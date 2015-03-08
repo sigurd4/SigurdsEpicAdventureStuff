@@ -1,4 +1,4 @@
-package com.sigurd4.sigurdsepicadventurestuff;
+package com.sigurd4.sigurdsEpicAdventureStuff;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,10 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.sigurd4.sigurdsepicadventurestuff.Stuff.HashMapStuff;
-import com.sigurd4.sigurdsepicadventurestuff.item.ItemMysteryPotion;
-import com.sigurd4.sigurdsepicadventurestuff.proxy.ProxyCommon;
-import com.sigurd4.sigurdsepicadventurestuff.tabs.TabGeneric;
+import com.sigurd4.sigurdsEpicAdventureStuff.Stuff.HashMapStuff;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemMysteryPotion;
+import com.sigurd4.sigurdsEpicAdventureStuff.proxy.ProxyCommon;
+import com.sigurd4.sigurdsEpicAdventureStuff.tabs.TabGeneric;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCompressed;
@@ -35,7 +35,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@Mod(modid = References.MODID, version = References.VERSION)
+@Mod(modid = References.MODID, name = References.NAME, version = References.VERSION, guiFactory = References.GUI_FACTORY_CLASS)
 public class M
 {
 	/**Register entity with egg**/
@@ -216,28 +216,7 @@ public class M
 	public static SimpleNetworkWrapper network;
 
 	/**tabs**/
-	public static TabGeneric tabCore = new TabGeneric("core")
-	{
-		@Override
-		public Item getTabIconItem()
-		{
-			return M.mystery_potion;
-		}
-		int i = -1;
-		@Override
-		public ItemStack getIconItemStack()
-		{
-			ArrayList<ItemStack> a = new ArrayList<ItemStack>();
-			M.mystery_potion.getSubItems(M.mystery_potion, this, a);
-			if(a.size() > 0)
-			{
-				long time = MinecraftServer.getServer().worldServers[0].getTotalWorldTime();
-				time /= 4;
-				return a.get((int)time % a.size());
-			}
-			return new ItemStack(M.mystery_potion);
-		}
-	};
+	public static TabGeneric tabCore = new TabGeneric("core");
 
 	////ITEMS:
 	public static final ItemMysteryPotion mystery_potion = registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[]{});
@@ -249,24 +228,24 @@ public class M
 
 	}
 
-	@SidedProxy(clientSide = References.Client, serverSide = References.Server)
+	@SidedProxy(clientSide = References.CLIENT_PROXY_CLASS, serverSide = References.SERVER_PROXY_CLASS)
 	public static ProxyCommon proxy;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		proxy.preInit();
+		proxy.preInit(event);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		proxy.init();
+		proxy.init(event);
 	}
 
 	@EventHandler
 	public void init(FMLPostInitializationEvent event)
 	{
-		proxy.postInit();
+		proxy.postInit(event);
 	}
 }

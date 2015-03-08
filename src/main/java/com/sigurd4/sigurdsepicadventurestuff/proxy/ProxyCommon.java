@@ -1,18 +1,20 @@
-package com.sigurd4.sigurdsepicadventurestuff.proxy;
+package com.sigurd4.sigurdsEpicAdventureStuff.proxy;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.sigurd4.sigurdsepicadventurestuff.M;
-import com.sigurd4.sigurdsepicadventurestuff.M.Id;
-import com.sigurd4.sigurdsepicadventurestuff.References;
-import com.sigurd4.sigurdsepicadventurestuff.event.HandlerCommon;
-import com.sigurd4.sigurdsepicadventurestuff.event.HandlerCommonFML;
-import com.sigurd4.sigurdsepicadventurestuff.packet.PacketKey;
-import com.sigurd4.sigurdsepicadventurestuff.packet.PacketPlayerProps;
+import com.sigurd4.sigurdsEpicAdventureStuff.Config;
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.References;
+import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
+import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommon;
+import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommonFML;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -22,7 +24,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,7 +36,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ProxyCommon
 {
-	public void preInit()
+	public void preInit(FMLPreInitializationEvent event)
 	{
 		MinecraftForge.EVENT_BUS.register(new HandlerCommon());
 		FMLCommonHandler.instance().bus().register(new HandlerCommonFML());
@@ -40,14 +46,15 @@ public class ProxyCommon
 		packets();
 		entities();
 		M.idsToBeRegistered.clear();
+		registerConfig(event.getSuggestedConfigurationFile());
 	}
 
-	public void init()
+	public void init(FMLInitializationEvent event)
 	{
 		recipes();
 	}
 
-	public void postInit()
+	public void postInit(FMLPostInitializationEvent event)
 	{
 
 	}
@@ -157,6 +164,14 @@ public class ProxyCommon
 					id.visible = true;
 				}
 			}
+		}
+	}
+
+	private void registerConfig(File file)
+	{
+		if(Config.config == null)
+		{
+			Config.config = new Configuration(file);
 		}
 	}
 }

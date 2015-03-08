@@ -1,4 +1,4 @@
-package com.sigurd4.sigurdsepicadventurestuff;
+package com.sigurd4.sigurdsEpicAdventureStuff;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.Lists;
 import com.sun.javafx.geom.Vec3f;
 
 import net.minecraft.entity.Entity;
@@ -514,6 +515,36 @@ public class Stuff
 				}
 			}
 			return null;
+		}
+	}
+	
+	public static class Strings
+	{
+		public static String UnderscoresToCamelSpaces(String s)
+		{
+			s = s.toLowerCase();
+			ArrayList<Character> cs = Lists.newArrayList();
+			for(int i = 0; i < s.length(); ++i)
+			{
+				cs.add(s.charAt(i));
+			}
+			for(int i = 0; i < cs.size(); ++i)
+			{
+				char c = cs.get(i);
+				if(c == '_')
+				{
+					cs.remove(i);
+					cs.set(i, Character.toUpperCase(cs.get(i)));
+					--i;
+				}
+			}
+			s = "";
+			for(int i = 0; i < cs.size(); ++i)
+			{
+				char c = cs.get(i);
+				s = s + c;
+			}
+			return s;
 		}
 	}
 }

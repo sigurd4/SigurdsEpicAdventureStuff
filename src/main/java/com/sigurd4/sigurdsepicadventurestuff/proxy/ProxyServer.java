@@ -1,7 +1,7 @@
-package com.sigurd4.sigurdsepicadventurestuff.proxy;
+package com.sigurd4.sigurdsEpicAdventureStuff.proxy;
 
-import com.sigurd4.sigurdsepicadventurestuff.event.HandlerServer;
-import com.sigurd4.sigurdsepicadventurestuff.event.HandlerServerFML;
+import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerServer;
+import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerServerFML;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
@@ -14,21 +14,23 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ProxyServer extends ProxyCommon
 {
 	@Override
-	public void preInit()
+	public void preInit(FMLPreInitializationEvent event)
 	{
 		MinecraftForge.EVENT_BUS.register(new HandlerServer());
 		FMLCommonHandler.instance().bus().register(new HandlerServerFML());
 		
-		super.preInit();
+		super.preInit(event);
 	}
 	
 	@Override
-	public void init()
+	public void init(FMLInitializationEvent event)
 	{
-		super.init();
+		super.init(event);
 	}
 }

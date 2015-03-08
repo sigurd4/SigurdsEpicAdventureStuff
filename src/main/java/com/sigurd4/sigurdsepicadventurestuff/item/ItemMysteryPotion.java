@@ -1,10 +1,11 @@
-package com.sigurd4.sigurdsepicadventurestuff.item;
+package com.sigurd4.sigurdsEpicAdventureStuff.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sigurd4.sigurdsepicadventurestuff.Stuff;
-import com.sigurd4.sigurdsepicadventurestuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.Config;
+import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
 import com.sun.xml.internal.stream.Entity;
 
 import java.awt.Color;
@@ -95,8 +96,8 @@ public class ItemMysteryPotion extends Item
 		}
 
 		ArrayList<PotionEffect> effects = Lists.newArrayList();
-		int maxSize = 5;
-		int tries = 10;
+		int maxSize = Config.maxEffects.get();
+		int tries = Config.tries.get();
 		for(int i = 0; i < tries && possibleEffects.size() > 0; ++i)
 		{
 			Potion p = null;
@@ -169,8 +170,8 @@ public class ItemMysteryPotion extends Item
 				{
 					if(potion.isBadEffect())
 					{
-					duration *= Stuff.Randomization.randSeed(seed, meta, i*i, 745426).nextInt(2)+1;
-				}
+						duration *= Stuff.Randomization.randSeed(seed, meta, i*i, 745426).nextInt(2)+1;
+					}
 					else
 					{
 						duration *= Stuff.Randomization.randSeed(seed, meta, i*i, 745426).nextInt(4)+1;
@@ -256,7 +257,8 @@ public class ItemMysteryPotion extends Item
 	public int getColorFromDamage(int meta)
 	{
 		long seed = MinecraftServer.getServer().worldServers[0].getSeed();
-		Color c = Color.getHSBColor(Stuff.Randomization.randSeed(seed, meta, 35124).nextFloat(), 1F, 1F);
+		long time = MinecraftServer.getServer().worldServers[0].getTotalWorldTime();
+		Color c = Color.getHSBColor(((float)meta/this.getMaxDamage()/2)+((float)time/80), 1F, 1F);
 		return c.getRGB();
 	}
 
@@ -416,7 +418,14 @@ public class ItemMysteryPotion extends Item
 	public boolean hasEffect(ItemStack stack)
 	{
 		List list = this.getEffects(stack);
-		return list != null && !list.isEmpty();
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		return false;
+		/*if(player != null)
+		{
+			EntityExtendedPlayer props = EntityExtendedPlayer.get(player);
+			return props.knowsPotion(stack.getItemDamage()) || true;
+		}
+		return true;*/
 	}
 
 	/**

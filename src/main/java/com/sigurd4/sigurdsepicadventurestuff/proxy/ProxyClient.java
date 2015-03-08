@@ -1,11 +1,11 @@
-package com.sigurd4.sigurdsepicadventurestuff.proxy;
+package com.sigurd4.sigurdsEpicAdventureStuff.proxy;
 
 import java.util.Iterator;
 
-import com.sigurd4.sigurdsepicadventurestuff.M;
-import com.sigurd4.sigurdsepicadventurestuff.M.Id;
-import com.sigurd4.sigurdsepicadventurestuff.event.HandlerClient;
-import com.sigurd4.sigurdsepicadventurestuff.event.HandlerClientFML;
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
+import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerClient;
+import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerClientFML;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -22,23 +22,25 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ProxyClient extends ProxyCommon
 {
 	@Override
-	public void preInit()
+	public void preInit(FMLPreInitializationEvent event)
 	{
 		MinecraftForge.EVENT_BUS.register(new HandlerClient());
 		FMLCommonHandler.instance().bus().register(new HandlerClientFML());
 		HandlerClientFML.init();
 
-		super.preInit();
+		super.preInit(event);
 	}
 
 	@Override
-	public void init()
+	public void init(FMLInitializationEvent event)
 	{
-		super.init();
+		super.init(event);
 
 		RenderItem ri = Minecraft.getMinecraft().getRenderItem();
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();

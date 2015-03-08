@@ -1,61 +1,115 @@
-[14:06:57] [Client thread/INFO]: Setting user: Player920
-[14:07:01] [Client thread/INFO]: LWJGL Version: 2.9.1
-[14:07:16] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:sigurdsepicadventurestuff
-[14:07:17] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[14:07:17] [Thread-7/INFO]: Initializing LWJGL OpenAL
-[14:07:17] [Thread-7/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[14:07:17] [Thread-7/INFO]: OpenAL initialized.
-[14:07:17] [Sound Library Loader/INFO]: Sound engine started
-[14:07:24] [Client thread/INFO]: Created: 512x512 textures-atlas
-[14:07:25] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:sigurdsepicadventurestuff
-[14:07:25] [Client thread/INFO]: SoundSystem shutting down...
-[14:07:26] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
-[14:07:26] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[14:07:26] [Thread-9/INFO]: Initializing LWJGL OpenAL
-[14:07:26] [Thread-9/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[14:07:26] [Thread-9/INFO]: OpenAL initialized.
-[14:07:26] [Sound Library Loader/INFO]: Sound engine started
-[14:07:29] [Client thread/INFO]: Created: 512x512 textures-atlas
-[14:07:34] [Server thread/INFO]: Starting integrated minecraft server version 1.8
-[14:07:34] [Server thread/INFO]: Generating keypair
-[14:07:34] [Server thread/INFO]: Preparing start region for level 0
-[14:07:35] [Server thread/INFO]: Preparing spawn area: 21%
-[14:07:36] [Server thread/INFO]: Preparing spawn area: 58%
-[14:07:38] [Server thread/INFO]: Changing view distance to 12, from 10
-[14:07:38] [Server thread/INFO]: Player920[local:E:f8a7747a] logged in with entity id 160 at (58.33788811277322, 74.0, 244.7238526492949)
-[14:07:38] [Server thread/INFO]: Player920 joined the game
-[14:07:40] [Server thread/INFO]: Saving and pausing game...
-[14:07:40] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
-[14:07:41] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
-[14:07:41] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
-[14:07:49] [Server thread/INFO]: Player920 has just earned the achievement [Taking Inventory]
-[14:07:49] [Client thread/INFO]: [CHAT] Player920 has just earned the achievement [Taking Inventory]
-[14:08:46] [Server thread/INFO]: Saving and pausing game...
-[14:08:46] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
-[14:08:46] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
-[14:08:46] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
-[14:08:47] [Server thread/INFO]: Stopping server
-[14:08:47] [Server thread/INFO]: Saving players
-[14:08:47] [Server thread/INFO]: Saving worlds
-[14:08:47] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
-[14:08:47] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
-[14:08:47] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
-[14:10:22] [Server thread/INFO]: Starting integrated minecraft server version 1.8
-[14:10:22] [Server thread/INFO]: Generating keypair
-[14:10:22] [Server thread/INFO]: Preparing start region for level 0
-[14:10:23] [Server thread/INFO]: Changing view distance to 12, from 10
-[14:10:23] [Server thread/INFO]: Player920[local:E:6b282465] logged in with entity id 1210 at (62.80483923810943, 72.0, 232.67006493651013)
-[14:10:23] [Server thread/INFO]: Player920 joined the game
-[14:30:04] [Server thread/INFO]: Saving and pausing game...
-[14:30:04] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
-[14:30:04] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
-[14:30:04] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
-[14:30:42] [Server thread/INFO]: Stopping server
-[14:30:42] [Server thread/INFO]: Saving players
-[14:30:42] [Server thread/INFO]: Saving worlds
-[14:30:42] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
-[14:30:42] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
-[14:30:42] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
-[14:30:42] [Client thread/INFO]: Stopping!
-[14:30:42] [Client thread/INFO]: SoundSystem shutting down...
-[14:30:43] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[22:05:45] [Client thread/INFO]: Setting user: Player230
+[22:05:47] [Client thread/INFO]: LWJGL Version: 2.9.1
+[22:05:50] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Sigurd's Epic Adventure Stuff!
+[22:05:50] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[22:05:50] [Thread-7/INFO]: Initializing LWJGL OpenAL
+[22:05:50] [Thread-7/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[22:05:50] [Thread-7/INFO]: OpenAL initialized.
+[22:05:51] [Sound Library Loader/INFO]: Sound engine started
+[22:05:54] [Client thread/INFO]: Created: 512x512 textures-atlas
+[22:05:55] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Sigurd's Epic Adventure Stuff!
+[22:05:55] [Client thread/INFO]: SoundSystem shutting down...
+[22:05:55] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[22:05:55] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[22:05:55] [Thread-9/INFO]: Initializing LWJGL OpenAL
+[22:05:55] [Thread-9/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[22:05:55] [Thread-9/INFO]: OpenAL initialized.
+[22:05:56] [Sound Library Loader/INFO]: Sound engine started
+[22:05:58] [Client thread/INFO]: Created: 512x512 textures-atlas
+[22:07:32] [Client thread/INFO]: Stopping!
+[22:07:32] [Cl[22:07:33] [Client thread/INFO]: LWJGL Version: 2.9.1
+[22:07:35] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Sigurd's Epic Adventure Stuff!
+[22:07:36] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[22:07:36] [Thread-6/INFO]: Initializing LWJGL OpenAL
+[22:07:36] [Thread-6/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[22:07:36] [Thread-6/INFO]: OpenAL initialized.
+[22:07:37] [Sound Library Loader/INFO]: Sound engine started
+[22:07:40] [Client thread/INFO]: Created: 512x512 textures-atlas
+[22:07:41] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Sigurd's Epic Adventure Stuff!
+[22:07:41] [Client thread/INFO]: SoundSystem shutting down...
+[22:07:41] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[22:07:41] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[22:07:41] [Thread-8/INFO]: Initializing LWJGL OpenAL
+[22:07:41] [Thread-8/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[22:07:41] [Thread-8/INFO]: OpenAL initialized.
+[22:07:42] [Sound Library Loader/INFO]: Sound engine started
+[22:07:44] [Client thread/INFO]: Created: 512x512 textures-atlas
+[22:11:57] [Server thread/INFO]: Starting integrated minecraft server version 1.8
+[22:11:57] [Server thread/INFO]: Generating keypair
+[22:11:58] [Server thread/INFO]: Preparing start region for level 0
+[22:11:59] [Server thread/INFO]: Changing view distance to 12, from 10
+[22:12:00] [Server thread/INFO]: Player244[local:E:de6afc16] logged in with entity id 76 at (-256.5017517106489, 77.65280525939022, 162.5963997579078)
+[22:12:00] [Server thread/INFO]: Player244 joined the game
+[22:12:27] [Server thread/INFO]: Saving and pausing game...
+[22:12:27] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:12:27] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:12:27] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:12:28] [Server thread/INFO]: Saving and pausing game...
+[22:12:28] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:12:28] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:12:28] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:12:31] [Server thread/INFO]: Saving and pausing game...
+[22:12:31] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:12:31] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:12:31] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:12:40] [Server thread/INFO]: Saving and pausing game...
+[22:12:40] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:12:40] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:12:40] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:12:41] [Server thread/INFO]: Stopping server
+[22:12:41] [Server thread/INFO]: Saving players
+[22:12:41] [Server thread/INFO]: Saving worlds
+[22:12:41] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:12:41] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:12:41] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:12:52] [Server thread/INFO]: Starting integrated minecraft server version 1.8
+[22:12:52] [Server thread/INFO]: Generating keypair
+[22:12:52] [Server thread/INFO]: Preparing start region for level 0
+[22:12:53] [Server thread/INFO]: Changing view distance to 12, from 10
+[22:12:53] [Server thread/INFO]: Player244[local:E:a731d65f] logged in with entity id 1152 at (-253.07215437133192, 78.0, 153.4245477080681)
+[22:12:53] [Server thread/INFO]: Player244 joined the game
+[22:13:29] [Server thread/INFO]: Saving and pausing game...
+[22:13:29] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:13:30] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:13:30] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:13:30] [Server thread/INFO]: Stopping server
+[22:13:30] [Server thread/INFO]: Saving players
+[22:13:30] [Server thread/INFO]: Saving worlds
+[22:13:30] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:13:30] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:13:30] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:14:51] [Server thread/INFO]: Starting integrated minecraft server version 1.8
+[22:14:51] [Server thread/INFO]: Generating keypair
+[22:14:51] [Server thread/INFO]: Preparing start region for level 0
+[22:14:52] [Server thread/INFO]: Changing view distance to 12, from 10
+[22:14:52] [Server thread/INFO]: Player244[local:E:ea59470b] logged in with entity id 2516 at (-253.07215437133192, 78.0, 153.4245477080681)
+[22:14:52] [Server thread/INFO]: Player244 joined the game
+[22:14:59] [Server thread/INFO]: Saving and pausing game...
+[22:14:59] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:14:59] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:14:59] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:14:59] [Server thread/INFO]: Stopping server
+[22:14:59] [Server thread/INFO]: Saving players
+[22:14:59] [Server thread/INFO]: Saving worlds
+[22:14:59] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:14:59] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:14:59] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:15:11] [Server thread/INFO]: Starting integrated minecraft server version 1.8
+[22:15:11] [Server thread/INFO]: Generating keypair
+[22:15:11] [Server thread/INFO]: Preparing start region for level 0
+[22:15:12] [Server thread/INFO]: Changing view distance to 12, from 10
+[22:15:12] [Server thread/INFO]: Player244[local:E:6b66aa3e] logged in with entity id 3047 at (-253.07215437133192, 78.0, 153.4245477080681)
+[22:15:12] [Server thread/INFO]: Player244 joined the game
+[22:15:17] [Server thread/INFO]: Saving and pausing game...
+[22:15:17] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:15:17] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:15:17] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:15:17] [Server thread/INFO]: Stopping server
+[22:15:17] [Server thread/INFO]: Saving players
+[22:15:17] [Server thread/INFO]: Saving worlds
+[22:15:17] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Overworld
+[22:15:17] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/Nether
+[22:15:17] [Server thread/INFO]: Saving chunks for level 'epic adventure world!'/The End
+[22:15:44] [Client thread/INFO]: Stopping!
+[22:15:44] [Client thread/INFO]: SoundSystem shutting down...
+[22:15:44] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
