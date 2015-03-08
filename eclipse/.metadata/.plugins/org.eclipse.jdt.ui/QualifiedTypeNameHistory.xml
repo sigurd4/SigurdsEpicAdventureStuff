@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.tabs.TabGeneric"/>
+<fullyQualifiedTypeName name="com.spectral.spectral_guns.proxy.ProxyCommon"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.proxy.ProxyCommon"/>
+<fullyQualifiedTypeName name="com.spectral.spectral_guns.Stuff.HashMapStuff"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.proxy.ProxyClient"/>
+<fullyQualifiedTypeName name="com.spectral.spectral_guns.proxy.ProxyServer"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.Stuff.HashMapStuff"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.event.HandlerClientFML"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.event.HandlerClient"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.M.Id"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.event.HandlerCommonFML"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.event.HandlerCommon"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.event.HandlerServer"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.event.HandlerServerFML"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.References"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.packet.PacketKey.Key"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.particles.ParticleHandler"/>
+<fullyQualifiedTypeName name="net.minecraft.item.ItemPotion"/>
+<fullyQualifiedTypeName name="net.minecraft.item.Item"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.item.ItemMysteryPotion"/>
+<fullyQualifiedTypeName name="net.minecraft.item.EnumAction"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.Stuff"/>
+<fullyQualifiedTypeName name="java.lang.reflect.Field"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.extended.EntityExtendedPlayer"/>
+<fullyQualifiedTypeName name="net.minecraft.nbt.NBTTagInt"/>
+<fullyQualifiedTypeName name="net.minecraft.nbt.NBTBase"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.M"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.packet.PacketKey"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.packet.PacketPlayerProps"/>
+<fullyQualifiedTypeName name="net.minecraftforge.fml.common.Mod.EventHandler"/>
+<fullyQualifiedTypeName name="net.minecraftforge.fml.relauncher.Side"/>
+<fullyQualifiedTypeName name="net.minecraftforge.fml.relauncher.SideOnly"/>
+<fullyQualifiedTypeName name="com.sun.xml.internal.stream.Entity"/>
+<fullyQualifiedTypeName name="net.minecraft.client.Minecraft"/>
+<fullyQualifiedTypeName name="net.minecraftforge.fml.server.FMLServerHandler"/>
+<fullyQualifiedTypeName name="com.sigurd4.sigurdsepicadventurestuff.Stuff.Randomization"/>
+<fullyQualifiedTypeName name="com.google.common.collect.Lists"/>
+<fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="net.minecraft.server.MinecraftServer"/>
+<fullyQualifiedTypeName name="net.minecraft.item.ItemStack"/>
+<fullyQualifiedTypeName name="org.lwjgl.util.Color"/>
+<fullyQualifiedTypeName name="com.sun.prism.paint.Color"/>
+<fullyQualifiedTypeName name="java.awt.Color"/>
+</qualifiedTypeNameHistroy>

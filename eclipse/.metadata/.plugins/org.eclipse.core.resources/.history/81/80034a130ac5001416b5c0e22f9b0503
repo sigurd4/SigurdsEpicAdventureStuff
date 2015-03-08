@@ -1,0 +1,53 @@
+package com.sigurd4.sigurdsepicadventurestuff.event;
+
+import java.util.HashMap;
+
+import com.sigurd4.sigurdsepicadventurestuff.M;
+import com.sigurd4.sigurdsepicadventurestuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsepicadventurestuff.packet.PacketPlayerProps;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.SERVER)
+public class HandlerServer extends HandlerCommon
+{
+	//minecraftforge events for server only here!
+
+	public static HashMap<EntityPlayer, NBTTagCompound> playerDeathData = new HashMap<EntityPlayer, NBTTagCompound>();
+
+	@SubscribeEvent
+	public void livingUpdateEvent(LivingUpdateEvent event)
+	{
+		if(event.entity instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)event.entity;
+			EntityExtendedPlayer props = EntityExtendedPlayer.get(player);
+
+			/**makes it so that players keep certain data upon death**/
+			if(playerDeathData.get(player) != null && player.getHealth() > 0)
+			{
+				props.loadNBTData(playerDeathData.get(player), false);
+				playerDeathData.remove(player);
+			}
+			if(playerDeathData.get(player) == null && player.getHealth() <= 0 || player.deathTime > 0)
+			{
+				NBTTagCompound playerData = new NBTTagCompound();
+				props.saveNBTData(playerData, false);
+				playerDeathData.put(player, playerData);
+			}
+
+			/**give data to client**/
+			if(player instanceof EntityPlayerMP)
+			{
+				NBTTagCompound compound = new NBTTagCompound();
+				M.network.sendTo(new PacketPlayerProps(props), (EntityPlayerMP)player);
+			}
+		}
+	}
+}

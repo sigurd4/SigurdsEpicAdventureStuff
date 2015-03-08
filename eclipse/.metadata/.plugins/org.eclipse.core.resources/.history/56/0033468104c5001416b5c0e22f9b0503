@@ -1,0 +1,82 @@
+package com.sigurd4.sigurdsepicadventurestuff.packet;
+
+import com.sigurd4.sigurdsepicadventurestuff.extended.EntityExtendedPlayer;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+
+public class PacketPlayerProps implements IMessage
+{
+	private EntityExtendedPlayer props;
+
+	public PacketPlayerProps() {}
+
+	public PacketPlayerProps(EntityExtendedPlayer props)
+	{
+		this.props = props;
+	}
+
+	@Override
+	public void fromBytes(ByteBuf buf)
+	{
+		props = new EntityExtendedPlayer(null);
+		props.readSpawnData(buf);
+	}
+
+	@Override
+	public void toBytes(ByteBuf buf)
+	{
+		ByteBufUtils.writeVarInt(buf, i, 3);
+	}
+
+	public static class Handler implements IMessageHandler<PacketPlayerProps, IMessage>
+	{
+		public Handler(){}
+
+		@Override
+		public IMessage onMessage(PacketPlayerProps message, MessageContext context)
+		{
+			EntityPlayer player = context.getServerHandler().playerEntity;
+			return onMessage(message, player);
+		}
+
+		public static IMessage onMessage(PacketPlayerProps message, EntityPlayer player)
+		{
+			if(player == null)
+			{
+				return null;
+			}
+			EntityExtendedPlayer props = EntityExtendedPlayer.get(player);
+			Key k = Key.get(message.i);
+			switch(k)
+			{
+			case RIGHTCLICK:
+			{
+				if(props != null)
+				{
+					props.setRightClick(true);
+				}
+				break;
+			}
+			case NOTRIGHTCLICK:
+			{
+				if(props != null)
+				{
+					props.setRightClick(false);
+				}
+				break;
+			}
+			}
+			return null;
+		}
+	}
+}
