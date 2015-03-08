@@ -1,14 +1,14 @@
-package com.sigurd4.sigurdsepicadventurestuff.event;
+package com.sigurd4.sigurdsEpicAdventureStuff.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.input.Keyboard;
 
-import com.sigurd4.sigurdsepicadventurestuff.M;
-import com.sigurd4.sigurdsepicadventurestuff.packet.PacketKey;
-import com.sigurd4.sigurdsepicadventurestuff.packet.PacketKey.Key;
-import com.sigurd4.sigurdsepicadventurestuff.particles.ParticleHandler;
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey.Key;
+import com.sigurd4.sigurdsEpicAdventureStuff.particles.ParticleHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -33,23 +33,17 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @SideOnly(Side.CLIENT)
-public class HandlerClientFML extends HandlerBase
+public class HandlerClientFML
 {
 	//fml events for client only here!
 
-	public static KeyBinding WeaponReload;
-	public static KeyBinding WeaponZoom;
-	public static KeyBinding WeaponEject;
+	//public static KeyBinding WeaponReload;
 
 	public static void init()
 	{
-		WeaponReload = new KeyBinding("key.WeaponReload", Keyboard.KEY_R, "key.categories.spectral.guns");
-		WeaponZoom = new KeyBinding("key.WeaponZoom", Keyboard.KEY_Z, "key.categories.spectral.guns");
-		WeaponEject = new KeyBinding("key.WeaponEject", Keyboard.KEY_B, "key.categories.spectral.guns");
+		//WeaponReload = new KeyBinding("key.WeaponReload", Keyboard.KEY_R, "key.categories.spectral.guns");
 
-		ClientRegistry.registerKeyBinding(WeaponReload);
-		ClientRegistry.registerKeyBinding(WeaponZoom);
-		ClientRegistry.registerKeyBinding(WeaponEject);
+		//ClientRegistry.registerKeyBinding(WeaponReload);
 	}
 
 	HashMap<KeyBinding, Integer> keyPressed = new HashMap<KeyBinding, Integer>();
@@ -86,7 +80,7 @@ public class HandlerClientFML extends HandlerBase
 	}
 
 	@SubscribeEvent
-	public void onKeyInput2(InputEvent.KeyInputEvent event)
+	public void onKeyInput(InputEvent.KeyInputEvent event)
 	{
 		//use for keys to hit once
 		/*if(keypress(WeaponReload) && !WeaponEject.isKeyDown())
@@ -96,7 +90,7 @@ public class HandlerClientFML extends HandlerBase
 	}
 
 	@SubscribeEvent
-	public void clientTickEvent2(ClientTickEvent event)
+	public void clientTickEvent(ClientTickEvent event)
 	{
 		//use for keys to hold down
 		/*if(Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())

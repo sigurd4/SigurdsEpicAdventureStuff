@@ -1,11 +1,11 @@
-package com.sigurd4.sigurdsepicadventurestuff.event;
+package com.sigurd4.sigurdsEpicAdventureStuff.event;
 
 import java.util.HashMap;
 import java.util.List;
 
-import com.sigurd4.sigurdsepicadventurestuff.M;
-import com.sigurd4.sigurdsepicadventurestuff.extended.EntityExtendedPlayer;
-import com.sigurd4.sigurdsepicadventurestuff.packet.PacketPlayerProps;
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -23,7 +23,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class HandlerCommon extends HandlerBase
+public class HandlerCommon
 {
 	//minecraftforge events for both sides here!
 	

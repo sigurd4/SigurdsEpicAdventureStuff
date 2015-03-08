@@ -1,4 +1,4 @@
-package com.sigurd4.sigurdsepicadventurestuff.audio;
+package com.sigurd4.sigurdsEpicAdventureStuff.audio;
 
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;

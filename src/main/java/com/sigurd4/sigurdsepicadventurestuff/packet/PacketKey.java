@@ -1,6 +1,6 @@
-package com.sigurd4.sigurdsepicadventurestuff.packet;
+package com.sigurd4.sigurdsEpicAdventureStuff.packet;
 
-import com.sigurd4.sigurdsepicadventurestuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;

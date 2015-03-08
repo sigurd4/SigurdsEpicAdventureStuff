@@ -1,10 +1,10 @@
-package com.sigurd4.sigurdsepicadventurestuff.event;
+package com.sigurd4.sigurdsEpicAdventureStuff.event;
 
 import java.util.HashMap;
 
-import com.sigurd4.sigurdsepicadventurestuff.M;
-import com.sigurd4.sigurdsepicadventurestuff.extended.EntityExtendedPlayer;
-import com.sigurd4.sigurdsepicadventurestuff.packet.PacketPlayerProps;
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,12 +16,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.SERVER)
-public class HandlerServerFML extends HandlerBase
+public class HandlerServerFML
 {
 	//fml events for server only here!
 
 	@SubscribeEvent
-	public void playerUpdateEvent2(PlayerTickEvent event)
+	public void playerUpdateEvent(PlayerTickEvent event)
 	{
 		
 	}

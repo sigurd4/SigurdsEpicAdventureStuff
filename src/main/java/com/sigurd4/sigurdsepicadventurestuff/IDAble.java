@@ -1,4 +1,4 @@
-package com.sigurd4.sigurdsepicadventurestuff;
+package com.sigurd4.sigurdsEpicAdventureStuff;
 
 public interface IDAble
 {

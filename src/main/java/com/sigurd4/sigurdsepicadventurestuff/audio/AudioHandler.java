@@ -1,4 +1,4 @@
-package com.sigurd4.sigurdsepicadventurestuff.audio;
+package com.sigurd4.sigurdsEpicAdventureStuff.audio;
 
 import java.util.ArrayList;
 import java.util.HashMap;

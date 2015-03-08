@@ -1,4 +1,4 @@
-package com.sigurd4.sigurdsepicadventurestuff.particles;
+package com.sigurd4.sigurdsEpicAdventureStuff.particles;
 
 import java.util.ArrayList;
 

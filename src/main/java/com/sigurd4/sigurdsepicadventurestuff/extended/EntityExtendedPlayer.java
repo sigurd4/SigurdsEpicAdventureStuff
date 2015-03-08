@@ -1,4 +1,4 @@
-package com.sigurd4.sigurdsepicadventurestuff.extended;
+package com.sigurd4.sigurdsEpicAdventureStuff.extended;
 
 import io.netty.buffer.ByteBuf;
 
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.google.common.collect.Lists;
-import com.sigurd4.sigurdsepicadventurestuff.References;
+import com.sigurd4.sigurdsEpicAdventureStuff.References;
 
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
