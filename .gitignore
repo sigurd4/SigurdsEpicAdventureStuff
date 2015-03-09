@@ -1,10 +1,11 @@
-/*
-!/build
-/build/*
-!/build/lib
-!/src
-!/build.gradle
-!/README.txt
+*
+bin
+!build
+build/*
+!build/lib
+!src
+!build.gradle
+!README.txt
 
 
 
