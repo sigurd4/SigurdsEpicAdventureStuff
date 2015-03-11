@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
+import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
 import com.sun.javafx.geom.Vec3f;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -19,7 +22,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.Vec3i;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ChestGenHooks;
 
 public class Stuff
 {
@@ -517,7 +522,7 @@ public class Stuff
 			return null;
 		}
 	}
-	
+
 	public static class Strings
 	{
 		public static String UnderscoresToCamelSpaces(String s)
@@ -545,6 +550,34 @@ public class Stuff
 				s = s + c;
 			}
 			return s;
+		}
+	}
+
+	public static class ItemStuff
+	{
+		public static ArrayList<WeightedRandomChestContent> getChestGens(Item item, ChestGenHooks chest, Random rand)
+		{
+			ArrayList<WeightedRandomChestContent> loot = new ArrayList<WeightedRandomChestContent>();
+			if(item != null)
+			{
+				Id id = M.getId(item);
+				if(id != null && id.visible && id.dungeonLoot && id.dungeonLootChance > 0)
+				{
+					ItemStack stack = new ItemStack(item);
+					ArrayList<ItemStack> variants = Lists.newArrayList();
+					item.getSubItems(item, item.getCreativeTab(), variants);
+					for(int i = 0; i < variants.size(); ++i)
+					{
+						stack = variants.get(i);
+						if(stack != null)
+						{
+							loot.add(new WeightedRandomChestContent(stack, id.dungeonLootMin, id.dungeonLootMax, id.dungeonLootChance));
+						}
+					}
+					return loot;
+				}
+			}
+			return loot;
 		}
 	}
 }

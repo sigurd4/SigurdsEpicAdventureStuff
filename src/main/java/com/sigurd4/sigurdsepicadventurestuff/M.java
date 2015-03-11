@@ -139,6 +139,10 @@ public class M
 		public final boolean replacedIfAlreadyAnOreDict;
 		public boolean shouldBeReplaced(){return oreDictNames.length <= 0 || !replacedIfAlreadyAnOreDict;};
 		public boolean visible;
+		public final boolean dungeonLoot;
+		public final int dungeonLootMin;
+		public final int dungeonLootMax;
+		public final int dungeonLootChance;
 
 		public Id(String id, String mod, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 		{
@@ -146,6 +150,29 @@ public class M
 			this.mod = mod;
 			this.replacedIfAlreadyAnOreDict = replacedIfAlreadyAnOreDict;
 			this.oreDictNames = oreDictNames;
+			
+			this.dungeonLoot = false;
+			this.dungeonLootMin = 0;
+			this.dungeonLootMax = 0;
+			this.dungeonLootChance = 0;
+		}
+
+		private Id(String id, String mod, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames, int dungeonLootMin, int dungeonLootMax, int dungeonLootChance)
+		{
+			this.id = id;
+			this.mod = mod;
+			this.replacedIfAlreadyAnOreDict = replacedIfAlreadyAnOreDict;
+			this.oreDictNames = oreDictNames;
+
+			dungeonLootMin = dungeonLootMin >= 1 ? dungeonLootMin : 1;
+			dungeonLootMax = dungeonLootMax <= 64 ? dungeonLootMax : 64;
+			dungeonLootMin = dungeonLootMin <= dungeonLootMax ? dungeonLootMin : dungeonLootMax;
+			dungeonLootMax = dungeonLootMax >= dungeonLootMin ? dungeonLootMax : dungeonLootMin;
+			
+			this.dungeonLoot = true;
+			this.dungeonLootMin = dungeonLootMin;
+			this.dungeonLootMax = dungeonLootMax;
+			this.dungeonLootChance = dungeonLootChance;
 		}
 
 		public Id(String id, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
@@ -166,9 +193,28 @@ public class M
 
 	public static <T extends Item> T registerItem(String id, String modid, T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames)
 	{
+		return registerItem(id, modid, item, replacedIfAlreadyAnOreDict, oreDictNames, 0, 0, 0);
+	}
+
+	public static <T extends Item & IDAble> T registerItem(T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames, int min, int max, int chance)
+	{
+		return registerItem(item.getId(), References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
+	}
+
+	public static <T extends Item> T registerItem(String id, T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames, int min, int max, int chance)
+	{
+		return registerItem(id, References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
+	}
+
+	public static <T extends Item> T registerItem(String id, String modid, T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames, int min, int max, int chance)
+	{
 		if(!ids.containsKey(item) && !ids.containsValue(id))
 		{
 			Id ID = new Id(id, modid, replacedIfAlreadyAnOreDict, oreDictNames);
+			if(chance > 0)
+			{
+				ID = new Id(id, modid, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
+			}
 			ids.put(item, ID);
 			idsToBeRegistered.add(ID);
 		}
@@ -219,7 +265,7 @@ public class M
 	public static TabGeneric tabCore = new TabGeneric("core");
 
 	////ITEMS:
-	public static final ItemMysteryPotion mystery_potion = registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[]{});
+	public static final ItemMysteryPotion mystery_potion = registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[]{}, 1, 1, 1);
 
 	////BLOCKS:
 

@@ -1,6 +1,7 @@
 package com.sigurd4.sigurdsEpicAdventureStuff.proxy;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.Config;
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.References;
 import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
+import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommon;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommonFML;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
@@ -23,6 +25,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionHelper;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -52,6 +58,7 @@ public class ProxyCommon
 	public void init(FMLInitializationEvent event)
 	{
 		recipes();
+		dungeonLoot();
 	}
 
 	public void postInit(FMLPostInitializationEvent event)
@@ -172,6 +179,50 @@ public class ProxyCommon
 		if(Config.config == null)
 		{
 			Config.config = new Configuration(file);
+		}
+	}
+
+	private void dungeonLoot()
+	{
+		Iterator<Id> ids = M.getIds();
+		while(ids.hasNext())
+		{
+			Id id = ids.next();
+			if(id != null)
+			{
+				if(M.getItem(id) instanceof Item)
+				{
+					Item item = (Item)M.getItem(id);
+
+					HashMap<String, ChestGenHooks> categories = null;
+					try
+					{
+						Field field = ChestGenHooks.class.getDeclaredField("chestInfo");
+						field.setAccessible(true);
+						if(field != null)
+						{
+							categories = (HashMap<String, ChestGenHooks>)field.get(null);
+						}
+					}
+					catch(Throwable e)
+					{
+						e.printStackTrace();
+					}
+
+					if(categories != null)
+					{
+						String[] categoriesS = categories.keySet().toArray(new String[categories.keySet().size()]);
+						for(int i = 0; i < categoriesS.length; ++i)
+						{
+							ArrayList<WeightedRandomChestContent> loot = Stuff.ItemStuff.getChestGens(item, ChestGenHooks.getInfo(categoriesS[i]), Stuff.rand);
+							for(int i2 = 0; i2 < loot.size(); ++i2)
+							{
+								ChestGenHooks.addItem(categoriesS[i], loot.get(i2));
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
