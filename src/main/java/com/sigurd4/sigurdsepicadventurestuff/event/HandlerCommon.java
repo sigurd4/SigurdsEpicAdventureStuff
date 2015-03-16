@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
-import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.client.Minecraft;
@@ -26,20 +26,19 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class HandlerCommon
 {
 	//minecraftforge events for both sides here!
-	
 	public static HashMap<EntityPlayer, NBTTagCompound> playerDeathData = new HashMap<EntityPlayer, NBTTagCompound>();
 
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event)
 	{
-		if(event.entity instanceof EntityPlayer && EntityExtendedPlayer.get((EntityPlayer) event.entity) == null)
+		if(event.entity instanceof EntityPlayer && ExtendedPlayer.get((EntityPlayer) event.entity) == null)
 		{
-			EntityExtendedPlayer.register((EntityPlayer)event.entity);
+			ExtendedPlayer.register((EntityPlayer)event.entity);
 		}
 
-		if (event.entity instanceof EntityPlayer && event.entity.getExtendedProperties(EntityExtendedPlayer.PROP) == null)
+		if (event.entity instanceof EntityPlayer && event.entity.getExtendedProperties(ExtendedPlayer.PROP) == null)
 		{
-			event.entity.registerExtendedProperties(EntityExtendedPlayer.PROP, new EntityExtendedPlayer((EntityPlayer) event.entity));
+			event.entity.registerExtendedProperties(ExtendedPlayer.PROP, new ExtendedPlayer((EntityPlayer) event.entity));
 		}
 	}
 
@@ -49,7 +48,7 @@ public class HandlerCommon
 		if(event.entity instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)event.entity;
-			EntityExtendedPlayer props = EntityExtendedPlayer.get((EntityPlayer)event.entity);
+			ExtendedPlayer props = ExtendedPlayer.get((EntityPlayer)event.entity);
 			props.update();
 
 			if(!event.entity.worldObj.isRemote)

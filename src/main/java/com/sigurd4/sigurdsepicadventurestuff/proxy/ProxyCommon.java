@@ -19,6 +19,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -28,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -40,7 +42,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ProxyCommon
+public abstract class ProxyCommon
 {
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -68,7 +70,7 @@ public class ProxyCommon
 
 	private void packets()
 	{
-		M.network = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODID + "Packets");
+		M.network = NetworkRegistry.INSTANCE.newSimpleChannel("SEASPackets");
 		M.network.registerMessage(PacketKey.Handler.class, PacketKey.class, 0, Side.SERVER);
 		M.network.registerMessage(PacketPlayerProps.Handler.class, PacketPlayerProps.class, 1, Side.CLIENT);
 	}
@@ -180,6 +182,14 @@ public class ProxyCommon
 		{
 			Config.config = new Configuration(file);
 		}
+		for(int i = 0; i < Config.entries.size(); ++i)
+		{
+			Config.entries.get(i).set(Config.config);
+		}
+		if(Config.config.hasChanged())
+		{
+			Config.config.save();
+		}
 	}
 
 	private void dungeonLoot()
@@ -225,4 +235,6 @@ public class ProxyCommon
 			}
 		}
 	}
+	
+	public abstract World world(int dimension);
 }

@@ -2,6 +2,8 @@ package com.sigurd4.sigurdsEpicAdventureStuff.particles;
 
 import java.util.ArrayList;
 
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntityReddustFX;
@@ -74,11 +76,12 @@ public class ParticleHandler
 	public static EntityFX spawnEntityFX(EntityFX particle, boolean ignoreDistance, double x, double y, double z, float mx, float my, float mz, int ... par)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
+		World world = M.proxy.world(0);
 		if(mc != null && mc.getRenderViewEntity() != null && mc.effectRenderer != null)
 		{
 			int k = mc.gameSettings.particleSetting;
 
-			if(k == 1 && mc.theWorld.rand.nextInt(3) == 0)
+			if(k == 1 && world.rand.nextInt(3) == 0)
 			{
 				k = 2;
 			}

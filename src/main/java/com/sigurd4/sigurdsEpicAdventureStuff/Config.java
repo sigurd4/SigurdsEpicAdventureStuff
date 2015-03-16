@@ -22,7 +22,8 @@ public class Config
 				return Configuration.CATEGORY_GENERAL;
 			}
 		},
-		MYSTERY_POTIONS;
+		MYSTERY_POTIONS,
+		SPECIAL_SWORDS;
 		
 		@Override
 		public String toString()
@@ -45,6 +46,8 @@ public class Config
 		}
 	};
 	public static final ConfigEntryInt tries = new ConfigEntryInt(6, 1, 100, "tries", ConfigEntryCategory.MYSTERY_POTIONS, "How many attempts that will be made to give a mystery potion its effects.");
+	public static final ConfigEntryBoolean slashMultiple = new ConfigEntryBoolean(true, "slashMultiple", ConfigEntryCategory.SPECIAL_SWORDS, "Wether or not the special swords should be able to slash multiple enemies at once.");
+	public static final ConfigEntryFloat slashLenght = new ConfigEntryFloat(4, 0.1F, 20, "slashLenght", ConfigEntryCategory.SPECIAL_SWORDS, "Multiplier for the lenght of the sword-slash.");
 
 	public abstract static class ConfigEntry<T>
 	{
@@ -101,6 +104,55 @@ public class Config
 		}
 
 		protected Integer valid(Integer value)
+		{
+			if(value > maxValue)
+			{
+				value = maxValue;
+			}
+			if(value < minValue)
+			{
+				value = minValue;
+			}
+			return value;
+		}
+	}
+
+	public static class ConfigEntryBoolean extends ConfigEntry<Boolean>
+	{
+		public ConfigEntryBoolean(boolean defaultValue, String name, ConfigEntryCategory category, String description)
+		{
+			super((Boolean)defaultValue, name, category, description);
+		}
+
+		protected Boolean load(Configuration config)
+		{
+			return config.getBoolean(name, category.toString(), defaultValue, description);
+		}
+
+		protected Boolean valid(Boolean value)
+		{
+			return value;
+		}
+	}
+
+	public static class ConfigEntryFloat extends ConfigEntry<Float>
+	{
+		public final float minValue;
+		public final float maxValue;
+
+		public ConfigEntryFloat(float defaultValue, float minValue, float maxValue, String name, ConfigEntryCategory category, String description)
+		{
+			super((Float)defaultValue, name, category, description);
+			this.minValue = minValue;
+			this.maxValue = maxValue;
+		}
+
+		protected Float load(Configuration config)
+		{
+			return config.getFloat(name, category.toString(), defaultValue, minValue, maxValue, description);
+		}
+
+		protected Float valid(Float value)
 		{
 			if(value > maxValue)
 			{

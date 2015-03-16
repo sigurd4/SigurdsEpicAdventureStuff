@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.entity.RenderEntity;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -24,13 +26,18 @@ public class ProxyServer extends ProxyCommon
 	{
 		MinecraftForge.EVENT_BUS.register(new HandlerServer());
 		FMLCommonHandler.instance().bus().register(new HandlerServerFML());
-		
+
 		super.preInit(event);
 	}
-	
+
 	@Override
 	public void init(FMLInitializationEvent event)
 	{
 		super.init(event);
+	}
+
+	public World world(int dimension)
+	{
+		return MinecraftServer.getServer().worldServers[dimension];
 	}
 }

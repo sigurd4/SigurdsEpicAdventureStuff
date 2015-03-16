@@ -1,5 +1,6 @@
 package com.sigurd4.sigurdsEpicAdventureStuff;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,8 +9,11 @@ import java.util.Random;
 
 import com.google.common.collect.Lists;
 import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemSubItems;
 import com.sun.javafx.geom.Vec3f;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,11 +24,14 @@ import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumFacing.AxisDirection;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Timer;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.Vec3i;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Stuff
 {
@@ -219,6 +226,15 @@ public class Stuff
 			}
 
 			return new Vec3i(x, y, z);
+		}
+
+		public static Vec3 getVectorForRotation(float pitch, float yaw)
+		{
+			float f2 = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
+			float f3 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
+			float f4 = -MathHelper.cos(-pitch * 0.017453292F);
+			float f5 = MathHelper.sin(-pitch * 0.017453292F);
+			return new Vec3((double)(f3 * f4), (double)f5, (double)(f2 * f4));
 		}
 	}
 
@@ -565,7 +581,10 @@ public class Stuff
 				{
 					ItemStack stack = new ItemStack(item);
 					ArrayList<ItemStack> variants = Lists.newArrayList();
-					item.getSubItems(item, item.getCreativeTab(), variants);
+					if(item instanceof IItemSubItems)
+					{
+						((IItemSubItems)item).getSubItems2(item, null, variants);
+					}
 					for(int i = 0; i < variants.size(); ++i)
 					{
 						stack = variants.get(i);
@@ -578,6 +597,26 @@ public class Stuff
 				}
 			}
 			return loot;
+		}
+	}
+
+	/**get hidden stuff**/
+	public static class Reflection
+	{
+		@SideOnly(Side.CLIENT)
+		public static Timer getTimer()
+		{
+			try
+			{
+				Field field = Minecraft.class.getDeclaredField("timer");
+				field.setAccessible(true);
+				return (Timer)field.get(Minecraft.getMinecraft());
+			}
+			catch(Throwable e)
+			{
+				e.printStackTrace();
+			}
+			return new Timer(20);
 		}
 	}
 }

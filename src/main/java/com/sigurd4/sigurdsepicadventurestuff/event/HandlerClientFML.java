@@ -6,11 +6,15 @@ import java.util.HashMap;
 import org.lwjgl.input.Keyboard;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemSpecialSword;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey.Key;
 import com.sigurd4.sigurdsEpicAdventureStuff.particles.ParticleHandler;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -18,6 +22,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.network.INetHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -28,6 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -99,8 +105,64 @@ public class HandlerClientFML
 			if(Minecraft.getMinecraft().thePlayer != null && EntityExtendedPlayer.get(Minecraft.getMinecraft().thePlayer) != null)
 				EntityExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).setRightClick(true);
 		}*/
-		
-		ParticleHandler.update();
+
+		if(event.phase == Phase.START || true)
+		{
+			EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+			WorldClient world = Minecraft.getMinecraft().theWorld;
+			if(player != null && world != null)
+			{
+				ExtendedPlayer props = ExtendedPlayer.get(player);
+				if(props.spin > 0)
+				{
+					float rot = 40;
+					//player.prevRotationYaw = player.rotationYaw;
+					player.rotationYaw += rot;
+					//player.prevRotationPitch = player.rotationPitch;
+					player.rotationPitch -= player.rotationPitch*2*rot/360;
+					while(ItemSpecialSword.prevRotPitch > 180)
+					{
+						ItemSpecialSword.prevRotPitch -= 360;
+					}
+					while(ItemSpecialSword.prevRotPitch < -180)
+					{
+						ItemSpecialSword.prevRotPitch += 360;
+					}
+					player.swingItem();
+					--props.spin;
+				}
+				
+				float prp = Minecraft.getMinecraft().thePlayer.prevRotationPitch;
+				float pry = Minecraft.getMinecraft().thePlayer.prevRotationYaw;
+				if(prp > 0)
+				{
+					while(ItemSpecialSword.prevRotPitch < 0)
+					{
+						ItemSpecialSword.prevRotPitch += 360;
+					}
+				}
+				else
+				{
+					while(ItemSpecialSword.prevRotPitch > 0)
+					{
+						ItemSpecialSword.prevRotPitch -= 360;
+					}
+				}
+				ItemSpecialSword.prevRotPitch += prp;
+				ItemSpecialSword.prevRotPitch /= 2;
+				ItemSpecialSword.prevRotYaw += pry;
+				ItemSpecialSword.prevRotYaw /= 2;
+				while(ItemSpecialSword.prevRotPitch > 180)
+				{
+					ItemSpecialSword.prevRotPitch -= 360;
+				}
+				while(ItemSpecialSword.prevRotPitch < -180)
+				{
+					ItemSpecialSword.prevRotPitch += 360;
+				}
+			}
+			ParticleHandler.update();
+		}
 	}
 
 	protected void sendKey(Key k)

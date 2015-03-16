@@ -1,6 +1,12 @@
 package com.sigurd4.sigurdsEpicAdventureStuff.proxy;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+
+import net.minecraft.util.Timer;
+import net.minecraft.world.World;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
@@ -15,6 +21,7 @@ import net.minecraft.client.renderer.entity.RenderFireball;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -68,18 +75,34 @@ public class ProxyClient extends ProxyCommon
 				}
 				else if(item != null && item instanceof Item)
 				{
-					String[] s = M.getTypes((Item)item);
-					for(int i = 0; i <= ((Item)item).getMaxDamage(); ++i)
+					HashMap<Integer, ArrayList<String>> metas = M.getTypes((Item)item);
+					for(int meta = 0; meta <= ((Item)item).getMaxDamage(); ++meta)
 					{
-						int i2 = i;
-						while(i2 >= s.length)
+						if(metas.containsKey(meta))
 						{
-							i2 -= s.length;
+							ArrayList<String> variants = metas.get(meta);
+							ArrayList<ModelResourceLocation> mrls = new ArrayList();
+							for(int i = 0; i < variants.size(); ++i)
+							{
+								mrls.add(new ModelResourceLocation(variants.get(i), "inventory"));
+							}
+							String sid = id.mod + ":" + id.id;
+							if(!variants.contains(sid))
+							{
+								variants.add(sid);
+							}
+							ModelBakery.addVariantName((Item)item, variants.toArray(new String[variants.size()]));
+
+							ri.getItemModelMesher().register((Item)item, meta, new ModelResourceLocation(sid, "inventory"));
 						}
-						ri.getItemModelMesher().register((Item)item, i, new ModelResourceLocation(s[i2], "inventory"));
 					}
 				}
 			}
 		}
+	}
+
+	public World world(int dimension)
+	{
+		return Minecraft.getMinecraft().theWorld;
 	}
 }

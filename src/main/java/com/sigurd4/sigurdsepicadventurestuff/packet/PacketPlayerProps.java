@@ -1,6 +1,6 @@
 package com.sigurd4.sigurdsEpicAdventureStuff.packet;
 
-import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -19,12 +19,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketPlayerProps implements IMessage
 {
-	private EntityExtendedPlayer props;
+	private ExtendedPlayer props;
 	private ByteBuf buf;
 
 	public PacketPlayerProps() {}
 
-	public PacketPlayerProps(EntityExtendedPlayer props)
+	public PacketPlayerProps(ExtendedPlayer props)
 	{
 		this.props = props;
 	}
@@ -63,7 +63,7 @@ public class PacketPlayerProps implements IMessage
 		public static IMessage onMessage(PacketPlayerProps message)
 		{
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			EntityExtendedPlayer props = EntityExtendedPlayer.get(player);
+			ExtendedPlayer props = ExtendedPlayer.get(player);
 			if(props != null && message.buf != null)
 			{
 				props.readSpawnData(message.buf);

@@ -3,7 +3,7 @@ package com.sigurd4.sigurdsEpicAdventureStuff.event;
 import java.util.HashMap;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
-import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.entity.player.EntityPlayer;

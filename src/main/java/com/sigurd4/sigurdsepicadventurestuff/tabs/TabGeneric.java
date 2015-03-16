@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.google.common.collect.Lists;
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,7 +29,8 @@ public class TabGeneric extends CreativeTabs
 	@SideOnly(Side.CLIENT)
 	public Item getTabIconItem()
 	{
-		long time = MinecraftServer.getServer().worldServers[0].getTotalWorldTime();
+		World world = M.proxy.world(0);
+		long time = world.getTotalWorldTime();
 		ArrayList<Item> items = getItems();
 		if(items.size() > 0)
 		{
@@ -41,18 +46,23 @@ public class TabGeneric extends CreativeTabs
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack()
 	{
-		long time = MinecraftServer.getServer().worldServers[0].getTotalWorldTime();
+		World world = M.proxy.world(0);
+		long time = world.getTotalWorldTime();
 		ArrayList<Item> items = getItems();
 		ArrayList<ItemStack> itemstacks = Lists.newArrayList();
 		for(int i = 0; i < items.size(); ++i)
 		{
 			ArrayList<ItemStack> variants = Lists.newArrayList();
 			items.get(i).getSubItems(items.get(i), this, variants);
-			itemstacks.addAll(variants);
+			//itemstacks.addAll(variants);
+			if(variants.size() > 0)
+			{
+				itemstacks.add(variants.get(Stuff.Randomization.randSeed(world.getSeed(), world.getTotalWorldTime()/10).nextInt(variants.size())));
+			}
 		}
 		if(itemstacks.size() > 0)
 		{
-			return itemstacks.get((int)(time % itemstacks.size()));
+			return itemstacks.get((int)(time/10 % itemstacks.size()));
 		}
 		else
 		{

@@ -1,13 +1,20 @@
 package com.sigurd4.sigurdsEpicAdventureStuff.event;
 
-import com.sigurd4.sigurdsEpicAdventureStuff.Config;
-import com.sigurd4.sigurdsEpicAdventureStuff.References;
+import java.util.Iterator;
 
+import com.sigurd4.sigurdsEpicAdventureStuff.Config;
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
+import com.sigurd4.sigurdsEpicAdventureStuff.References;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemSpecialSword;
+
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -22,7 +29,19 @@ public class HandlerCommonFML
 	@SubscribeEvent
 	public void playerUpdateEvent(PlayerTickEvent event)
 	{
-
+		Iterator<Id> ids = M.getIds();
+		while(ids.hasNext())
+		{
+			Object object = M.getItem(ids.next());
+			if(object instanceof Block)
+			{
+				object = Item.getItemFromBlock((Block)object);
+			}
+			if(object instanceof Item)
+			{
+				Item item = (Item)object;
+			}
+		}
 	}
 
 	@SubscribeEvent

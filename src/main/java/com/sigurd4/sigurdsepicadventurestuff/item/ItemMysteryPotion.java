@@ -7,7 +7,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.Config;
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
-import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
 import com.sun.xml.internal.stream.Entity;
 
 import java.awt.Color;
@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
-public class ItemMysteryPotion extends Item
+public class ItemMysteryPotion extends Item implements IItemSubItems
 {
 	/**
 	 * Contains a map from integers to the list of potion effects that potions with that damage value confer (to prevent
@@ -88,7 +88,8 @@ public class ItemMysteryPotion extends Item
 	 */
 	public ArrayList<PotionEffect> getEffects(int meta)
 	{
-		long seed = MinecraftServer.getServer().worldServers[0].getSeed();
+		World world = M.proxy.world(0);
+		long seed = world.getSeed();
 
 		ArrayList<Potion> possibleEffects = Lists.newArrayList();
 		for(int i = 0; i < Potion.potionTypes.length; ++i)
@@ -200,7 +201,7 @@ public class ItemMysteryPotion extends Item
 			--stack.stackSize;
 		}
 
-		EntityExtendedPlayer props = EntityExtendedPlayer.get(player);
+		ExtendedPlayer props = ExtendedPlayer.get(player);
 		if(!world.isRemote)
 		{
 			List list = this.getEffects(stack);
@@ -261,8 +262,9 @@ public class ItemMysteryPotion extends Item
 	@SideOnly(Side.CLIENT)
 	public int getColorFromDamage(int meta)
 	{
-		long seed = MinecraftServer.getServer().worldServers[0].getSeed();
-		long time = MinecraftServer.getServer().worldServers[0].getTotalWorldTime();
+		World world = M.proxy.world(0);
+		long seed = world.getSeed();
+		long time = world.getTotalWorldTime();
 		Color c = Color.getHSBColor(((float)meta/this.getMaxDamage()/2)+((float)time/80), 1F, 1F);
 		return c.getRGB();
 	}
@@ -322,7 +324,7 @@ public class ItemMysteryPotion extends Item
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced)
 	{
-		EntityExtendedPlayer props = EntityExtendedPlayer.get(player);
+		ExtendedPlayer props = ExtendedPlayer.get(player);
 		if(props.knowsPotion(stack.getItemDamage()))
 		{
 			List list1 = getEffects(stack);
@@ -440,6 +442,13 @@ public class ItemMysteryPotion extends Item
 	 */
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List stacks)
+	{
+		if(stacks instanceof ArrayList<?>)
+		{
+			getSubItems2(item, tab, (ArrayList<ItemStack>)stacks);
+		}
+	}
+	public void getSubItems2(Item item, CreativeTabs tab, ArrayList<ItemStack> stacks)
 	{
 		ArrayList<Integer> types = Lists.newArrayList();
 

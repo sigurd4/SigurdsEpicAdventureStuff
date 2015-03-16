@@ -1,6 +1,6 @@
 package com.sigurd4.sigurdsEpicAdventureStuff.packet;
 
-import com.sigurd4.sigurdsEpicAdventureStuff.extended.EntityExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,7 +77,7 @@ public class PacketKey implements IMessage
 			{
 				return null;
 			}
-			EntityExtendedPlayer props = EntityExtendedPlayer.get(player);
+			ExtendedPlayer props = ExtendedPlayer.get(player);
 			Key k = Key.get(message.i);
 			switch(k)
 			{
