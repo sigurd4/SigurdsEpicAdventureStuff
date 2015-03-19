@@ -1,15 +1,18 @@
 [
-{
-  "modid": "sigurdsEpicAdventureStuff",
-  "name": "Sigurd's Epic Adventure Stuff!",
-  "description": "Various stuff that I think would fit nicely with vanilla minecraft, and some things that I suggested at /r/minecraftsuggestions that didn't get much support, but I still thought was really cool.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["sigurd4"],
+    {
+    "modid": "sigurdsEpicAdventureStuff",
+    "name": "Sigurd's Epic Adventure Stuff!",
+    "description": "Epic loot and adventure-y things!",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList":
+    [
+    "sigurd4"
+    ],
   "credits": "",
-  "logoFile": "",
+  "logoFile": "/info/logo.png",
   "screenshots": [],
   "dependencies": []
 }

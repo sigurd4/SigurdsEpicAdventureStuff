@@ -17,6 +17,9 @@ public class References
 CHANGELOG:
 1.0 - sigurd4:
 +mystery potions!
++special swords!
+  •adventure sword
+  •sky sword
 +creative tab
 +config
 */

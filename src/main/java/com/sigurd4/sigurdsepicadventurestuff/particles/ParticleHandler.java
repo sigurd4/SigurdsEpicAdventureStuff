@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityCrit2FX;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntityReddustFX;
 import net.minecraft.client.particle.IParticleFactory;
@@ -32,12 +33,22 @@ public class ParticleHandler
 
 	public static enum EnumParticleTypes2
 	{
-		TEMPORARY()
+		CRIT_COLOURED()
 		{
 			@Override
-			public EntityFX get(World world, double x, double y, double z, float mx, float my, float mz, int... par)
+			public EntityFX get(World world, double x, double y, double z, double mx, double my, double mz, int... par)
 			{
-				return null;
+				float r = 1;
+				float g = 1;
+				float b = 1;
+				if(par.length >= 3)
+				{
+					r = (float)par[0]/100;
+					g = (float)par[1]/100;
+					b = (float)par[2]/100;
+				}
+				EntityCritColouredFX fx = new EntityCritColouredFX(world, x, y, z, mx, my, mz, r, g, b);
+				return fx;
 			}
 
 			@Override
@@ -52,13 +63,13 @@ public class ParticleHandler
 
 		}
 
-		public abstract EntityFX get(World world, double x, double y, double z, float mx, float my, float mz, int ... par);
+		public abstract EntityFX get(World world, double x, double y, double z, double mx, double my, double mz, int ... par);
 
 		public abstract void update(P p);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static EntityFX particle(EnumParticleTypes2 particleEnum, World world, boolean ignoreDistance, double x, double y, double z, float mx, float my, float mz, int ... par)
+	public static EntityFX particle(EnumParticleTypes2 particleEnum, World world, boolean ignoreDistance, double x, double y, double z, double mx, double my, double mz, int ... par)
 	{
 		EntityFX particle = particleEnum.get(world, x, y, z, mx, my, mz, par);
 		if(particle != null)
@@ -73,7 +84,7 @@ public class ParticleHandler
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static EntityFX spawnEntityFX(EntityFX particle, boolean ignoreDistance, double x, double y, double z, float mx, float my, float mz, int ... par)
+	public static EntityFX spawnEntityFX(EntityFX particle, boolean ignoreDistance, double x, double y, double z, double mx, double my, double mz, int ... par)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		World world = M.proxy.world(0);
@@ -118,6 +129,14 @@ public class ParticleHandler
 			{
 				p.type.update(p);
 			}
+		}
+	}
+	
+	public static void spawnCritColoured(World world, boolean ignoreDistance, double x, double y, double z, double mx, double my, double mz, float r, float g, float b)
+	{
+		if(world.isRemote)
+		{
+			particle(EnumParticleTypes2.CRIT_COLOURED, world, ignoreDistance, x, y, z, mx, my, mz, new int[]{(int)(r*100), (int)(g*100), (int)(b*100)});
 		}
 	}
 }

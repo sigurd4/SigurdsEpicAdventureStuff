@@ -37,6 +37,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemIdFrom;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemTextureVariants;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemMysteryPotion;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemSpecialSword;
+import com.sigurd4.sigurdsEpicAdventureStuff.particles.ParticleHandler;
 import com.sigurd4.sigurdsEpicAdventureStuff.proxy.ProxyCommon;
 import com.sigurd4.sigurdsEpicAdventureStuff.tabs.TabGeneric;
 
@@ -386,7 +387,7 @@ public class M
 		public void spawnSlashParticle(Vec3 look1, Vec3 look)
 		{
 			Minecraft mc = Minecraft.getMinecraft();
-			mc.thePlayer.worldObj.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, true, mc.thePlayer.posX+look.xCoord, mc.thePlayer.posY+look.yCoord+mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ+look.zCoord, look.xCoord/10, look.yCoord/10, look.zCoord/10, new int[]{});
+			ParticleHandler.spawnCritColoured(mc.thePlayer.worldObj, true, mc.thePlayer.posX+look.xCoord, mc.thePlayer.posY+look.yCoord+mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ+look.zCoord, look.xCoord/10, look.yCoord/10, look.zCoord/10, 0.8F, 0.95F, 1.15F);
 		}
 
 		@Override
