@@ -1,0 +1,7 @@
+{
+    "parent": "sigurdsepicadventurestuff:item/sword",
+    "textures": {
+        "layer0": "sigurdsepicadventurestuff:items/adventure_sword/adventure_sword",
+        "layer1": "sigurdsepicadventurestuff:items/adventure_sword/adventure_sword_4"
+    }
+}

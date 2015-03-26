@@ -1,0 +1,6 @@
+{
+    "parent": "sigurdsepicadventurestuff:item/sky_sword",
+    "textures": {
+        "layer1": "sigurdsepicadventurestuff:items/sky_sword/sky_sword_1"
+    }
+}
