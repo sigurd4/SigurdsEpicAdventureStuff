@@ -117,6 +117,26 @@ public class Config
 		}
 	}
 
+	public static abstract class ConfigEntryEnum<E extends Enum> extends ConfigEntry<E>
+	{
+		public ConfigEntryEnum(E defaultValue, String name, ConfigEntryCategory category, String description)
+		{
+			super(defaultValue, name, category, description);
+		}
+
+		protected E load(Configuration config)
+		{
+			return values()[config.getInt(name, category.toString(), defaultValue.ordinal()-1, 0, values().length-1, description)];
+		}
+
+		protected E valid(E value)
+		{
+			return value;
+		}
+		
+		protected abstract E[] values();
+	}
+
 	public static class ConfigEntryBoolean extends ConfigEntry<Boolean>
 	{
 		public ConfigEntryBoolean(boolean defaultValue, String name, ConfigEntryCategory category, String description)
