@@ -494,7 +494,7 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 		String[] potionPrefixes = null;
 		try
 		{
-			potionPrefixes = (String[])ReflectionHelper.getPrivateValue(PotionHelper.class, null, 1);
+			potionPrefixes = (String[])ReflectionHelper.getPrivateValue(PotionHelper.class, null, 17);
 		}
 		catch(Throwable e)
 		{
