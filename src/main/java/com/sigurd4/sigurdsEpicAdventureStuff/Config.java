@@ -46,6 +46,22 @@ public class Config
 		}
 	};
 	public static final ConfigEntryInt tries = new ConfigEntryInt(6, 1, 100, "tries", ConfigEntryCategory.MYSTERY_POTIONS, "How many attempts that will be made to give a mystery potion its effects.");
+	public enum EnumPotionColorMethod
+	{
+		DEFAULT,
+		RAINBOW_ANIMATED,
+		RAINBOW,
+		RANDOMIZED_TINT,
+		RANDOMIZED_ALL
+	}
+	public static final ConfigEntryEnum<EnumPotionColorMethod> potionColor = new ConfigEntryEnum<EnumPotionColorMethod>(EnumPotionColorMethod.DEFAULT, "potionColor", ConfigEntryCategory.MYSTERY_POTIONS, "Determines what the potions should look like. 0=default, 1=animated rainbow, 2=rainbow, 3=randomized tint, 4=all randomized")
+			{
+				@Override
+				protected EnumPotionColorMethod[] values()
+				{
+					return EnumPotionColorMethod.values();
+				}
+			};
 	public static final ConfigEntryBoolean slashMultiple = new ConfigEntryBoolean(true, "slashMultiple", ConfigEntryCategory.SPECIAL_SWORDS, "Wether or not the special swords should be able to slash multiple enemies at once.");
 	public static final ConfigEntryFloat slashLenght = new ConfigEntryFloat(4, 0.1F, 20, "slashLenght", ConfigEntryCategory.SPECIAL_SWORDS, "Multiplier for the lenght of the sword-slash.");
 

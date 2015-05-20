@@ -266,7 +266,35 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 		World world = M.proxy.world(0);
 		long seed = world.getSeed();
 		long time = world.getTotalWorldTime();
-		Color c = Color.getHSBColor(((float)meta/this.getMaxDamage()/2)+((float)time/80), 1F, 1F);
+		Color c = null;
+		switch(Config.potionColor.get())
+		{
+		case DEFAULT:
+		{
+			c = Color.getHSBColor(((float)meta/this.getMaxDamage()*4.8F)+Stuff.Randomization.randSeed(seed, 235235423l).nextFloat(), 1F, 1F);
+			break;
+		}
+		case RAINBOW_ANIMATED:
+		{
+			c = Color.getHSBColor(((float)meta/this.getMaxDamage()/2)+((float)time/80), 1F, 1F);
+			break;
+		}
+		case RAINBOW:
+		{
+			c = Color.getHSBColor(((float)meta/this.getMaxDamage()*4.8F)+Stuff.Randomization.randSeed(seed, 6576474524l).nextFloat(), 1F, 1F);
+			break;
+		}
+		case RANDOMIZED_TINT:
+		{
+			c = Color.getHSBColor(Stuff.Randomization.randSeed(seed, meta, 5435436l).nextFloat(), 1F, 1F);
+			break;
+		}
+		case RANDOMIZED_ALL:
+		{
+			c = new Color(Stuff.Randomization.randSeed(seed, meta, 4324324l).nextFloat(), Stuff.Randomization.randSeed(seed, meta, 547654734l).nextFloat(), Stuff.Randomization.randSeed(seed, meta, 3254234l).nextFloat());
+			break;
+		}
+		}
 		return c.getRGB();
 	}
 
