@@ -295,10 +295,7 @@ public class M
 		{
 			if(COOLDOWN.get(stack) < COOLDOWN.max)
 			{
-				if(!(entity instanceof EntityPlayer) || (ExtendedPlayer.get((EntityPlayer)entity).spin <= 0 && ((EntityPlayer)entity).experienceTotal > 0))
-				{
-					COOLDOWN.add(stack, 1);
-				}
+				COOLDOWN.add(stack, 1);
 				CHARGE.set(stack, 0);
 			}
 			if(!isSelected || (entity instanceof EntityPlayer && !((EntityPlayer)entity).isBlocking()))
