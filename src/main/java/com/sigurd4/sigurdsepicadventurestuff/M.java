@@ -314,11 +314,7 @@ public class M
 		{
 			if(CHARGE.get(stack) >= CHARGE.max)
 			{
-				if(!world.isRemote)
-				{
-					player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, (int)Math.ceil((float)(COOLDOWN.max+CHARGE.max)*1/2), 0));
-				}
-				else
+				if(world.isRemote)
 				{
 					ItemSpecialSword.prevRotPitch = -player.rotationPitch;
 					ItemSpecialSword.prevRotYaw = player.rotationYaw+179;
@@ -328,17 +324,6 @@ public class M
 				}
 				stack.damageItem(2, player);
 				COOLDOWN.set(stack, 0);
-			}
-			else
-			{
-				if(CHARGE.get(stack) > 0)
-				{
-					if(!world.isRemote)
-					{
-						player.addPotionEffect(new PotionEffect(Potion.resistance.id, CHARGE.get(stack), 0));
-					}
-					COOLDOWN.add(stack, -(int)Math.floor((float)COOLDOWN.max*((float)CHARGE.get(stack)/CHARGE.max)));
-				}
 			}
 			CHARGE.set(stack, 0);
 		}
@@ -425,11 +410,7 @@ public class M
 		{
 			if(CHARGE.get(stack) >= CHARGE.max)
 			{
-				if(!world.isRemote)
-				{
-					player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, (int)Math.ceil((float)(COOLDOWN.max+CHARGE.max)*1/2), 0));
-				}
-				else
+				if(world.isRemote)
 				{
 					ItemSpecialSword.prevRotPitch = -player.rotationPitch;
 					ItemSpecialSword.prevRotYaw = player.rotationYaw+179;
