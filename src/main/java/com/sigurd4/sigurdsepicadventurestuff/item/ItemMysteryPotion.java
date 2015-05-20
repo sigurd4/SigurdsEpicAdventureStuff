@@ -41,6 +41,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.server.FMLServerHandler;
@@ -493,16 +494,7 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 		String[] potionPrefixes = null;
 		try
 		{
-			Field field = PotionHelper.class.getDeclaredField("potionPrefixes");
-			field.setAccessible(true);
-			if(field != null)
-			{
-				Object obj = field.get(null);
-				if(obj instanceof String[])
-				{
-					potionPrefixes = (String[])obj;
-				}
-			}
+			potionPrefixes = (String[])ReflectionHelper.getPrivateValue(PotionHelper.class, null, 1);
 		}
 		catch(Throwable e)
 		{
