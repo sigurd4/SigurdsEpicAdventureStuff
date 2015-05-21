@@ -6,6 +6,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 import com.google.common.collect.Lists;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemMysteryPotion.EnumPotionColorMethod;
 
 public class Config
 {
@@ -24,14 +25,14 @@ public class Config
 		},
 		MYSTERY_POTIONS,
 		SPECIAL_SWORDS;
-		
+
 		@Override
 		public String toString()
 		{
 			return Stuff.Strings.UnderscoresToCamelSpaces(super.toString());
 		}
 	}
-	
+
 	public static final ConfigEntryInt maxEffects = new ConfigEntryInt(3, 1, 100, "maxEffects", ConfigEntryCategory.MYSTERY_POTIONS, "How many effects a mystery potion can have at maximum.")
 	{
 		@Override
@@ -46,22 +47,14 @@ public class Config
 		}
 	};
 	public static final ConfigEntryInt tries = new ConfigEntryInt(6, 1, 100, "tries", ConfigEntryCategory.MYSTERY_POTIONS, "How many attempts that will be made to give a mystery potion its effects.");
-	public enum EnumPotionColorMethod
+	public static final ConfigEntryEnum<EnumPotionColorMethod> potionColor = new ConfigEntryEnum(EnumPotionColorMethod.DEFAULT, "potionColor", ConfigEntryCategory.MYSTERY_POTIONS, "Determines what the potions should look like. 0=default, 1=animated rainbow, 2=rainbow, 3=randomized tint, 4=all randomized")
 	{
-		DEFAULT,
-		RAINBOW_ANIMATED,
-		RAINBOW,
-		RANDOMIZED_TINT,
-		RANDOMIZED_ALL
-	}
-	public static final ConfigEntryEnum<EnumPotionColorMethod> potionColor = new ConfigEntryEnum<EnumPotionColorMethod>(EnumPotionColorMethod.DEFAULT, "potionColor", ConfigEntryCategory.MYSTERY_POTIONS, "Determines what the potions should look like. 0=default, 1=animated rainbow, 2=rainbow, 3=randomized tint, 4=all randomized")
-			{
-				@Override
-				protected EnumPotionColorMethod[] values()
-				{
-					return EnumPotionColorMethod.values();
-				}
-			};
+		@Override
+		protected EnumPotionColorMethod[] values()
+		{
+			return EnumPotionColorMethod.values();
+		}
+	};
 	public static final ConfigEntryBoolean slashMultiple = new ConfigEntryBoolean(true, "slashMultiple", ConfigEntryCategory.SPECIAL_SWORDS, "Wether or not the special swords should be able to slash multiple enemies at once.");
 	public static final ConfigEntryFloat slashLenght = new ConfigEntryFloat(4, 0.1F, 20, "slashLenght", ConfigEntryCategory.SPECIAL_SWORDS, "Multiplier for the lenght of the sword-slash.");
 
@@ -142,14 +135,14 @@ public class Config
 
 		protected E load(Configuration config)
 		{
-			return values()[config.getInt(name, category.toString(), defaultValue.ordinal()-1, 0, values().length-1, description)];
+			return values()[config.getInt(name, category.toString(), defaultValue.ordinal(), 0, values().length-1, description)];
 		}
 
 		protected E valid(E value)
 		{
 			return value;
 		}
-		
+
 		protected abstract E[] values();
 	}
 

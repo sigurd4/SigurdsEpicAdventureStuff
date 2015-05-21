@@ -48,6 +48,14 @@ import net.minecraftforge.fml.server.FMLServerHandler;
 
 public class ItemMysteryPotion extends Item implements IItemSubItems
 {
+	public enum EnumPotionColorMethod
+	{
+		DEFAULT,
+		RAINBOW_ANIMATED,
+		RAINBOW,
+		RANDOMIZED_TINT,
+		RANDOMIZED_ALL
+	}
 	/**
 	 * Contains a map from integers to the list of potion effects that potions with that damage value confer (to prevent
 	 * recalculating it).
