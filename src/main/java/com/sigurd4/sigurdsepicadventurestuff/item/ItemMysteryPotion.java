@@ -289,7 +289,7 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 		}
 		case RAINBOW:
 		{
-			c = Color.getHSBColor(((float)meta/this.getMaxDamage()*4.8F)+Stuff.Randomization.randSeed(seed, 6576474524l).nextFloat(), 1F, 1F);
+			c = Color.getHSBColor(((float)meta/this.getMaxDamage()/2)+Stuff.Randomization.randSeed(seed, 6576474524l).nextFloat(), 1F, 1F);
 			break;
 		}
 		case RANDOMIZED_TINT:
