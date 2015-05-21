@@ -1,4 +1,6 @@
 #items
+item.adventureSword.name=the Adventure Sword
+item.skySword.name=the Sky Sword
 item.mysteryPotion.name=Mystery Potion
 #tabs
 itemGroup.sigurdsEpicAdventureStuff.core=Sigurd's Epic Adventure Stuff
