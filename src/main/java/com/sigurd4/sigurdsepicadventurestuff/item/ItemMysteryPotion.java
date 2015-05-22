@@ -13,6 +13,7 @@ import com.sun.xml.internal.stream.Entity;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +49,9 @@ import net.minecraftforge.fml.server.FMLServerHandler;
 
 public class ItemMysteryPotion extends Item implements IItemSubItems
 {
+	@SideOnly(Side.CLIENT)
 	public enum EnumPotionColorMethod
 	{
-		DEFAULT,
 		RAINBOW_ANIMATED,
 		RAINBOW,
 		RANDOMIZED_TINT,
@@ -268,20 +269,109 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 		return itemStackIn;
 	}
 
+	private HashMap<EnumPotionColorMethod, HashMap<Float, HashMap<World, HashMap<Integer, Color>>>> potionColorMap = new HashMap();
 	@SideOnly(Side.CLIENT)
 	public int getColorFromDamage(int meta)
 	{
 		World world = M.proxy.world(0);
-		long seed = world.getSeed();
+		Color c = this.getColorFromDamage2(meta);
+		if(!potionColorMap.containsKey(Config.potionColor.get()) || !potionColorMap.get(Config.potionColor.get()).containsKey((Float)Config.potionColorSimilarityThreshold.get()))
+		{
+			potionColorMap = new HashMap();
+			potionColorMap.put(Config.potionColor.get(), new HashMap());
+			potionColorMap.get(Config.potionColor.get()).put((Float)Config.potionColorSimilarityThreshold.get(), new HashMap());
+		}
+		if(!potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).containsKey(world))
+		{
+			potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).put(world, new HashMap());
+		}
+		potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).put((Integer)meta, c);
+		return c.getRGB();
+	}
+	@SideOnly(Side.CLIENT)
+	public Color getColorFromDamage2(int meta)
+	{
+		World world = M.proxy.world(0);
+		long worldSeed = world.getSeed();
 		long time = world.getTotalWorldTime();
+
+		Color[] cs = new Color[20];
+		if(Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_TINT || Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL)
+		{
+			if(potionColorMap.containsKey(Config.potionColor.get()))
+			{
+				if(potionColorMap.get(Config.potionColor.get()).containsKey((Float)Config.potionColorSimilarityThreshold.get()))
+				{
+					if(potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).containsKey(world))
+					{
+						if(potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).containsKey((Integer)meta))
+						{
+							return potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).get((Integer)meta);
+						}
+					}
+				}
+			}
+
+			Color oldC = null;
+			loop:for(int seed = 0; ; ++seed)
+			{
+				Color c = getColorFromDamage(meta, Stuff.Randomization.randSeed(seed, meta, 35234324l, seed).nextLong());
+				if(seed < cs.length)
+				{
+					cs[seed] = c;
+				}
+				if(oldC != null && oldC.equals(c))
+				{
+					break loop;
+				}
+				else
+				{
+					oldC = c;
+				}
+				lowerMetas:for(int i = 1; i < meta; ++i)
+				{
+					ArrayList<ItemStack> stacks = Lists.newArrayList();
+					this.getSubItems2(this, this.getCreativeTab(), stacks);
+					for(ItemStack stack : stacks)
+					{
+						if(stack.getItemDamage() == i)
+						{
+							if(Stuff.Colors.similarity(c, new Color(getColorFromDamage(i)), true, Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL, Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL, false) < 0.9)
+							{
+								continue loop;
+							}
+						}
+						continue lowerMetas;
+					}
+				}
+				if(Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL && (Stuff.Colors.getSaturation(c) < 0.3 || Stuff.Colors.getBrightness(c) < 0.3))
+				{
+					continue loop;
+				}
+				return c;
+			}
+		}
+		Color c = cs.length > 0 ? cs[Stuff.Randomization.randSeed(meta, worldSeed, 39758234905l).nextInt(cs.length)] : null;
+		if(c != null)
+		{
+			return c;
+		}
+		else
+		{
+			return this.getColorFromDamage(meta, 0);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public Color getColorFromDamage(int meta, long seed)
+	{
+		World world = M.proxy.world(0);
+		long worldSeed = world.getSeed();
+		long time = world.getTotalWorldTime();
+
 		Color c = null;
 		switch(Config.potionColor.get())
 		{
-		case DEFAULT:
-		{
-			c = Color.getHSBColor(((float)meta/this.getMaxDamage()*4.8F)+Stuff.Randomization.randSeed(seed, 235235423l).nextFloat(), 1F, 1F);
-			break;
-		}
 		case RAINBOW_ANIMATED:
 		{
 			c = Color.getHSBColor(((float)meta/this.getMaxDamage()/2)+((float)time/80), 1F, 1F);
@@ -289,22 +379,24 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 		}
 		case RAINBOW:
 		{
-			c = Color.getHSBColor(((float)meta/this.getMaxDamage()/2)+Stuff.Randomization.randSeed(seed, 6576474524l).nextFloat(), 1F, 1F);
+			c = Color.getHSBColor(((float)meta/this.getMaxDamage()/2)+Stuff.Randomization.randSeed(worldSeed, 6576474524l, seed).nextFloat(), 1F, 1F);
 			break;
 		}
 		case RANDOMIZED_TINT:
 		{
-			c = Color.getHSBColor(Stuff.Randomization.randSeed(seed, meta, 5435436l).nextFloat(), 1F, 1F);
+			c = Color.getHSBColor(Stuff.Randomization.randSeed(worldSeed, meta, 5435436l, seed).nextFloat(), 1F, 1F);
 			break;
 		}
 		case RANDOMIZED_ALL:
 		{
-			c = new Color(Stuff.Randomization.randSeed(seed, meta, 4324324l).nextFloat(), Stuff.Randomization.randSeed(seed, meta, 547654734l).nextFloat(), Stuff.Randomization.randSeed(seed, meta, 3254234l).nextFloat());
+			c = new Color(Stuff.Randomization.randSeed(worldSeed, meta, 4324324l, seed).nextFloat(), Stuff.Randomization.randSeed(worldSeed, meta, 547654734l, seed).nextFloat(), Stuff.Randomization.randSeed(worldSeed, meta, 3254234l, seed).nextFloat());
 			break;
 		}
 		}
-		return c.getRGB();
+		return c;
 	}
+
+
 
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int renderPass)

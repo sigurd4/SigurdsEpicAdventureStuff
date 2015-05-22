@@ -1,5 +1,6 @@
 package com.sigurd4.sigurdsEpicAdventureStuff;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -519,6 +520,34 @@ public class Stuff
 			}
 			return d;
 		}
+
+		public static double max(double... ds)
+		{
+			double d = 0;
+			for(int i = 0; i < ds.length; ++i)
+			{
+				if(ds[i] > d)
+				{
+					d = ds[i];
+				}
+			}
+			return d;
+		}
+
+		public static double min(double... ds)
+		{
+			double d = 0;
+			boolean b = false;
+			for(int i = 0; i < ds.length; ++i)
+			{
+				if(!b || ds[i] < d)
+				{
+					b = true;
+					d = ds[i];
+				}
+			}
+			return d;
+		}
 	}
 
 	/**fun with hashmaps**/ //- sigurd4
@@ -617,6 +646,108 @@ public class Stuff
 				e.printStackTrace();
 			}
 			return new Timer(20);
+		}
+	}
+
+	/**color mixing and such**/
+	public static class Colors
+	{
+		public static double similarity(Color c1, Color c2, boolean hue, boolean saturation, boolean brightness, boolean alpha)
+		{
+			double h = hue ? (double)(getHue(c1) - getHue(c2)) : 0;
+			if(max(c1) - min(c1) == 0 || max(c2) - min(c2) == 0)
+			{
+				h = 0;
+			}
+			double s = saturation ? (double)(getSaturation(c1) - getSaturation(c2)) : 0;
+			double b = brightness ? (double)(getBrightness(c1) - getBrightness(c2)) : 0;
+			double a = alpha ? (double)(c1.getAlpha() - c2.getAlpha())/255 : 0;
+			return h*h + s*s + b*b + a*a;
+		}
+
+		public static double getHue(Color c)
+		{
+			double d = max(c) - min(c);
+			if(d == 0)
+			{
+				return 0; //undefined, but let's just make it simple, shall we...
+			}
+			else if(max(c) == red(c))
+			{
+				return Rotary.modularArithmetic(60*((green(c)-blue(c))/d), 360)/360;
+			}
+			else if(max(c) == green(c))
+			{
+				return Rotary.modularArithmetic(60*((blue(c)-red(c))/d) + 120, 360)/360;
+			}
+			else if(max(c) == blue(c))
+			{
+				return Rotary.modularArithmetic(60*((red(c)-green(c))/d) + 240, 360)/360;
+			}
+			return 0;
+		}
+
+		public static double getSaturation(Color c)
+		{
+			if(max(c) == 0)
+			{
+				return 0;
+			}
+			else
+			{
+				return (max(c) - min(c))/max(c);
+			}
+		}
+
+		public static double getBrightness(Color c)
+		{
+			return max(c);
+		}
+
+		public static double red(Color c)
+		{
+			return (double)c.getRed()/255;
+		}
+
+		public static double green(Color c)
+		{
+			return (double)c.getGreen()/255;
+		}
+
+		public static double blue(Color c)
+		{
+			return (double)c.getBlue()/255;
+		}
+
+		public static double max(Color c)
+		{
+			return Stuff.MathWithMultiple.max(red(c), green(c), blue(c));
+		}
+
+		public static double min(Color c)
+		{
+			return Stuff.MathWithMultiple.min(red(c), green(c), blue(c));
+		}
+	}
+	
+	public static class Rotary
+	{
+		public static double modularArithmeticBipolar(double value, double modulus)
+		{
+			return modularArithmetic(value+modulus, modulus*2)-modulus;
+		}
+		
+		public static double modularArithmetic(double value, double modulus)
+		{
+			while(value > modulus)
+			{
+				value -= modulus;
+			}
+			while(value < 0)
+			{
+				value += modulus;
+			}
+			return value;
 		}
 	}
 }

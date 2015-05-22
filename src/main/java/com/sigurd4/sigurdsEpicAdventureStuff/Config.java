@@ -2,8 +2,11 @@ package com.sigurd4.sigurdsEpicAdventureStuff;
 
 import java.util.ArrayList;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Lists;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemMysteryPotion.EnumPotionColorMethod;
@@ -47,7 +50,8 @@ public class Config
 		}
 	};
 	public static final ConfigEntryInt tries = new ConfigEntryInt(6, 1, 100, "tries", ConfigEntryCategory.MYSTERY_POTIONS, "How many attempts that will be made to give a mystery potion its effects.");
-	public static final ConfigEntryEnum<EnumPotionColorMethod> potionColor = new ConfigEntryEnum(EnumPotionColorMethod.DEFAULT, "potionColor", ConfigEntryCategory.MYSTERY_POTIONS, "Determines what the potions should look like. 0=default, 1=animated rainbow, 2=rainbow, 3=randomized tint, 4=all randomized")
+	@SideOnly(Side.CLIENT)
+	public static final ConfigEntryEnum<EnumPotionColorMethod> potionColor = new ConfigEntryEnum<EnumPotionColorMethod>(EnumPotionColorMethod.RANDOMIZED_ALL, "potionColor", ConfigEntryCategory.MYSTERY_POTIONS, "Determines what the potions should look like. [0=animated rainbow, 1=rainbow, 2=randomized tint, 3=all randomized]")
 	{
 		@Override
 		protected EnumPotionColorMethod[] values()
@@ -55,6 +59,8 @@ public class Config
 			return EnumPotionColorMethod.values();
 		}
 	};
+	@SideOnly(Side.CLIENT)
+	public static final ConfigEntryFloat potionColorSimilarityThreshold = new ConfigEntryFloat(0.5F, 0.0F, 1.0F, "potionColorSimilarityThreshold", ConfigEntryCategory.MYSTERY_POTIONS, "No colors will be any more similar to each other than this value is to 1.");
 	public static final ConfigEntryBoolean slashMultiple = new ConfigEntryBoolean(true, "slashMultiple", ConfigEntryCategory.SPECIAL_SWORDS, "Wether or not the special swords should be able to slash multiple enemies at once.");
 	public static final ConfigEntryFloat slashLenght = new ConfigEntryFloat(4, 0.1F, 20, "slashLenght", ConfigEntryCategory.SPECIAL_SWORDS, "Multiplier for the lenght of the sword-slash.");
 
