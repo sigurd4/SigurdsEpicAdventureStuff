@@ -5,9 +5,9 @@ item.mysteryPotion.name=Mystery Potion
 #tabs
 itemGroup.sigurdsEpicAdventureStuff.core=Sigurd's Epic Adventure Stuff
 #config
-configEntry.maxEffects.name=Maximum of Random Mystery Potion Effects
-configEntry.tries.name=Attempts of Adding Random Mystery Potion Effects
-configEntry.potionColor.name=Potion Color Algorithm
-configEntry.potionColorSimilarityThreshold.name=Potion Color Similarity Threshold
-configEntry.slashMultiple.name=Slash Multiple Entities with Special Swords
-configEntry.slashLenght.name=Special Sword Slash Lenght
+#configEntry.maxEffects.name=Maximum of Random Mystery Potion Effects
+#configEntry.tries.name=Attempts of Adding Random Mystery Potion Effects
+#configEntry.potionColor.name=Potion Color Algorithm
+#configEntry.potionColorSimilarityThreshold.name=Potion Color Similarity Threshold
+#configEntry.slashMultiple.name=Slash Multiple Entities with Special Swords
+#configEntry.slashLenght.name=Special Sword Slash Lenght
