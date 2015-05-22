@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
 import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemSpecialSword;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
@@ -106,59 +108,33 @@ public class HandlerClientFML
 				EntityExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).setRightClick(true);
 		}*/
 
-		if(event.phase == Phase.START || true)
+		if(event.phase == Phase.END)
 		{
 			EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 			WorldClient world = Minecraft.getMinecraft().theWorld;
 			if(player != null && world != null)
 			{
 				ExtendedPlayer props = ExtendedPlayer.get(player);
+
+				//handle spin attack movement
 				if(props.spin > 0)
 				{
 					float rot = 40;
-					//player.prevRotationYaw = player.rotationYaw;
 					player.rotationYaw += rot;
-					//player.prevRotationPitch = player.rotationPitch;
-					player.rotationPitch -= player.rotationPitch*2*rot/360;
-					while(ItemSpecialSword.prevRotPitch > 180)
-					{
-						ItemSpecialSword.prevRotPitch -= 360;
-					}
-					while(ItemSpecialSword.prevRotPitch < -180)
-					{
-						ItemSpecialSword.prevRotPitch += 360;
-					}
+					player.rotationYawHead += rot;
+					player.rotationPitch -= player.prevRotationPitch*2*rot/360;
 					player.swingItem();
 					--props.spin;
 				}
-				
-				float prp = Minecraft.getMinecraft().thePlayer.prevRotationPitch;
-				float pry = Minecraft.getMinecraft().thePlayer.prevRotationYaw;
-				if(prp > 0)
+			}
+			if(ItemSpecialSword.yaw > 0)
+			{
+				float max = 10F;
+				if(Math.sqrt(ItemSpecialSword.pitch*ItemSpecialSword.pitch + ItemSpecialSword.yaw*ItemSpecialSword.yaw) > max)
 				{
-					while(ItemSpecialSword.prevRotPitch < 0)
-					{
-						ItemSpecialSword.prevRotPitch += 360;
-					}
-				}
-				else
-				{
-					while(ItemSpecialSword.prevRotPitch > 0)
-					{
-						ItemSpecialSword.prevRotPitch -= 360;
-					}
-				}
-				ItemSpecialSword.prevRotPitch += prp;
-				ItemSpecialSword.prevRotPitch /= 2;
-				ItemSpecialSword.prevRotYaw += pry;
-				ItemSpecialSword.prevRotYaw /= 2;
-				while(ItemSpecialSword.prevRotPitch > 180)
-				{
-					ItemSpecialSword.prevRotPitch -= 360;
-				}
-				while(ItemSpecialSword.prevRotPitch < -180)
-				{
-					ItemSpecialSword.prevRotPitch += 360;
+					double w = max/Math.sqrt(ItemSpecialSword.pitch*ItemSpecialSword.pitch + ItemSpecialSword.yaw*ItemSpecialSword.yaw);
+					ItemSpecialSword.pitch *= w;
+					ItemSpecialSword.yaw *= w;
 				}
 			}
 			ParticleHandler.update();

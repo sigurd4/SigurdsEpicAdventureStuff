@@ -11,6 +11,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.Config;
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.References;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
+import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
 import com.sigurd4.sigurdsEpicAdventureStuff.proxy.ProxyClient;
 
 import net.minecraft.block.Block;
@@ -40,8 +41,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class ItemSpecialSword extends ItemSword implements IItemSubItems, IItemTextureVariants
 {
 	public HashMap<EntityPlayer, Boolean> playerReachAffected = new HashMap<EntityPlayer, Boolean>();
-	public static float prevRotPitch = 0;
-	public static float prevRotYaw = 0;
+	public static float pitch = 0;
+	public static float yaw = 0;
 
 	public float attackDamage;
 	public float moveMultiplier;
@@ -244,19 +245,24 @@ public abstract class ItemSpecialSword extends ItemSword implements IItemSubItem
 		final float pory = mc.thePlayer.prevRotationYaw;
 		final float poryh = mc.thePlayer.prevRotationYawHead;
 
-		float rp = mc.thePlayer.rotationPitch-prevRotPitch;
-		float ry = mc.thePlayer.rotationYaw-prevRotYaw;
-		rp /= pt;
-		ry /= pt;
+		float rp = -pitch;
+		float ry = -yaw;
+		rp /= 2;
+		ry /= 2;
 		if(!mc.thePlayer.onGround && !mc.thePlayer.isAirBorne)
 		{
 			rp -= mc.thePlayer.motionY*200;
 		}
 		double w = Math.sqrt(rp*rp + ry*ry);
-		if(w > 0)
+		if(w > 1)
 		{
-			rp *= Config.slashLenght.get()*this.slashMultiplier;
-			ry *= Config.slashLenght.get()*this.slashMultiplier;
+			rp *= this.slashMultiplier;
+			ry *= this.slashMultiplier;
+			if(ExtendedPlayer.get(mc.thePlayer).spin <= 0)
+			{
+				rp *= Config.slashLenght.get();
+				ry *= Config.slashLenght.get();
+			}
 			w /= w/100;
 			float a = 90;
 			if(w > a)
@@ -268,19 +274,17 @@ public abstract class ItemSpecialSword extends ItemSword implements IItemSubItem
 			for(int i = 0; i < times; ++i)
 			{
 				float f = Stuff.rand.nextFloat()*Stuff.rand.nextFloat()*Stuff.rand.nextFloat();
-				mc.thePlayer.rotationPitch = orp+rp*(f-0.5F);
-				mc.thePlayer.prevRotationPitch = prevRotPitch+rp*(f-0.5F);
-				mc.thePlayer.rotationYawHead = mc.thePlayer.rotationYaw = ory+ry*(f-0.5F);
-				mc.thePlayer.prevRotationYawHead = mc.thePlayer.prevRotationYaw = prevRotYaw+ry*(f-0.5F);
+				f *= Stuff.rand.nextBoolean() ? -1 : 1;
+				mc.thePlayer.rotationPitch = orp+rp*(f);
+				mc.thePlayer.prevRotationPitch = porp+pitch+rp*(f);
+				mc.thePlayer.rotationYawHead = mc.thePlayer.rotationYaw = ory+ry*(f);
+				mc.thePlayer.prevRotationYawHead = mc.thePlayer.prevRotationYaw = pory+yaw+ry*(f);
+
 				mc.entityRenderer.getMouseOver(pt);
 
 				Vec3 look = Stuff.Coordinates3D.getVectorForRotation(mc.thePlayer.rotationPitch, mc.thePlayer.rotationYaw);
 				look = new Vec3(look.xCoord*reach, look.yCoord*reach, look.zCoord*reach);
 
-				if(look.distanceTo(look1) > w/60 && !Config.slashMultiple.get())
-				{
-					//continue;
-				}
 				if(mc.thePlayer != null && mc.objectMouseOver != null)
 				{
 					Vec3 hitVec = new Vec3(mc.objectMouseOver.hitVec.xCoord-mc.thePlayer.posX, mc.objectMouseOver.hitVec.yCoord-mc.thePlayer.posY-mc.thePlayer.getEyeHeight(), mc.objectMouseOver.hitVec.zCoord-mc.thePlayer.posZ);
@@ -304,8 +308,8 @@ public abstract class ItemSpecialSword extends ItemSword implements IItemSubItem
 					}
 				}
 			}
-			prevRotPitch = mc.thePlayer.rotationPitch;
-			prevRotYaw = mc.thePlayer.rotationYaw;
+			pitch = mc.thePlayer.rotationPitch;
+			yaw = mc.thePlayer.rotationYaw;
 		}
 		if(true)
 		{

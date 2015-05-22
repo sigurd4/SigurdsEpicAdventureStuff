@@ -754,7 +754,7 @@ public class Stuff
 	{
 		public static double modularArithmeticBipolar(double value, double modulus)
 		{
-			return modularArithmetic(value+modulus, modulus*2)-modulus;
+			return modularArithmetic(value+modulus/2, modulus)-modulus/2;
 		}
 
 		public static double modularArithmetic(double value, double modulus)

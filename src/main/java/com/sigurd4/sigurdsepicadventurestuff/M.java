@@ -316,8 +316,7 @@ public class M
 			{
 				if(world.isRemote)
 				{
-					ItemSpecialSword.prevRotPitch = -player.rotationPitch;
-					ItemSpecialSword.prevRotYaw = player.rotationYaw+179;
+					ItemSpecialSword.yaw += 179;
 					this.attack(stack);
 					ExtendedPlayer props = ExtendedPlayer.get(player);
 					props.spin = (int)((float)360/10);
@@ -412,8 +411,7 @@ public class M
 			{
 				if(world.isRemote)
 				{
-					ItemSpecialSword.prevRotPitch = -player.rotationPitch;
-					ItemSpecialSword.prevRotYaw = player.rotationYaw+179;
+					ItemSpecialSword.yaw += 179;
 					this.attack(stack);
 					ExtendedPlayer props = ExtendedPlayer.get(player);
 					props.spin = (int)((float)360/40);
