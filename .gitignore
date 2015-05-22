@@ -2,8 +2,13 @@
 .settings
 bin
 !build
-build/*
 !build/lib
+build/classes
+build/dependency-cache
+build/resources
+build/sources
+build/taskLogs
+build/tmp
 eclipse
 gradle
 !src
@@ -13,6 +18,7 @@ gradle
 !README.txt
 !CHANGELOG.txt
 !.gitignore
+!*.gitignore
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
