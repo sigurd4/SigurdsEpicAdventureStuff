@@ -18,6 +18,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -31,6 +32,7 @@ import net.minecraft.util.Vec3i;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -632,14 +634,32 @@ public class Stuff
 	/**get hidden stuff**/
 	public static class Reflection
 	{
+		public static boolean isPotionBadEffect(Potion potion)
+		{
+			try
+			{
+				return potion.isBadEffect();
+			}
+			catch(Throwable e)
+			{
+				try
+				{
+					return ReflectionHelper.getPrivateValue(Potion.class, potion, 36);
+				}
+				catch(Throwable e2)
+				{
+					e2.printStackTrace();
+				}
+				return false;
+			}
+		}
+
 		@SideOnly(Side.CLIENT)
 		public static Timer getTimer()
 		{
 			try
 			{
-				Field field = Minecraft.class.getDeclaredField("timer");
-				field.setAccessible(true);
-				return (Timer)field.get(Minecraft.getMinecraft());
+				return ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), 17);
 			}
 			catch(Throwable e)
 			{
@@ -729,14 +749,14 @@ public class Stuff
 			return Stuff.MathWithMultiple.min(red(c), green(c), blue(c));
 		}
 	}
-	
+
 	public static class Rotary
 	{
 		public static double modularArithmeticBipolar(double value, double modulus)
 		{
 			return modularArithmetic(value+modulus, modulus*2)-modulus;
 		}
-		
+
 		public static double modularArithmetic(double value, double modulus)
 		{
 			while(value > modulus)

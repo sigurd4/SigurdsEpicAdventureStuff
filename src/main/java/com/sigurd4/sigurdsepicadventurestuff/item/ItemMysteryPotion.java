@@ -184,7 +184,7 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 				}
 				else
 				{
-					if(potion.isBadEffect())
+					if(Stuff.Reflection.isPotionBadEffect(potion))
 					{
 						duration *= Stuff.Randomization.randSeed(seed, meta, i*i, 745426).nextInt(2)+1;
 					}
