@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.relauncher.Side;
@@ -68,6 +69,7 @@ public class Config
 			{
 				public final T defaultValue;
 				public final String name;
+				public final String unlocalizedName;
 				public final ConfigEntryCategory category;
 				public final String description;
 				public final Side side;
@@ -79,6 +81,7 @@ public class Config
 				{
 					this.defaultValue = this.value = defaultValue;
 					this.name = name;
+					this.unlocalizedName = (side == Side.SERVER ? EnumChatFormatting.AQUA : EnumChatFormatting.GREEN) + "configEntry." + name + ".name";
 					this.category = category;
 					this.side = side;
 					this.description = description + " [SIDE: " + side.name().toUpperCase() + "]";
@@ -129,7 +132,7 @@ public class Config
 
 				protected Integer load(Configuration config)
 				{
-					return config.getInt(name, category.toString(), defaultValue, minValue, maxValue, description);
+					return config.getInt(name, category.toString(), defaultValue, minValue, maxValue, description, unlocalizedName);
 				}
 
 				protected Integer valid(Integer value)
@@ -168,7 +171,7 @@ public class Config
 
 				protected E load(Configuration config)
 				{
-					return values()[config.getInt(name, category.toString(), defaultValue.ordinal(), 0, values().length-1, description)];
+					return values()[config.getInt(name, category.toString(), defaultValue.ordinal(), 0, values().length-1, description, unlocalizedName)];
 				}
 
 				protected E valid(E value)
@@ -238,7 +241,7 @@ public class Config
 
 				protected Float load(Configuration config)
 				{
-					return config.getFloat(name, category.toString(), defaultValue, minValue, maxValue, description);
+					return config.getFloat(name, category.toString(), defaultValue, minValue, maxValue, description, unlocalizedName);
 				}
 
 				protected Float valid(Float value)
