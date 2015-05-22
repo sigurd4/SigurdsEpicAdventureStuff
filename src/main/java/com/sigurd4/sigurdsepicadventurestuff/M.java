@@ -319,7 +319,7 @@ public class M
 					ItemSpecialSword.yaw += 179;
 					this.attack(stack);
 					ExtendedPlayer props = ExtendedPlayer.get(player);
-					props.spin = (int)((float)360/10);
+					props.spin = (int)((float)360/20);
 				}
 				stack.damageItem(2, player);
 				COOLDOWN.set(stack, 0);
