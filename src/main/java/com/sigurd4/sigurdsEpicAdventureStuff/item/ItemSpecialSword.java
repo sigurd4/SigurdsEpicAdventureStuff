@@ -254,7 +254,7 @@ public abstract class ItemSpecialSword extends ItemSword implements IItemSubItem
 			rp -= mc.thePlayer.motionY*200;
 		}
 		double w = Math.sqrt(rp*rp + ry*ry);
-		if(w > 1)
+		if(w > 0.1)
 		{
 			rp *= this.slashMultiplier;
 			ry *= this.slashMultiplier;

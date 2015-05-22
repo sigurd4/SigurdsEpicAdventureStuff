@@ -44,7 +44,7 @@ public class HandlerClient
 		WorldClient world = Minecraft.getMinecraft().theWorld;
 
 		ItemSpecialSword.pitch = (float)event.dy*2.4F;
-		ItemSpecialSword.yaw = (float)event.dx*2.2F;
+		ItemSpecialSword.yaw = (float)-event.dx*2.2F;
 		if(player != null && world != null)
 		{
 			ExtendedPlayer props = ExtendedPlayer.get(player);

@@ -279,7 +279,7 @@ public class M
 	public static final ItemSpecialSword adventure_sword = registerItem("adventure_sword", (ItemSpecialSword)new ItemSpecialSword(7, 2.3F, 100)
 	{
 		public final ItemTagInteger CHARGE = new ItemTagInteger("Charge", 0, 0, 2*20, true);
-		public final ItemTagInteger COOLDOWN = new ItemTagInteger("Cooldown", 0, 0, 10*20, true);
+		public final ItemTagInteger COOLDOWN = new ItemTagInteger("Cooldown", 0, 0, 11*20, true);
 		public final ItemTagInteger CHARGEINT = new ItemTagInteger("ChargeInt", 0, 0, 4, true);
 		public final ItemTagInteger COOLDOWNINT = new ItemTagInteger("CooldownInt", 0, 0, 4, true);
 
@@ -357,10 +357,10 @@ public class M
 			return new String[]{References.MODID + ":" + M.getId(this).id + "_0", References.MODID + ":" + M.getId(this).id + "_1", References.MODID + ":" + M.getId(this).id + "_2", References.MODID + ":" + M.getId(this).id + "_3", References.MODID + ":" + M.getId(this).id + "_4", References.MODID + ":" + M.getId(this).id + "_5", References.MODID + ":" + M.getId(this).id + "_6", References.MODID + ":" + M.getId(this).id + "_7", References.MODID + ":" + M.getId(this).id + "_8"};
 		}
 	}.setUnlocalizedName("adventureSword").setCreativeTab(M.tabCore), false, new String[]{}, 1, 1, 1);
-	public static final ItemSpecialSword sky_sword = registerItem("sky_sword", (ItemSpecialSword)new ItemSpecialSword(4, 1.5F, 100)
+	public static final ItemSpecialSword sky_sword = registerItem("sky_sword", (ItemSpecialSword)new ItemSpecialSword(4, 3.5F, 100)
 	{
-		public final ItemTagInteger CHARGE = new ItemTagInteger("Charge", 0, 0, 1*20, true);
-		public final ItemTagInteger COOLDOWN = new ItemTagInteger("Cooldown", 0, 0, 16*20, true);
+		public final ItemTagInteger CHARGE = new ItemTagInteger("Charge", 0, 0, 15, true);
+		public final ItemTagInteger COOLDOWN = new ItemTagInteger("Cooldown", 0, 0, 8*20, true);
 		public final ItemTagInteger CHARGEINT = new ItemTagInteger("ChargeInt", 0, 0, 4, true);
 		public final ItemTagInteger COOLDOWNINT = new ItemTagInteger("CooldownInt", 0, 0, 4, true);
 

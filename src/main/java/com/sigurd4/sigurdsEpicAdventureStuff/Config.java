@@ -63,7 +63,7 @@ public class Config
 			};
 			public static final ConfigEntryFloat potionColorSimilarityThreshold = new ConfigEntryFloat(Side.CLIENT, 0.5F, 0.0F, 1.0F, "potionColorSimilarityThreshold", ConfigEntryCategory.MYSTERY_POTIONS, "No colors will be any more similar to each other than this value is to 1.");
 			public static final ConfigEntryBoolean slashMultiple = new ConfigEntryBoolean(Side.SERVER, true, "slashMultiple", ConfigEntryCategory.SPECIAL_SWORDS, "Wether or not the special swords should be able to slash multiple enemies at once.");
-			public static final ConfigEntryFloat slashLenght = new ConfigEntryFloat(Side.SERVER, 4, 0.1F, 20, "slashLenght", ConfigEntryCategory.SPECIAL_SWORDS, "Multiplier for the lenght of the sword-slash.");
+			public static final ConfigEntryFloat slashLenght = new ConfigEntryFloat(Side.SERVER, 4, 0.1F, 10, "slashLenght", ConfigEntryCategory.SPECIAL_SWORDS, "Multiplier for the lenght of the sword-slash.");
 
 			public abstract static class ConfigEntry<T>
 			{
