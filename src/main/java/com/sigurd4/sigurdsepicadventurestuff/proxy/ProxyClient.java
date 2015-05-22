@@ -1,5 +1,6 @@
 package com.sigurd4.sigurdsEpicAdventureStuff.proxy;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerClient;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerClientFML;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemMysteryPotion.EnumPotionColorMethod;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -31,9 +33,19 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ProxyClient extends ProxyCommon
 {
+	public HashMap<EnumPotionColorMethod, HashMap<Float, HashMap<World, HashMap<Integer, Color>>>> potionColorMap = new HashMap();
+
+	@Override
+	public Side side()
+	{
+		return Side.CLIENT;
+	}
+	
 	@Override
 	public void preInit(FMLPreInitializationEvent event)
 	{

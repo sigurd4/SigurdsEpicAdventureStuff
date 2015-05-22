@@ -8,6 +8,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
 import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.proxy.ProxyClient;
 import com.sun.xml.internal.stream.Entity;
 
 import java.awt.Color;
@@ -49,7 +50,6 @@ import net.minecraftforge.fml.server.FMLServerHandler;
 
 public class ItemMysteryPotion extends Item implements IItemSubItems
 {
-	@SideOnly(Side.CLIENT)
 	public enum EnumPotionColorMethod
 	{
 		RAINBOW_ANIMATED,
@@ -269,23 +269,22 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 		return itemStackIn;
 	}
 
-	private HashMap<EnumPotionColorMethod, HashMap<Float, HashMap<World, HashMap<Integer, Color>>>> potionColorMap = new HashMap();
 	@SideOnly(Side.CLIENT)
 	public int getColorFromDamage(int meta)
 	{
 		World world = M.proxy.world(0);
 		Color c = this.getColorFromDamage2(meta);
-		if(!potionColorMap.containsKey(Config.potionColor.get()) || !potionColorMap.get(Config.potionColor.get()).containsKey((Float)Config.potionColorSimilarityThreshold.get()))
+		if(!((ProxyClient)M.proxy).potionColorMap.containsKey(Config.potionColor.get()) || !((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).containsKey((Float)Config.potionColorSimilarityThreshold.get()))
 		{
-			potionColorMap = new HashMap();
-			potionColorMap.put(Config.potionColor.get(), new HashMap());
-			potionColorMap.get(Config.potionColor.get()).put((Float)Config.potionColorSimilarityThreshold.get(), new HashMap());
+			((ProxyClient)M.proxy).potionColorMap = new HashMap();
+			((ProxyClient)M.proxy).potionColorMap.put(Config.potionColor.get(), new HashMap());
+			((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).put((Float)Config.potionColorSimilarityThreshold.get(), new HashMap());
 		}
-		if(!potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).containsKey(world))
+		if(!((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).containsKey(world))
 		{
-			potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).put(world, new HashMap());
+			((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).put(world, new HashMap());
 		}
-		potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).put((Integer)meta, c);
+		((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).put((Integer)meta, c);
 		return c.getRGB();
 	}
 	@SideOnly(Side.CLIENT)
@@ -298,15 +297,15 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 		Color[] cs = new Color[20];
 		if(Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_TINT || Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL)
 		{
-			if(potionColorMap.containsKey(Config.potionColor.get()))
+			if(((ProxyClient)M.proxy).potionColorMap.containsKey(Config.potionColor.get()))
 			{
-				if(potionColorMap.get(Config.potionColor.get()).containsKey((Float)Config.potionColorSimilarityThreshold.get()))
+				if(((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).containsKey((Float)Config.potionColorSimilarityThreshold.get()))
 				{
-					if(potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).containsKey(world))
+					if(((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).containsKey(world))
 					{
-						if(potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).containsKey((Integer)meta))
+						if(((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).containsKey((Integer)meta))
 						{
-							return potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).get((Integer)meta);
+							return ((ProxyClient)M.proxy).potionColorMap.get(Config.potionColor.get()).get((Float)Config.potionColorSimilarityThreshold.get()).get(world).get((Integer)meta);
 						}
 					}
 				}

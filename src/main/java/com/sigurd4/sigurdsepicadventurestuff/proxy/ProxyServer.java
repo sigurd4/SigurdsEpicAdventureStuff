@@ -18,9 +18,16 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ProxyServer extends ProxyCommon
 {
+	@Override
+	public Side side()
+	{
+		return Side.SERVER;
+	}
+	
 	@Override
 	public void preInit(FMLPreInitializationEvent event)
 	{

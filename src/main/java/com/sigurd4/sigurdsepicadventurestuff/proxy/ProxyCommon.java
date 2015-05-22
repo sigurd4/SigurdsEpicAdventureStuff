@@ -44,6 +44,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class ProxyCommon
 {
+	public abstract Side side();
+	
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		MinecraftForge.EVENT_BUS.register(new HandlerCommon());
