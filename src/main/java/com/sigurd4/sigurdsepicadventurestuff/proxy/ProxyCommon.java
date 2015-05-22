@@ -15,6 +15,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommon;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommonFML;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketConfig;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
@@ -75,6 +76,7 @@ public abstract class ProxyCommon
 		M.network = NetworkRegistry.INSTANCE.newSimpleChannel("SEASPackets");
 		M.network.registerMessage(PacketKey.Handler.class, PacketKey.class, 0, Side.SERVER);
 		M.network.registerMessage(PacketPlayerProps.Handler.class, PacketPlayerProps.class, 1, Side.CLIENT);
+		M.network.registerMessage(PacketConfig.Handler.class, PacketConfig.class, 2, Side.CLIENT);
 	}
 
 	private void recipes()

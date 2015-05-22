@@ -3,8 +3,10 @@ package com.sigurd4.sigurdsEpicAdventureStuff.event;
 import java.util.HashMap;
 import java.util.List;
 
+import com.sigurd4.sigurdsEpicAdventureStuff.Config;
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketConfig;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.client.Minecraft;
@@ -22,6 +24,7 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class HandlerCommon
 {

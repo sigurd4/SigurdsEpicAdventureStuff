@@ -2,8 +2,10 @@ package com.sigurd4.sigurdsEpicAdventureStuff.event;
 
 import java.util.HashMap;
 
+import com.sigurd4.sigurdsEpicAdventureStuff.Config;
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketConfig;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +25,15 @@ public class HandlerServerFML
 	@SubscribeEvent
 	public void playerUpdateEvent(PlayerTickEvent event)
 	{
-		
+		if(event.player instanceof EntityPlayerMP)
+		{
+			for(int i = 0; i < Config.entries.size(); ++i)
+			{
+				if(Config.entries.get(i) != null && Config.entries.get(i).side == Side.SERVER)
+				{
+					M.network.sendTo(new PacketConfig(i), (EntityPlayerMP)event.player);
+				}
+			}
+		}
 	}
 }
