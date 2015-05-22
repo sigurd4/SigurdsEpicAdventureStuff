@@ -148,13 +148,14 @@ public class Config
 				@Override
 				public void fromBytes(ByteBuf buf)
 				{
-					serverValue = valid(buf.readInt());
+					int i = buf.readInt();
+					serverValue = valid((Integer)i);
 				}
 
 				@Override
 				public void toBytes(ByteBuf buf)
 				{
-					buf.writeInt(valid(value));
+					buf.writeInt((int)valid(value));
 				}
 			}
 
@@ -202,7 +203,7 @@ public class Config
 
 				protected Boolean load(Configuration config)
 				{
-					return config.getBoolean(name, category.toString(), defaultValue, description);
+					return config.getBoolean(name, category.toString(), defaultValue, description, unlocalizedName);
 				}
 
 				protected Boolean valid(Boolean value)
@@ -213,7 +214,7 @@ public class Config
 				@Override
 				public void fromBytes(ByteBuf buf)
 				{
-					serverValue = valid(buf.readByte() > 0);
+					serverValue = valid((Boolean)(buf.readByte() > 0));
 				}
 
 				@Override
@@ -256,13 +257,13 @@ public class Config
 				@Override
 				public void fromBytes(ByteBuf buf)
 				{
-					serverValue = valid(buf.readFloat());
+					serverValue = valid((Float)buf.readFloat());
 				}
 
 				@Override
 				public void toBytes(ByteBuf buf)
 				{
-					buf.writeFloat(valid(value));
+					buf.writeFloat((float)valid(value));
 				}
 			}
 }
