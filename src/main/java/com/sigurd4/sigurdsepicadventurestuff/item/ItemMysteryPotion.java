@@ -335,7 +335,8 @@ public class ItemMysteryPotion extends Item implements IItemSubItems
 					{
 						if(stack.getItemDamage() == i)
 						{
-							if(Stuff.Colors.similarity(c, new Color(getColorFromDamage(i)), true, Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL, Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL, false) < 0.9)
+							Color c2 = new Color(getColorFromDamage(i));
+							if((Stuff.Colors.similarity(c, c2, true, false, false, false) + Stuff.Colors.similarity(c, c2, true, Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL, Config.potionColor.get() == EnumPotionColorMethod.RANDOMIZED_ALL, false))/2 < Config.potionColorSimilarityThreshold.get()*Config.potionColorSimilarityThreshold.get())
 							{
 								continue loop;
 							}
