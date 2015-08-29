@@ -8,13 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.collect.Lists;
-import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
-import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemSubItems;
-import com.sun.javafx.geom.Vec3f;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +20,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumFacing.AxisDirection;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Timer;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.Vec3i;
@@ -36,54 +30,66 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.google.common.collect.Lists;
+import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemSubItems;
+
 public class Stuff
 {
 	public static Random rand = new Random();
 	public static Random randSeed = new Random();
 
-	/**Random stuff**/ //- sigurd4
+	/** Random stuff **/
+	//- sigurd4
 	public static class Randomization
 	{
 		public static double r(double i)
 		{
-			return r(i, Stuff.rand);
+			return Randomization.r(i, Stuff.rand);
 		}
+
 		public static double r(double i, Random rand)
 		{
-			return (rand.nextDouble()*i*2)-i;
+			return rand.nextDouble() * i * 2 - i;
 		}
+
 		public static float r(float i, Random rand)
 		{
-			return (rand.nextFloat()*i*2)-i;
+			return rand.nextFloat() * i * 2 - i;
 		}
+
 		public static float r(float i)
 		{
-			return r(i, Stuff.rand);
+			return Randomization.r(i, Stuff.rand);
 		}
+
 		public static <T> T getRandom(List<T> es)
 		{
 			if(es.size() > 0)
 			{
-				return es.get(es.size() > 1 ? rand.nextInt(es.size()-1) : 0);
+				return es.get(es.size() > 1 ? Stuff.rand.nextInt(es.size() - 1) : 0);
 			}
 			return null;
 		}
+
 		public static <T> T getRandom(T[] es)
 		{
-			return getRandom(ArraysAndSuch.arrayToArrayList(es));
+			return Randomization.getRandom(ArraysAndSuch.arrayToArrayList(es));
 		}
+
 		public static Random randSeed(long seed, long ... seeds)
 		{
 			for(int i = 0; i < seeds.length; ++i)
 			{
-				seed += randSeed(seeds[i]).nextLong();
+				seed += Randomization.randSeed(seeds[i]).nextLong();
 			}
-			randSeed.setSeed(seed);
-			return randSeed;
+			Stuff.randSeed.setSeed(seed);
+			return Stuff.randSeed;
 		}
 	}
 
-	/**Stuff with coordinates in a 3D room.*/ //- sigurd4
+	/** Stuff with coordinates in a 3D room. */
+	//- sigurd4
 	public static class Coordinates3D
 	{
 		public static Vec3 mix(ArrayList<Vec3> a)
@@ -91,60 +97,60 @@ public class Stuff
 			Vec3 pos = new Vec3(0, 0, 0);
 			for(int i = 0; i < a.size(); ++i)
 			{
-				pos = add(pos, a.get(i));
+				pos = Coordinates3D.add(pos, a.get(i));
 			}
-			pos = divide(pos, a.size());
+			pos = Coordinates3D.divide(pos, a.size());
 			return pos;
 		}
 
 		public static Vec3 stabilize(Vec3 pos, double w)
 		{
-			double d = w/distance(pos);
-			return new Vec3(pos.xCoord*d, pos.yCoord*d, pos.zCoord*d);
+			double d = w / Coordinates3D.distance(pos);
+			return new Vec3(pos.xCoord * d, pos.yCoord * d, pos.zCoord * d);
 		}
 
 		public static double distance(Vec3 pos1, Vec3 pos2)
 		{
-			return distance(subtract(pos1, pos2));
+			return Coordinates3D.distance(Coordinates3D.subtract(pos1, pos2));
 		}
 
 		public static Vec3 subtract(Vec3 pos1, Vec3 pos2)
 		{
-			return new Vec3(pos1.xCoord-pos2.xCoord, pos1.yCoord-pos2.yCoord, pos1.zCoord-pos2.zCoord);
+			return new Vec3(pos1.xCoord - pos2.xCoord, pos1.yCoord - pos2.yCoord, pos1.zCoord - pos2.zCoord);
 		}
 
 		public static Vec3 add(Vec3 pos1, Vec3 pos2)
 		{
-			return new Vec3(pos1.xCoord+pos2.xCoord, pos1.yCoord+pos2.yCoord, pos1.zCoord+pos2.zCoord);
+			return new Vec3(pos1.xCoord + pos2.xCoord, pos1.yCoord + pos2.yCoord, pos1.zCoord + pos2.zCoord);
 		}
 
 		public static Vec3 divide(Vec3 pos, double d)
 		{
-			return multiply(pos, 1/d);
+			return Coordinates3D.multiply(pos, 1 / d);
 		}
 
 		public static Vec3 multiply(Vec3 pos, double d)
 		{
-			return new Vec3(pos.xCoord*d, pos.yCoord*d, pos.zCoord*d);
+			return new Vec3(pos.xCoord * d, pos.yCoord * d, pos.zCoord * d);
 		}
 
 		public static double distance(Vec3 pos)
 		{
-			return Math.sqrt(pos.xCoord*pos.xCoord + pos.yCoord*pos.yCoord + pos.zCoord*pos.zCoord);
+			return Math.sqrt(pos.xCoord * pos.xCoord + pos.yCoord * pos.yCoord + pos.zCoord * pos.zCoord);
 		}
 
 		public static void throwThing(Entity source, Entity object, double f)
 		{
-			object.setLocationAndAngles(source.posX, source.posY + (double)source.getEyeHeight(), source.posZ, source.rotationYaw, source.rotationPitch);
-			object.posX -= (double)(MathHelper.cos(object.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+			object.setLocationAndAngles(source.posX, source.posY + source.getEyeHeight(), source.posZ, source.rotationYaw, source.rotationPitch);
+			object.posX -= MathHelper.cos(object.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
 			object.posY -= 0.10000000149011612D;
-			object.posZ -= (double)(MathHelper.sin(object.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+			object.posZ -= MathHelper.sin(object.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
 			object.setPosition(object.posX, object.posY, object.posZ);
 
-			object.motionX = (double)(-MathHelper.sin(object.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(object.rotationPitch / 180.0F * (float)Math.PI) * f);
-			object.motionZ = (double)(MathHelper.cos(object.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(object.rotationPitch / 180.0F * (float)Math.PI) * f);
+			object.motionX = -MathHelper.sin(object.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(object.rotationPitch / 180.0F * (float)Math.PI) * f;
+			object.motionZ = MathHelper.cos(object.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(object.rotationPitch / 180.0F * (float)Math.PI) * f;
 
-			object.motionY = (double)(-MathHelper.sin((object.rotationPitch) / 180.0F * (float)Math.PI) * f);
+			object.motionY = -MathHelper.sin(object.rotationPitch / 180.0F * (float)Math.PI) * f;
 		}
 
 		public static Vec3 velocity(Entity entity)
@@ -169,7 +175,7 @@ public class Stuff
 
 		public static void bounce(Entity entity, EnumFacing sideHit, double bouncyness)
 		{
-			velocity(entity, bounce(velocity(entity), sideHit, bouncyness));
+			Coordinates3D.velocity(entity, Coordinates3D.bounce(Coordinates3D.velocity(entity), sideHit, bouncyness));
 		}
 
 		public static Vec3 bounce(Vec3 m, EnumFacing sideHit, double bouncyness)
@@ -237,16 +243,17 @@ public class Stuff
 			float f3 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
 			float f4 = -MathHelper.cos(-pitch * 0.017453292F);
 			float f5 = MathHelper.sin(-pitch * 0.017453292F);
-			return new Vec3((double)(f3 * f4), (double)f5, (double)(f2 * f4));
+			return new Vec3(f3 * f4, f5, f2 * f4);
 		}
 	}
 
-	/**Compare entities.**/ //- sigurd4
+	/** Compare entities. **/
+	//- sigurd4
 	public static class EntityComparison
 	{
 		public static boolean isEntitySmaller(Entity e1, Entity e2, float offset)
 		{
-			return isEntityBigger(e2, e1, offset);
+			return EntityComparison.isEntityBigger(e2, e1, offset);
 		}
 
 		public static boolean isEntityBigger(Entity e1, Entity e2, float offset)
@@ -263,13 +270,14 @@ public class Stuff
 				{
 					s2 = e2.width;
 				}
-				return s1+offset > s2;
+				return s1 + offset > s2;
 			}
 			return false;
 		}
 	}
 
-	/**Things with arrays and lists etc.**/ //- sigurd4
+	/** Things with arrays and lists etc. **/
+	//- sigurd4
 	public static class ArraysAndSuch
 	{
 		public static <T> ArrayList<T> hashMapToArrayList(HashMap<?, T> map)
@@ -296,7 +304,7 @@ public class Stuff
 
 		public static <T> boolean has(T[] a, T o)
 		{
-			return has(arrayToArrayList(a), o);
+			return ArraysAndSuch.has(ArraysAndSuch.arrayToArrayList(a), o);
 		}
 
 		public static <T> boolean has(ArrayList<T> a, T o)
@@ -313,7 +321,7 @@ public class Stuff
 
 		public static Object[] arrayListToArray(ArrayList<Object> al)
 		{
-			return arrayListToArray2(al, new Object[al.size()]);
+			return ArraysAndSuch.arrayListToArray2(al, new Object[al.size()]);
 		}
 
 		public static <T> T[] arrayListToArray2(ArrayList<T> al, T[] a)
@@ -341,15 +349,15 @@ public class Stuff
 		public static <T> T[] mixArrays(T[] a1, T[] a2)
 		{
 			ArrayList<T> al = new ArrayList<T>();
-			al.addAll(arrayToArrayList(a1));
-			al.addAll(arrayToArrayList(a2));
+			al.addAll(ArraysAndSuch.arrayToArrayList(a1));
+			al.addAll(ArraysAndSuch.arrayToArrayList(a2));
 			return (T[])al.toArray();
 		}
 
 		public static <T> T[] addToArray(T[] a, T o)
 		{
 			ArrayList<T> al = new ArrayList<T>();
-			al.addAll(arrayToArrayList(a));
+			al.addAll(ArraysAndSuch.arrayToArrayList(a));
 			al.add(o);
 			return (T[])al.toArray();
 		}
@@ -381,20 +389,22 @@ public class Stuff
 		}
 	}
 
-	/**Get all entities within the area**/ //- sigurd4
+	/** Get all entities within the area **/
+	//- sigurd4
 	public static class EntitiesInArea
 	{
 		public static HashMap<Entity, Vec3> hit = new HashMap<Entity, Vec3>();
 
 		public static List<Entity> getEntitiesWithinRadius(Entity e, double r)
 		{
-			return getEntitiesWithinRadius(e, r, true);
+			return EntitiesInArea.getEntitiesWithinRadius(e, r, true);
 		}
+
 		public static List<Entity> getEntitiesWithinRadius(Entity e, double r, boolean exclude)
 		{
 			if(e != null)
 			{
-				List<Entity> es = getEntitiesWithinRadius(e.worldObj, new Vec3(e.posX, e.posY, e.posZ), r);
+				List<Entity> es = EntitiesInArea.getEntitiesWithinRadius(e.worldObj, new Vec3(e.posX, e.posY, e.posZ), r);
 				for(int i = 0; i > es.size(); ++i)
 				{
 					Entity e2 = es.get(i);
@@ -408,27 +418,31 @@ public class Stuff
 			}
 			return null;
 		}
+
 		public static Entity getRandomEntityWithinRadius(Entity e, double r, Random rand)
 		{
-			List<Entity> es = getEntitiesWithinRadius(e, r);
-			Entity e2 = (Entity)Randomization.getRandom(es);
+			List<Entity> es = EntitiesInArea.getEntitiesWithinRadius(e, r);
+			Entity e2 = Randomization.getRandom(es);
 			return e2;
 		}
+
 		public static Entity getRandomEntityWithinCube(Entity e, double m, Random rand)
 		{
-			List<Entity> es = getEntitiesWithinCube(e, m);
-			Entity e2 = (Entity)Randomization.getRandom(es);
+			List<Entity> es = EntitiesInArea.getEntitiesWithinCube(e, m);
+			Entity e2 = Randomization.getRandom(es);
 			return e2;
 		}
+
 		public static List<Entity> getEntitiesWithinCube(Entity e, double m)
 		{
-			return getEntitiesWithinCube(e, m, true);
+			return EntitiesInArea.getEntitiesWithinCube(e, m, true);
 		}
+
 		public static List<Entity> getEntitiesWithinCube(Entity e, double m, boolean exclude)
 		{
 			if(e != null)
 			{
-				List<Entity> es = getEntitiesWithinCube(e.worldObj, new Vec3(e.posX, e.posY, e.posZ), m);
+				List<Entity> es = EntitiesInArea.getEntitiesWithinCube(e.worldObj, new Vec3(e.posX, e.posY, e.posZ), m);
 				for(int i = 0; i > es.size(); ++i)
 				{
 					Entity e2 = es.get(i);
@@ -442,9 +456,10 @@ public class Stuff
 			}
 			return null;
 		}
+
 		public static List<Entity> getEntitiesWithinRadius(World w, Vec3 v, double r)
 		{
-			List<Entity> es = getEntitiesWithinCube(w, v, r);
+			List<Entity> es = EntitiesInArea.getEntitiesWithinCube(w, v, r);
 			for(int i = 0; i > es.size(); ++i)
 			{
 				Entity e2 = es.get(i);
@@ -456,43 +471,50 @@ public class Stuff
 			}
 			return es;
 		}
+
 		public static List<Entity> getEntitiesWithinCube(World w, Vec3 v, double m)
 		{
-			List<Entity> es = w.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(v.xCoord-m, v.yCoord-m, v.zCoord-m, v.xCoord+m, v.yCoord+m, v.zCoord+m));
+			List<Entity> es = w.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(v.xCoord - m, v.yCoord - m, v.zCoord - m, v.xCoord + m, v.yCoord + m, v.zCoord + m));
 			return es;
 		}
+
 		public static List<Entity> getEntitiesOnAxis(World w, Vec3 pos, Vec3 p2)
 		{
-			return getEntitiesOnAxis(w, pos, p2, 0.04);
+			return EntitiesInArea.getEntitiesOnAxis(w, pos, p2, 0.04);
 		}
+
 		public static List<Entity> getEntitiesOnAxis(World w, Vec3 pos, Vec3 p2, double r)
 		{
 			ArrayList<Entity> es = new ArrayList<Entity>();
 
-			double h = Math.max(r/5, 3);
+			double h = Math.max(r / 5, 3);
 			double d = Coordinates3D.distance(pos, p2);
-			int t = (int)Math.ceil(d/h);
-			d = h/t;
+			int t = (int)Math.ceil(d / h);
+			d = h / t;
 
 			Vec3 axis = Coordinates3D.subtract(p2, pos);
 			for(int i = 0; i < t; ++i)
 			{
-				List<Entity> es2 = getEntitiesWithinRadius(w, Coordinates3D.add(Coordinates3D.multiply(axis, d*i), pos), r);
+				List<Entity> es2 = EntitiesInArea.getEntitiesWithinRadius(w, Coordinates3D.add(Coordinates3D.multiply(axis, d * i), pos), r);
 				for(int i2 = 0; i2 < es2.size(); ++i2)
 				{
-					EntitiesInArea.hit.put(es2.get(i2), Coordinates3D.add(Coordinates3D.multiply(axis, d*i), pos));
+					EntitiesInArea.hit.put(es2.get(i2), Coordinates3D.add(Coordinates3D.multiply(axis, d * i), pos));
 					es.addAll(es2);
 				}
 			}
 
 			return es;
 		}
+
 		public static Entity getClosestEntity(List<Entity> es, Vec3 pos)
 		{
 			Entity e = null;
 			for(int i = 0; i < es.size(); ++i)
 			{
-				if(e == null || e.getDistance(pos.xCoord, pos.yCoord, pos.zCoord) > es.get(i).getDistance(pos.xCoord, pos.yCoord, pos.zCoord));
+				if(e == null || e.getDistance(pos.xCoord, pos.yCoord, pos.zCoord) > es.get(i).getDistance(pos.xCoord, pos.yCoord, pos.zCoord))
+				{
+					;
+				}
 				{
 					e = es.get(i);
 				}
@@ -501,19 +523,20 @@ public class Stuff
 		}
 	}
 
-	/**Arrays of multiple numbers**/ //- sigurd4
+	/** Arrays of multiple numbers **/
+	//- sigurd4
 	public static class MathWithMultiple
 	{
-		public static double distance(double... ds)
+		public static double distance(double ... ds)
 		{
 			for(int i = 0; i < ds.length; ++i)
 			{
 				ds[i] *= ds[i];
 			}
-			return Math.sqrt(addAll(ds));
+			return Math.sqrt(MathWithMultiple.addAll(ds));
 		}
 
-		public static double addAll(double... ds)
+		public static double addAll(double ... ds)
 		{
 			double d = 0;
 			for(int i = 0; i < ds.length; ++i)
@@ -523,7 +546,7 @@ public class Stuff
 			return d;
 		}
 
-		public static double max(double... ds)
+		public static double max(double ... ds)
 		{
 			double d = 0;
 			for(int i = 0; i < ds.length; ++i)
@@ -536,7 +559,7 @@ public class Stuff
 			return d;
 		}
 
-		public static double min(double... ds)
+		public static double min(double ... ds)
 		{
 			double d = 0;
 			boolean b = false;
@@ -552,7 +575,8 @@ public class Stuff
 		}
 	}
 
-	/**fun with hashmaps**/ //- sigurd4
+	/** fun with hashmaps **/
+	//- sigurd4
 	public static class HashMapStuff
 	{
 		public static <K, V> K getKeyFromValue(HashMap<K, V> map, V value)
@@ -631,7 +655,7 @@ public class Stuff
 		}
 	}
 
-	/**get hidden stuff**/
+	/** get hidden stuff **/
 	public static class Reflection
 	{
 		public static boolean isPotionBadEffect(Potion potion)
@@ -669,84 +693,84 @@ public class Stuff
 		}
 	}
 
-	/**color mixing and such**/
+	/** color mixing and such **/
 	public static class Colors
 	{
 		public static double similarity(Color c1, Color c2, boolean hue, boolean saturation, boolean brightness, boolean alpha)
 		{
-			double h = hue ? (double)(getHue(c1) - getHue(c2)) : 0;
-			if(max(c1) - min(c1) == 0 || max(c2) - min(c2) == 0)
+			double h = hue ? (double)(Colors.getHue(c1) - Colors.getHue(c2)) : 0;
+			if(Colors.max(c1) - Colors.min(c1) == 0 || Colors.max(c2) - Colors.min(c2) == 0)
 			{
 				h = 0;
 			}
-			double s = saturation ? (double)(getSaturation(c1) - getSaturation(c2)) : 0;
-			double b = brightness ? (double)(getBrightness(c1) - getBrightness(c2)) : 0;
-			double a = alpha ? (double)(c1.getAlpha() - c2.getAlpha())/255 : 0;
-			return h*h + s*s + b*b + a*a;
+			double s = saturation ? (double)(Colors.getSaturation(c1) - Colors.getSaturation(c2)) : 0;
+			double b = brightness ? (double)(Colors.getBrightness(c1) - Colors.getBrightness(c2)) : 0;
+			double a = alpha ? (double)(c1.getAlpha() - c2.getAlpha()) / 255 : 0;
+			return h * h + s * s + b * b + a * a;
 		}
 
 		public static double getHue(Color c)
 		{
-			double d = max(c) - min(c);
+			double d = Colors.max(c) - Colors.min(c);
 			if(d == 0)
 			{
 				return 0; //undefined, but let's just make it simple, shall we...
 			}
-			else if(max(c) == red(c))
+			else if(Colors.max(c) == Colors.red(c))
 			{
-				return Rotary.modularArithmetic(60*((green(c)-blue(c))/d), 360)/360;
+				return Rotary.modularArithmetic(60 * ((Colors.green(c) - Colors.blue(c)) / d), 360) / 360;
 			}
-			else if(max(c) == green(c))
+			else if(Colors.max(c) == Colors.green(c))
 			{
-				return Rotary.modularArithmetic(60*((blue(c)-red(c))/d) + 120, 360)/360;
+				return Rotary.modularArithmetic(60 * ((Colors.blue(c) - Colors.red(c)) / d) + 120, 360) / 360;
 			}
-			else if(max(c) == blue(c))
+			else if(Colors.max(c) == Colors.blue(c))
 			{
-				return Rotary.modularArithmetic(60*((red(c)-green(c))/d) + 240, 360)/360;
+				return Rotary.modularArithmetic(60 * ((Colors.red(c) - Colors.green(c)) / d) + 240, 360) / 360;
 			}
 			return 0;
 		}
 
 		public static double getSaturation(Color c)
 		{
-			if(max(c) == 0)
+			if(Colors.max(c) == 0)
 			{
 				return 0;
 			}
 			else
 			{
-				return (max(c) - min(c))/max(c);
+				return (Colors.max(c) - Colors.min(c)) / Colors.max(c);
 			}
 		}
 
 		public static double getBrightness(Color c)
 		{
-			return max(c);
+			return Colors.max(c);
 		}
 
 		public static double red(Color c)
 		{
-			return (double)c.getRed()/255;
+			return (double)c.getRed() / 255;
 		}
 
 		public static double green(Color c)
 		{
-			return (double)c.getGreen()/255;
+			return (double)c.getGreen() / 255;
 		}
 
 		public static double blue(Color c)
 		{
-			return (double)c.getBlue()/255;
+			return (double)c.getBlue() / 255;
 		}
 
 		public static double max(Color c)
 		{
-			return Stuff.MathWithMultiple.max(red(c), green(c), blue(c));
+			return Stuff.MathWithMultiple.max(Colors.red(c), Colors.green(c), Colors.blue(c));
 		}
 
 		public static double min(Color c)
 		{
-			return Stuff.MathWithMultiple.min(red(c), green(c), blue(c));
+			return Stuff.MathWithMultiple.min(Colors.red(c), Colors.green(c), Colors.blue(c));
 		}
 	}
 
@@ -754,7 +778,7 @@ public class Stuff
 	{
 		public static double modularArithmeticBipolar(double value, double modulus)
 		{
-			return modularArithmetic(value+modulus/2, modulus)-modulus/2;
+			return Rotary.modularArithmetic(value + modulus / 2, modulus) - modulus / 2;
 		}
 
 		public static double modularArithmetic(double value, double modulus)

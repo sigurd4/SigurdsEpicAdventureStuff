@@ -1,40 +1,32 @@
 package com.sigurd4.sigurdsEpicAdventureStuff.proxy;
 
 import java.awt.Color;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import net.minecraft.util.Timer;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerClient;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerClientFML;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemDynamicModel;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemMysteryPotion.EnumPotionColorMethod;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderEntity;
-import net.minecraft.client.renderer.entity.RenderFireball;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ProxyClient extends ProxyCommon
 {
@@ -45,7 +37,7 @@ public class ProxyClient extends ProxyCommon
 	{
 		return Side.CLIENT;
 	}
-	
+
 	@Override
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -63,8 +55,8 @@ public class ProxyClient extends ProxyCommon
 
 		RenderItem ri = Minecraft.getMinecraft().getRenderItem();
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
-		registerItemModels(ri);
-		entityRender(rm, ri);
+		this.registerItemModels(ri);
+		this.entityRender(rm, ri);
 	}
 
 	private void entityRender(RenderManager rm, RenderItem ri)
@@ -113,6 +105,7 @@ public class ProxyClient extends ProxyCommon
 		}
 	}
 
+	@Override
 	public World world(int dimension)
 	{
 		return Minecraft.getMinecraft().theWorld;

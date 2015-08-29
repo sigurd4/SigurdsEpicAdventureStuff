@@ -6,29 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import com.sigurd4.sigurdsEpicAdventureStuff.Config;
-import com.sigurd4.sigurdsEpicAdventureStuff.M;
-import com.sigurd4.sigurdsEpicAdventureStuff.References;
-import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
-import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
-import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommon;
-import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommonFML;
-import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketConfig;
-import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
-import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionHelper;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
@@ -43,6 +25,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.sigurd4.sigurdsEpicAdventureStuff.Config;
+import com.sigurd4.sigurdsEpicAdventureStuff.M;
+import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
+import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
+import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommon;
+import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommonFML;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketConfig;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
+
 public abstract class ProxyCommon
 {
 	public abstract Side side();
@@ -51,26 +43,26 @@ public abstract class ProxyCommon
 	{
 		MinecraftForge.EVENT_BUS.register(new HandlerCommon());
 		FMLCommonHandler.instance().bus().register(new HandlerCommonFML());
-
-		registerItems();
-		oreDictionary();
-		packets();
-		entities();
+		
+		this.registerItems();
+		this.oreDictionary();
+		this.packets();
+		this.entities();
 		M.idsToBeRegistered.clear();
-		registerConfig(event.getSuggestedConfigurationFile());
+		this.registerConfig(event.getSuggestedConfigurationFile());
 	}
-
+	
 	public void init(FMLInitializationEvent event)
 	{
-		recipes();
-		dungeonLoot();
+		this.recipes();
+		this.dungeonLoot();
 	}
-
+	
 	public void postInit(FMLPostInitializationEvent event)
 	{
-
+		
 	}
-
+	
 	private void packets()
 	{
 		M.network = NetworkRegistry.INSTANCE.newSimpleChannel("SEASPackets");
@@ -78,7 +70,7 @@ public abstract class ProxyCommon
 		M.network.registerMessage(PacketPlayerProps.Handler.class, PacketPlayerProps.class, 1, Side.CLIENT);
 		M.network.registerMessage(PacketConfig.Handler.class, PacketConfig.class, 2, Side.CLIENT);
 	}
-
+	
 	private void recipes()
 	{
 	}

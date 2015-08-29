@@ -1,5 +1,5 @@
 {
-    "parent": "builtin/generated",
+    "parent": "sigurdsepicadventurestuff:item/standard",
     "display": {
         "thirdperson": {
             "rotation": [ 180, 90, -45 ],
