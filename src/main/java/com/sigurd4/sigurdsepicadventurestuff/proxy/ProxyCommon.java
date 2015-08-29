@@ -74,24 +74,24 @@ public abstract class ProxyCommon
 	private void recipes()
 	{
 	}
-
+	
 	private void registerNugget(Item nugget, Item bar)
 	{
 		if(M.visible(nugget))
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(bar, 1), new Object[]{"NNN", "NNN", "NNN", 'N', nugget});
-			GameRegistry.addShapedRecipe(new ItemStack(nugget, 9), new Object[]{"B", 'B', bar});
+			GameRegistry.addShapedRecipe(new ItemStack(bar, 1), new Object[] {"NNN", "NNN", "NNN", 'N', nugget});
+			GameRegistry.addShapedRecipe(new ItemStack(nugget, 9), new Object[] {"B", 'B', bar});
 		}
 	}
-
+	
 	private void registerGear(Item gear, Item bar)
 	{
 		if(M.visible(gear))
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(gear, 6), new Object[]{" B ", "BbB", " B ", 'B', bar, 'b', Item.getItemFromBlock(Blocks.stone_button)});
+			GameRegistry.addShapedRecipe(new ItemStack(gear, 6), new Object[] {" B ", "BbB", " B ", 'B', bar, 'b', Item.getItemFromBlock(Blocks.stone_button)});
 		}
 	}
-
+	
 	private void oreDictionary()
 	{
 		Iterator<Id> ids = M.idsToBeRegistered.iterator();
@@ -115,14 +115,14 @@ public abstract class ProxyCommon
 			}
 		}
 	}
-
+	
 	private void entities()
 	{
 		/*M.registerEntityNoEgg(EntityFood.class, "foodProjectile", 0);
 		M.registerEntityNoEgg(EntityShuriken.class, "shuriken", 1);
 		M.registerEntityNoEgg(EntityLaser.class, "laser", 2);*/
 	}
-
+	
 	private void registerItems()
 	{
 		Iterator<Id> ids = M.idsToBeRegistered.iterator();
@@ -140,7 +140,7 @@ public abstract class ProxyCommon
 				{
 					GameRegistry.registerItem((Item)item, id.id);
 				}
-
+	
 				if(id.replacedIfAlreadyAnOreDict)
 				{
 					id.visible = false;
@@ -187,7 +187,7 @@ public abstract class ProxyCommon
 			Config.config.save();
 		}
 	}
-
+					
 	private void dungeonLoot()
 	{
 		Iterator<Id> ids = M.getIds();
@@ -199,7 +199,7 @@ public abstract class ProxyCommon
 				if(M.getItem(id) instanceof Item)
 				{
 					Item item = (Item)M.getItem(id);
-
+					
 					HashMap<String, ChestGenHooks> categories = null;
 					try
 					{
@@ -214,7 +214,7 @@ public abstract class ProxyCommon
 					{
 						e.printStackTrace();
 					}
-
+	
 					if(categories != null)
 					{
 						String[] categoriesS = categories.keySet().toArray(new String[categories.keySet().size()]);
