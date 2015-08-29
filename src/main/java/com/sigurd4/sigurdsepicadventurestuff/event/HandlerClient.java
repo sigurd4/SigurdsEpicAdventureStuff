@@ -6,6 +6,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,6 +28,24 @@ public class HandlerClient
 			hud.renderGameOverlay(Minecraft.getMinecraft().thePlayer);
 		}
 	}
+	
+	@SubscribeEvent
+	public void RenderHandEvent(RenderHandEvent event)
+	{
+		try
+		{
+			Stuff.Reflection.setItemToRender2();
+		}
+		catch(IllegalArgumentException e)
+		{
+			e.printStackTrace();
+		}
+		catch(IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	@SubscribeEvent
 	public void MouseEvent(MouseEvent event)
 	{
