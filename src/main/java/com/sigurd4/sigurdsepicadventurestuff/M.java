@@ -43,7 +43,20 @@ import com.sigurd4.sigurdsEpicAdventureStuff.tabs.TabGeneric;
 @Mod(modid = References.MODID, name = References.NAME, version = References.VERSION, guiFactory = References.GUI_FACTORY_CLASS)
 public class M
 {
-	/**Register entity with egg**/
+	@Instance(References.MODID)
+	public static M instance;
+
+	public static SimpleNetworkWrapper network;
+
+	private static final HashMap<Object, Id> ids = new HashMap<Object, Id>();
+	public static final ArrayList<Id> idsToBeRegistered = new ArrayList<Id>();
+	public static final HashMap<Object, CreativeTabs[]> creativeTabs = new HashMap<Object, CreativeTabs[]>();
+	private static final HashMap<String, Boolean> isModLoaded = new HashMap<String, Boolean>();
+
+	/** tabs **/
+	public static TabGeneric tabCore = new TabGeneric("core");
+
+	////ITEMS:
 	public static final ItemSpecialSwordCharge adventure_sword = M.registerItem("adventure_sword", (ItemSpecialSwordCharge)new ItemSpecialSwordCharge(7, 2.3F, 100, 2 * 20, 11 * 20)
 	{
 		@Override
@@ -108,50 +121,77 @@ public class M
 			return super.onEntitySwing(entity, stack);
 		}
 	}.setUnlocalizedName("skySword").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
+	public static final ItemMysteryPotion mystery_potion = M.registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
+
+	////BLOCKS:
+
+	public M()
+	{
+
+	}
+
+	@SidedProxy(clientSide = References.CLIENT_PROXY_CLASS, serverSide = References.SERVER_PROXY_CLASS)
+	public static ProxyCommon proxy;
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event)
+	{
+		M.proxy.preInit(event);
+	}
+
+	@EventHandler
+	public void init(FMLInitializationEvent event)
+	{
+		M.proxy.init(event);
+	}
+
+	@EventHandler
+	public void init(FMLPostInitializationEvent event)
+	{
+		M.proxy.postInit(event);
+	}
+
+	/** Register entity with egg **/
 	/*public static void registerEntity(Class<? extends Entity> entityClass, String name, int entityID, int primaryColor, int secondaryColor)
 	{
 		EntityRegistry.registerGlobalEntityID(entityClass, name, entityID);
 		ItemMonsterPlacer2.EntityList2.registerEntity(entityClass, entityID, name, primaryColor, secondaryColor);
 	}*/
 
-	/**Register entity without egg**/
+	/** Register entity without egg **/
 	public static void registerEntityNoEgg(Class<? extends Entity> entityClass, String name, int entityID)
 	{
-		EntityRegistry.registerModEntity(entityClass, name, entityID, instance, 64, 1, true);
+		EntityRegistry.registerModEntity(entityClass, name, entityID, M.instance, 64, 1, true);
 	}
-
-	private static final HashMap<Object, Id> ids = new HashMap<Object, Id>();
-	public static final ArrayList<Id> idsToBeRegistered = new ArrayList<Id>();
-	public static final HashMap<Object, CreativeTabs[]> creativeTabs = new HashMap<Object, CreativeTabs[]>();
 
 	public static Iterator<Id> getIds()
 	{
-		return ((HashMap<Object, Id>)ids.clone()).values().iterator();
+		return ((HashMap<Object, Id>)M.ids.clone()).values().iterator();
 	}
 
 	public static Id getId(Item item)
 	{
-		if(ids.containsKey(item))
+		if(M.ids.containsKey(item))
 		{
-			return ids.get(item);
+			return M.ids.get(item);
 		}
 		return null;
 	}
 
 	public static Id getId(Block block)
 	{
-		if(ids.containsKey(block))
+		if(M.ids.containsKey(block))
 		{
-			return ids.get(block);
+			return M.ids.get(block);
 		}
 		return null;
 	}
 
 	public static Object getItem(Id id)
 	{
-		if(ids.containsValue(id))
+		if(M.ids.containsValue(id))
 		{
-			Object v = HashMapStuff.getKeyFromValue((HashMap<Object, Id>)ids.clone(), id);
+			Object v = HashMapStuff.getKeyFromValue((HashMap<Object, Id>)M.ids.clone(), id);
 			if(v instanceof Item || v instanceof Block)
 			{
 				return v;
@@ -162,16 +202,17 @@ public class M
 
 	public static boolean hasId(Id id)
 	{
-		return ids.containsValue(id);
+		return M.ids.containsValue(id);
 	}
 
 	public static boolean hasItem(Item item)
 	{
-		return ids.containsKey(item);
+		return M.ids.containsKey(item);
 	}
+
 	public static boolean hasItem(Block block)
 	{
-		return ids.containsKey(block);
+		return M.ids.containsKey(block);
 	}
 
 	public static HashMap<Integer, ArrayList<String>> getTypes(Item item)
@@ -190,9 +231,9 @@ public class M
 			}
 			if(types.get(meta).size() <= 0)
 			{
-				if(getId(item) != null)
+				if(M.getId(item) != null)
 				{
-					Id id = getId(item);
+					Id id = M.getId(item);
 					types.get(meta).add(id.mod + ":" + id.id);
 				}
 				else
@@ -210,7 +251,12 @@ public class M
 		public final String mod;
 		public final String[] oreDictNames;
 		public final boolean replacedIfAlreadyAnOreDict;
-		public boolean shouldBeReplaced(){return oreDictNames.length <= 0 || !replacedIfAlreadyAnOreDict;};
+
+		public boolean shouldBeReplaced()
+		{
+			return this.oreDictNames.length <= 0 || !this.replacedIfAlreadyAnOreDict;
+		};
+
 		public boolean visible;
 		public final boolean dungeonLoot;
 		public final int dungeonLootMin;
@@ -254,58 +300,58 @@ public class M
 		}
 	}
 
-	public static <T extends Item & IItemIdFrom> T registerItem(T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames)
+	public static <T extends Item & IItemIdFrom> T registerItem(T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
-		return registerItem(item.getId(), References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames);
+		return M.registerItem(item.getId(), References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames);
 	}
 
-	public static <T extends Item> T registerItem(String id, T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames)
+	public static <T extends Item> T registerItem(String id, T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
-		return registerItem(id, References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames);
+		return M.registerItem(id, References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames);
 	}
 
-	public static <T extends Item> T registerItem(String id, String modid, T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames)
+	public static <T extends Item> T registerItem(String id, String modid, T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
-		return registerItem(id, modid, item, replacedIfAlreadyAnOreDict, oreDictNames, 0, 0, 0);
+		return M.registerItem(id, modid, item, replacedIfAlreadyAnOreDict, oreDictNames, 0, 0, 0);
 	}
 
-	public static <T extends Item & IItemIdFrom> T registerItem(T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames, int min, int max, int chance)
+	public static <T extends Item & IItemIdFrom> T registerItem(T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames, int min, int max, int chance)
 	{
-		return registerItem(item.getId(), References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
+		return M.registerItem(item.getId(), References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
 	}
 
-	public static <T extends Item> T registerItem(String id, T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames, int min, int max, int chance)
+	public static <T extends Item> T registerItem(String id, T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames, int min, int max, int chance)
 	{
-		return registerItem(id, References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
+		return M.registerItem(id, References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
 	}
 
-	public static <T extends Item> T registerItem(String id, String modid, T item, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames, int min, int max, int chance)
+	public static <T extends Item> T registerItem(String id, String modid, T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames, int min, int max, int chance)
 	{
-		if(!ids.containsKey(item) && !ids.containsValue(id))
+		if(!M.ids.containsKey(item) && !M.ids.containsValue(id))
 		{
 			Id ID = new Id(id, modid, replacedIfAlreadyAnOreDict, oreDictNames);
 			if(chance > 0)
 			{
 				ID = new Id(id, modid, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
 			}
-			ids.put(item, ID);
-			idsToBeRegistered.add(ID);
+			M.ids.put(item, ID);
+			M.idsToBeRegistered.add(ID);
 		}
 		return item;
 	}
 
-	public static <T extends Block> T registerBlock(String id, T block, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames)
+	public static <T extends Block> T registerBlock(String id, T block, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
-		return registerBlock(id, References.MODID, block, replacedIfAlreadyAnOreDict, oreDictNames);
+		return M.registerBlock(id, References.MODID, block, replacedIfAlreadyAnOreDict, oreDictNames);
 	}
 
-	public static <T extends Block> T registerBlock(String id, String modid, T block, boolean replacedIfAlreadyAnOreDict, String [] oreDictNames)
+	public static <T extends Block> T registerBlock(String id, String modid, T block, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
-		if(!ids.containsKey(block))
+		if(!M.ids.containsKey(block))
 		{
 			Id ID = new Id(id, modid, replacedIfAlreadyAnOreDict, oreDictNames);
-			ids.put(block, ID);
-			idsToBeRegistered.add(ID);
+			M.ids.put(block, ID);
+			M.idsToBeRegistered.add(ID);
 		}
 		return block;
 	}
@@ -313,13 +359,15 @@ public class M
 	public static boolean visible(Item item)
 	{
 		Id id = M.getId(item);
-		return visible(id);
+		return M.visible(id);
 	}
+
 	public static boolean visible(Block block)
 	{
 		Id id = M.getId(block);
-		return visible(id);
+		return M.visible(id);
 	}
+
 	public static boolean visible(Id id)
 	{
 		if(id != null)
@@ -329,15 +377,6 @@ public class M
 		return true;
 	}
 
-	@Instance(References.MODID)
-	public static M instance;
-
-	public static SimpleNetworkWrapper network;
-
-	/**tabs**/
-	public static TabGeneric tabCore = new TabGeneric("core");
-
-	////ITEMS:
 	{
 		{
 		}
@@ -367,33 +406,11 @@ public class M
 		}
 		{
 		}
-	public static final ItemMysteryPotion mystery_potion = registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[]{}, 1, 1, 1);
-
-	////BLOCKS:
-
-	public M()
-	{
-
 	}
 
-	@SidedProxy(clientSide = References.CLIENT_PROXY_CLASS, serverSide = References.SERVER_PROXY_CLASS)
-	public static ProxyCommon proxy;
-
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event)
 	{
-		proxy.preInit(event);
 	}
 
-	@EventHandler
-	public void init(FMLInitializationEvent event)
 	{
-		proxy.init(event);
-	}
-
-	@EventHandler
-	public void init(FMLPostInitializationEvent event)
-	{
-		proxy.postInit(event);
 	}
 }
