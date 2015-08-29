@@ -691,6 +691,73 @@ public class Stuff
 			}
 			return new Timer(20);
 		}
+
+		private static ItemStack itemToRender = null;
+
+		@SideOnly(Side.CLIENT)
+		public static void setItemToRender(ItemStack stack)
+		{
+			Minecraft mc = Minecraft.getMinecraft();
+			if(stack == null || mc.thePlayer.getHeldItem() != stack)
+			{
+				Reflection.itemToRender = stack;
+				return;
+			}
+			return;
+		}
+
+		@SideOnly(Side.CLIENT)
+		public static void setItemToRender2() throws IllegalArgumentException, IllegalAccessException
+		{
+			ItemStack stack = Reflection.itemToRender;
+
+			Minecraft mc = Minecraft.getMinecraft();
+			ItemRenderer ir = mc.getItemRenderer();
+
+			if(stack == null || mc.thePlayer.getHeldItem() == null || !mc.thePlayer.getHeldItem().getIsItemStackEqual(stack))
+			{
+				return;
+			}
+			if(mc.thePlayer.getItemInUse() != null && stack.getIsItemStackEqual(mc.thePlayer.getItemInUse()) && stack != mc.thePlayer.getItemInUse())
+			{
+				stack = mc.thePlayer.getItemInUse();
+			}
+
+			Field[] fs = ItemRenderer.class.getDeclaredFields();
+			Field f = null;
+			int a = 3;
+			if(true)
+			{
+				String s = fs[a].getGenericType().getTypeName();
+				if(s.equals(ItemStack.class.getName()))
+				{
+					f = fs[a];
+				}
+			}
+			for(int i = 0; i < fs.length; ++i)
+			{
+				String s = fs[i].getGenericType().getTypeName();
+				if(s.equals(ItemStack.class.getName()))
+				{
+					f = fs[i];
+				}
+			}
+			if(f != null)
+			{
+				f.setAccessible(true);
+				if(f.get(ir) != null && ((ItemStack)f.get(ir)).getItem() == stack.getItem())
+				{
+					f.set(ir, stack);
+				}
+				else
+				{
+					boolean b = true;
+				}
+				f.setAccessible(false);
+				return;
+			}
+			throw new IllegalArgumentException();
+		}
 	}
 
 	/** color mixing and such **/
