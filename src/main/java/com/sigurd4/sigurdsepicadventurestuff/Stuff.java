@@ -248,6 +248,11 @@ public class Stuff
 			float f5 = MathHelper.sin(-pitch * 0.017453292F);
 			return new Vec3(f3 * f4, f5, f2 * f4);
 		}
+		
+		public static Vec3 middle(BlockPos pos)
+		{
+			return new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+		}
 	}
 
 	/** Compare entities. **/
