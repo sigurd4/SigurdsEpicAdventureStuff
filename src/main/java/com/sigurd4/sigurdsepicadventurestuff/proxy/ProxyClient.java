@@ -96,10 +96,17 @@ public class ProxyClient extends ProxyCommon
 								variants.add(sid);
 							}
 							ModelBakery.addVariantName((Item)item, variants.toArray(new String[variants.size()]));
-
-							ri.getItemModelMesher().register((Item)item, meta, new ModelResourceLocation(sid, "inventory"));
+							
+							if(!(item instanceof IItemDynamicModel))
+							{
+								ri.getItemModelMesher().register((Item)item, meta, new ModelResourceLocation(sid, "inventory"));
+							}
 						}
 					}
+				}
+				if(item instanceof IItemDynamicModel)
+				{
+					ri.getItemModelMesher().register((Item)item, new ItemMeshDefinitionDynamic((IItemDynamicModel)item));
 				}
 			}
 		}
@@ -109,5 +116,21 @@ public class ProxyClient extends ProxyCommon
 	public World world(int dimension)
 	{
 		return Minecraft.getMinecraft().theWorld;
+	}
+
+	private static class ItemMeshDefinitionDynamic implements ItemMeshDefinition
+	{
+		private final IItemDynamicModel item;
+
+		private ItemMeshDefinitionDynamic(IItemDynamicModel item)
+		{
+			this.item = item;
+		}
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack)
+		{
+			return this.item.getModelLocation(stack);
+		}
 	}
 }
