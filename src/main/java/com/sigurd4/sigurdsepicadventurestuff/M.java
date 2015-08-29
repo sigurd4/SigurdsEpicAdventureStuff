@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Vec3;
@@ -28,11 +29,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import baubles.api.BaubleType;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff.HashMapStuff;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.AItemForMod;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.EnumArmorMaterial2;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemIdFrom;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemTextureVariants;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemEquipmentBauble;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemMysteryPotion;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemSpecialSwordCharge;
 import com.sigurd4.sigurdsEpicAdventureStuff.particles.ParticleHandler;
@@ -120,6 +124,9 @@ public class M
 			return super.onEntitySwing(entity, stack);
 		}
 	}.setUnlocalizedName("skySword").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
+	
+	//generated loot
+	public static final ItemEquipmentBauble equipment_ring = M.registerItem("ring", (ItemEquipmentBauble)new ItemEquipmentBauble(new ArmorMaterial[] {ArmorMaterial.IRON, ArmorMaterial.GOLD, EnumArmorMaterial2.SILVER}, new ArmorMaterial[] {ArmorMaterial.DIAMOND, EnumArmorMaterial2.EMERALD}, 0, 1F / 6F, 6, BaubleType.RING).setUnlocalizedName("generatedRing").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
 	public static final ItemMysteryPotion mystery_potion = M.registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
 
 	//crafting ingredients

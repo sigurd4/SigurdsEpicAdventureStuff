@@ -1,0 +1,6 @@
+{
+    "parent": "sigurdsepicadventurestuff:item/ring_silver",
+    "textures": {
+        "layer1": "sigurdsepicadventurestuff:items/gear/ring/1/emerald"
+    }
+}

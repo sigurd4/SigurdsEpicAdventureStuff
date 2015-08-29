@@ -1,0 +1,18 @@
+{
+    "parent": "sigurdsepicadventurestuff:item/standard",
+    "textures": {
+        "layer0": "sigurdsepicadventurestuff:items/gear/ring/0/gold"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ 180, 60, -45 ],
+            "translation": [ 0.4, 1.25, -1.8 ],
+            "scale": [ 0.3, 0.3, 0.3 ]
+        },
+        "firstperson": {
+            "rotation": [ -5, -60, 30 ],
+            "translation": [ -3, 5.4, 1 ],
+            "scale": [ 1.5, 1.5, 1.5 ]
+        }
+    }
+}
