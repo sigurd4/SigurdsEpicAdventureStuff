@@ -1,5 +1,6 @@
 package com.sigurd4.sigurdsEpicAdventureStuff;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,11 +13,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -26,12 +26,11 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff.HashMapStuff;
-import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.AItemForMod;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemIdFrom;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemTextureVariants;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemMysteryPotion;
@@ -380,40 +379,103 @@ public class M
 		return true;
 	}
 
+	public static boolean isModForItemLoaded(Object item)
 	{
+		if(item instanceof Block)
 		{
+			item = Item.getItemFromBlock((Block)item);
 		}
+		boolean b1 = false;
+		Field field = null;
+		try
 		{
+			Field[] fields = M.class.getDeclaredFields();
+			for(Field field2 : fields)
 			{
+				boolean b = false;
+				if(!field2.isAccessible())
 				{
+					b = true;
+					field2.setAccessible(true);
 				}
+				Object item2 = field2.get(M.instance);
+				if(item2 != null)
 				{
+					Class clazz = item.getClass();
+					Class clazz2 = item2.getClass();
+					if(clazz2.equals(clazz))
+					{
+						if(item2.equals(item))
+						{
+							field = field2;
+							b1 = b;
+						}
+					}
 				}
+				if(b && !b1)
 				{
+					field2.setAccessible(false);
+				}
+				if(field != null)
+				{
+					break;
 				}
 			}
 		}
+		catch(Exception e)
 		{
 		}
+		
+		AItemForMod annotation = null;
+		if(field != null)
 		{
+			if(field.isAnnotationPresent(AItemForMod.class))
 			{
+				annotation = field.getAnnotation(AItemForMod.class);
 			}
 		}
+		if(annotation == null)
 		{
+			Class clazz = item.getClass();
+			if(clazz.isAnnotationPresent(AItemForMod.class))
 			{
+				annotation = (AItemForMod)clazz.getAnnotation(AItemForMod.class);
 			}
 		}
+		if(b1)
 		{
+			field.setAccessible(false);
 		}
+		if(annotation != null)
 		{
+			return M.isModForItemLoaded2(annotation);
 		}
+		else
 		{
+			return true;
 		}
 	}
 
+	public static boolean isModForItemLoaded2(AItemForMod item)
 	{
+		for(String modid : item.modids())
+		{
+			if(!M.isModLoaded(modid))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
+	public static boolean isModLoaded(String modid)
 	{
+		if(M.isModLoaded.containsKey(modid))
+		{
+			return M.isModLoaded.get(modid);
+		}
+		boolean b = Loader.isModLoaded(modid);
+		M.isModLoaded.put(modid, b);
+		return b;
 	}
 }

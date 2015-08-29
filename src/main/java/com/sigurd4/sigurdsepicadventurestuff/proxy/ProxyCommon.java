@@ -132,46 +132,57 @@ public abstract class ProxyCommon
 			if(id != null)
 			{
 				Object item = M.getItem(id);
-				if(item != null && item instanceof Block)
+				if(M.isModForItemLoaded(item))
 				{
-					GameRegistry.registerBlock((Block)item, id.id);
-				}
-				if(item != null && item instanceof Item)
-				{
-					GameRegistry.registerItem((Item)item, id.id);
-				}
-	
-				if(id.replacedIfAlreadyAnOreDict)
-				{
-					id.visible = false;
-					for(int i2 = 0; i2 < id.oreDictNames.length; ++i2)
+					if(item != null && item instanceof Block)
 					{
-						List<ItemStack> oreDicts = OreDictionary.getOres(id.oreDictNames[i2]);
-						if(oreDicts != null)
+						GameRegistry.registerBlock((Block)item, id.id);
+					}
+					if(item != null && item instanceof Item)
+					{
+						GameRegistry.registerItem((Item)item, id.id);
+					}
+					
+					if(id.replacedIfAlreadyAnOreDict)
+					{
+						id.visible = false;
+						for(int i2 = 0; i2 < id.oreDictNames.length; ++i2)
 						{
-							for(int i3 = 0; i3 < oreDicts.size(); ++i3)
+							List<ItemStack> oreDicts = OreDictionary.getOres(id.oreDictNames[i2]);
+							if(oreDicts != null)
 							{
-								if(oreDicts.get(i3) != null && oreDicts.get(i3).getItem() == item)
+								for(int i3 = 0; i3 < oreDicts.size(); ++i3)
 								{
-									oreDicts.remove(i3);
-									--i3;
+									if(oreDicts.get(i3) != null && oreDicts.get(i3).getItem() == item)
+									{
+										oreDicts.remove(i3);
+										--i3;
+									}
 								}
 							}
+							if(oreDicts == null || oreDicts.size() <= 0)
+							{
+								id.visible = true;
+							}
 						}
-						if(oreDicts == null || oreDicts.size() <= 0)
-						{
-							id.visible = true;
-						}
+					}
+					else
+					{
+						id.visible = true;
+					}
+					if(!M.isModForItemLoaded(item))
+					{
+						id.visible = false;
 					}
 				}
 				else
 				{
-					id.visible = true;
+					continue;
 				}
 			}
 		}
 	}
-
+	
 	private void registerConfig(File file)
 	{
 		if(Config.config == null)
@@ -187,7 +198,7 @@ public abstract class ProxyCommon
 			Config.config.save();
 		}
 	}
-					
+	
 	private void dungeonLoot()
 	{
 		Iterator<Id> ids = M.getIds();
@@ -214,7 +225,7 @@ public abstract class ProxyCommon
 					{
 						e.printStackTrace();
 					}
-	
+					
 					if(categories != null)
 					{
 						String[] categoriesS = categories.keySet().toArray(new String[categories.keySet().size()]);

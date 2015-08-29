@@ -70,25 +70,33 @@ public class TabGeneric extends CreativeTabs
 
 	public ArrayList<Item> getItems()
 	{
-        Iterator iterator = Item.itemRegistry.iterator();
-        ArrayList<Item> items = Lists.newArrayList();
-        while(iterator.hasNext())
-        {
-            Item item = (Item)iterator.next();
-            if (item == null)
-            {
-                continue;
-            }
-            boolean contains = false;
-            CreativeTabs[] itemTabs = item.getCreativeTabs();
-            for(int i = 0; i < itemTabs.length; ++i)
-            {
-            	if(this == itemTabs[i])
-            	{
-            		items.add(item);
-            	}
-            }
-        }
-        return items;
+		Iterator iterator = Item.itemRegistry.iterator();
+		ArrayList<Item> items = Lists.newArrayList();
+		while(iterator.hasNext())
+		{
+			Item item = (Item)iterator.next();
+			if(item == null)
+			{
+				continue;
+			}
+			if(M.hasItem(item))
+			{
+				Id id = M.getId(item);
+				if(!id.visible)
+				{
+					continue;
+				}
+			}
+			boolean contains = false;
+			CreativeTabs[] itemTabs = item.getCreativeTabs();
+			for(int i = 0; i < itemTabs.length; ++i)
+			{
+				if(this == itemTabs[i])
+				{
+					items.add(item);
+				}
+			}
+		}
+		return items;
 	}
 }
