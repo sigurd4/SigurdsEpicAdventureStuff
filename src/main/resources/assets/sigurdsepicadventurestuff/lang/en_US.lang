@@ -2,6 +2,7 @@
 item.adventureSword.name=the Adventure Sword
 item.skySword.name=the Sky Sword
 item.mysteryPotion.name=Mystery Potion
+item.ingotSilver.name=Silver Ingot
 #tabs
 itemGroup.sigurdsEpicAdventureStuff.core=Sigurd's Epic Adventure Stuff
 #config

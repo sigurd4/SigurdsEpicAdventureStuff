@@ -123,6 +123,9 @@ public class M
 	}.setUnlocalizedName("skySword").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
 	public static final ItemMysteryPotion mystery_potion = M.registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
 
+	//crafting ingredients
+	public static final Item silver_ingot = M.registerItem("silver_ingot", new Item().setUnlocalizedName("ingotSilver").setCreativeTab(CreativeTabs.tabMaterials), true, new String[] {"ingotSilver"});
+
 	////BLOCKS:
 
 	public M()
