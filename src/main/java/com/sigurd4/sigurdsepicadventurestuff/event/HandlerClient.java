@@ -30,7 +30,7 @@ public class HandlerClient
 			hud.renderGameOverlay(Minecraft.getMinecraft().thePlayer);
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void RenderHandEvent(RenderHandEvent event)
 	{
@@ -47,13 +47,13 @@ public class HandlerClient
 			e.printStackTrace();
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void MouseEvent(MouseEvent event)
 	{
 		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 		WorldClient world = Minecraft.getMinecraft().theWorld;
-		
+
 		ItemSpecialSword.pitch = event.dy * 2.4F;
 		ItemSpecialSword.yaw = -event.dx * 2.2F;
 		if(player != null && world != null)
@@ -76,7 +76,7 @@ public class HandlerClient
 			}
 		}
 	}
-
+	
 	@SubscribeEvent
 	public void ItemTooltipEvent(ItemTooltipEvent event)
 	{

@@ -36,6 +36,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.References;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
 import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagBoolean;
 import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagEnum;
+import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagInteger;
 import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagMap;
 
 public abstract class ItemEquipment extends Item implements IItemTextureVariants, IItemDynamicModel
@@ -72,6 +73,7 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	public final float enchantabilityMod;
 	private final ArmorMaterial[] materialsBase;
 	private final ArmorMaterial[] materialsDeco;
+	private final int cursedTime = 400;
 
 	//nbt
 	private static final ItemTagMap<Boolean, ItemTagBoolean, EntityPlayer> KNOWN_BY_PLAYERS = new ItemTagMap<Boolean, ItemTagBoolean, EntityPlayer>("KnownByPlayers", new ItemTagBoolean("", false, true), true)
@@ -88,6 +90,9 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			return new ItemTagBoolean(key, defaultEntry.getDefault(), defaultEntry.noWobble);
 		}
 	};
+	
+	public static final ItemTagInteger CURSED = new ItemTagInteger("Cursed", 0, 0, Integer.MAX_VALUE, false);
+	
 	public final ItemTagEnum<ArmorMaterial> MATERIAL_BASE = new ItemTagEnum<ArmorMaterial>("MaterialBase", ArmorMaterial.IRON, false)
 	{
 		@Override
@@ -177,7 +182,10 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	{
 		if(this.isKnown(stack, player))
 		{
-			
+			if(this.isCursed(stack))
+			{
+				tooltip.add(EnumChatFormatting.DARK_RED + "Curse: " + ItemEquipment.CURSED.get(stack));
+			}
 		}
 		else
 		{
@@ -212,6 +220,7 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 				EnchantmentHelper.addRandomEnchantment(Item.itemRand, stack, 1);
 			}
 		}
+		ArrayList<ItemStack> stacks2 = new ArrayList<ItemStack>();
 		while(stacks.size() > 0)
 		{
 			int i2 = 0;
@@ -224,9 +233,17 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 					i2 = i;
 				}
 			}
-			list.add(stacks.get(i2));
+			stacks2.add(stacks.get(i2));
 			stacks.remove(i2);
 		}
+		for(ItemStack stack : stacks2)
+		{
+			if(Item.itemRand.nextFloat() <= 1F / 8F)
+			{
+				ItemEquipment.CURSED.set(stack, (int)(this.cursedTime * (1F + Item.itemRand.nextFloat() * 2F + (Item.itemRand.nextFloat() / 4 + 0.1F) * this.getRarityInt(stack))));
+			}
+		}
+		list.addAll(stacks2);
 	}
 	
 	public final void setToHide(ItemStack stack, EntityPlayer player)
@@ -312,6 +329,10 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			Enchantment ench = Enchantment.getEnchantmentById(id);
 			rarity += this.getEnchRarity(ench, lvl);
 		}
+		if(this.isCursed(stack))
+		{
+			rarity *= 1.5F;
+		}
 		return rarity;
 	}
 	
@@ -396,6 +417,13 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 		{
 			s += " (" + Stuff.Strings.capitalize(this.getMaterial2(stack).getName()) + ")";
 		}
+		if(M.proxy.side() == Side.CLIENT)
+		{
+			if(this.isCursed(stack) && this.isKnown(stack, Minecraft.getMinecraft().thePlayer))
+			{
+				s = EnumChatFormatting.DARK_RED + "Cursed " + s;
+			}
+		}
 		return s;
 	}
 	
@@ -421,5 +449,10 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	public final boolean isKnown(ItemStack stack, EntityPlayer player)
 	{
 		return ItemEquipment.KNOWN_BY_PLAYERS.get(stack, player);
+	}
+	
+	public final boolean isCursed(ItemStack stack)
+	{
+		return ItemEquipment.CURSED.get(stack) > 0;
 	}
 }

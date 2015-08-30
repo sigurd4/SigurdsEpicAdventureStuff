@@ -13,13 +13,13 @@ import baubles.api.IBauble;
 public class ItemEquipmentBauble extends ItemEquipment implements IBauble
 {
 	public final BaubleType baubleType;
-	
+
 	public ItemEquipmentBauble(ArmorMaterial[] matsBase, ArmorMaterial[] matsDeco, float damageReduceMod, float durabilityMod, float enchantabilityMod, BaubleType baubleType)
 	{
 		super(matsBase, matsDeco, damageReduceMod, durabilityMod, enchantabilityMod);
 		this.baubleType = baubleType;
 	}
-	
+
 	@Override
 	protected boolean equipEquipment(ItemStack stack, EntityLivingBase entitylivingbase)
 	{
@@ -27,7 +27,7 @@ public class ItemEquipmentBauble extends ItemEquipment implements IBauble
 		{
 			EntityPlayer player = (EntityPlayer)entitylivingbase;
 			IInventory baubles = BaublesApi.getBaubles(player);
-			
+
 			for(int i = 0; i < baubles.getSizeInventory(); i++)
 			{
 				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, stack.copy()))
@@ -37,9 +37,9 @@ public class ItemEquipmentBauble extends ItemEquipment implements IBauble
 						ItemStack itemstack1 = stack.copy();
 						itemstack1.stackSize = 1;
 						baubles.setInventorySlotContents(i, itemstack1);
-						
+
 						this.onEquipped(stack, player);
-						
+
 						--stack.stackSize;
 					}
 					return true;
@@ -48,13 +48,13 @@ public class ItemEquipmentBauble extends ItemEquipment implements IBauble
 		}
 		return false;
 	}
-	
+
 	@Override
 	public BaubleType getBaubleType(ItemStack itemstack)
 	{
 		return this.baubleType;
 	}
-	
+
 	@Override
 	public final void onWornTick(ItemStack stack, EntityLivingBase player)
 	{
@@ -63,33 +63,39 @@ public class ItemEquipmentBauble extends ItemEquipment implements IBauble
 		{
 			this.setKnown(stack, (EntityPlayer)player);
 		}
+		ItemEquipment.CURSED.add(stack, -1);
 	}
-
+	
 	public void onWornTick2(ItemStack stack, EntityLivingBase player)
 	{
-		
+
 	}
-	
+
 	@Override
-	public void onEquipped(ItemStack itemstack, EntityLivingBase player)
+	public final void onEquipped(ItemStack stack, EntityLivingBase player)
 	{
 		
 	}
-	
+
 	@Override
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player)
+	public void onUnequipped(ItemStack stack, EntityLivingBase player)
 	{
-		
+
 	}
-	
+
 	@Override
-	public boolean canEquip(ItemStack itemstack, EntityLivingBase player)
+	public boolean canEquip(ItemStack stack, EntityLivingBase player)
 	{
 		return true;
 	}
-	
+
 	@Override
-	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player)
+	public final boolean canUnequip(ItemStack stack, EntityLivingBase player)
+	{
+		return (!this.isCursed(stack) || player instanceof EntityPlayer && ((EntityPlayer)player).capabilities.isCreativeMode) && this.canUnequip2(stack, player);
+	}
+
+	public boolean canUnequip2(ItemStack stack, EntityLivingBase player)
 	{
 		return true;
 	}
