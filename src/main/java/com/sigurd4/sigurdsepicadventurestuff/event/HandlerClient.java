@@ -7,6 +7,7 @@ import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
 import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
 import com.sigurd4.sigurdsEpicAdventureStuff.gui.GuiHud;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemEquipment;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.ItemSpecialSword;
 
 @SideOnly(Side.CLIENT)
@@ -72,6 +74,15 @@ public class HandlerClient
 				ItemSpecialSword.pitch *= w;
 				ItemSpecialSword.yaw *= w;
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void ItemTooltipEvent(ItemTooltipEvent event)
+	{
+		if(event.itemStack != null && event.itemStack.getItem() instanceof ItemEquipment)
+		{
+			((ItemEquipment)event.itemStack.getItem()).setToHide(event.itemStack, Minecraft.getMinecraft().thePlayer);
 		}
 	}
 }

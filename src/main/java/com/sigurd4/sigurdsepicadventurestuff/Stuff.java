@@ -912,4 +912,37 @@ public class Stuff
 			return value;
 		}
 	}
+	
+	public static class ItemStacks
+	{
+		public static int getHideFlagsInt(boolean hideEnchants, boolean hideAttributes, boolean hideUnbreakable, boolean hideCanDestroy, boolean hideCanPlaceOn, boolean hideOthers)
+		{
+			int i = 0;
+			if(hideEnchants)
+			{
+				i += 1;
+			}
+			if(hideAttributes)
+			{
+				i += 2;
+			}
+			if(hideUnbreakable)
+			{
+				i += 4;
+			}
+			if(hideCanDestroy)
+			{
+				i += 8;
+			}
+			if(hideCanPlaceOn)
+			{
+				i += 16;
+			}
+			if(hideOthers)
+			{
+				i += 32;
+			}
+			return i;
+		}
+	}
 }

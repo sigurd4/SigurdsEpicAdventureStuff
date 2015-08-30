@@ -56,7 +56,16 @@ public class ItemEquipmentBauble extends ItemEquipment implements IBauble
 	}
 	
 	@Override
-	public void onWornTick(ItemStack itemstack, EntityLivingBase player)
+	public final void onWornTick(ItemStack stack, EntityLivingBase player)
+	{
+		this.onWornTick2(stack, player);
+		if(player instanceof EntityPlayer)
+		{
+			this.setKnown(stack, (EntityPlayer)player);
+		}
+	}
+
+	public void onWornTick2(ItemStack stack, EntityLivingBase player)
 	{
 		
 	}

@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,7 +34,9 @@ import com.google.common.base.Predicates;
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.References;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
+import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagBoolean;
 import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagEnum;
+import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagMap;
 
 public abstract class ItemEquipment extends Item implements IItemTextureVariants, IItemDynamicModel
 {
@@ -71,6 +74,20 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	private final ArmorMaterial[] materialsDeco;
 
 	//nbt
+	private static final ItemTagMap<Boolean, ItemTagBoolean, EntityPlayer> KNOWN_BY_PLAYERS = new ItemTagMap<Boolean, ItemTagBoolean, EntityPlayer>("KnownByPlayers", new ItemTagBoolean("", false, true), true)
+	{
+		@Override
+		protected String getKey(EntityPlayer key)
+		{
+			return key.getGameProfile().getId().toString();
+		}
+
+		@Override
+		protected ItemTagBoolean newEntryTag(ItemTagBoolean defaultEntry, String key)
+		{
+			return new ItemTagBoolean(key, defaultEntry.getDefault(), defaultEntry.noWobble);
+		}
+	};
 	public final ItemTagEnum<ArmorMaterial> MATERIAL_BASE = new ItemTagEnum<ArmorMaterial>("MaterialBase", ArmorMaterial.IRON, false)
 	{
 		@Override
@@ -89,7 +106,7 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			}
 			return new NBTTagInt(0);
 		}
-
+		
 		@Override
 		protected ArmorMaterial NBTTagToRaw(NBTTagInt value)
 		{
@@ -154,6 +171,20 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 		BlockDispenser.dispenseBehaviorRegistry.putObject(this, ItemEquipment.dispenserBehavior);
 	}
 	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced)
+	{
+		if(this.isKnown(stack, player))
+		{
+			
+		}
+		else
+		{
+			tooltip.add(EnumChatFormatting.GRAY + "???");
+		}
+	}
+	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list)
@@ -164,6 +195,8 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			ItemStack stack = new ItemStack(item);
 			this.MATERIAL_BASE.set(stack, materialBase);
 			this.MATERIAL_DECO.remove(stack);
+			//this.setKnown(stack, Minecraft.getMinecraft().thePlayer);
+			this.setToHide(stack, Minecraft.getMinecraft().thePlayer);
 			stacks.add(stack);
 			for(ArmorMaterial materialDeco : this.materialsDeco)
 			{
@@ -193,6 +226,18 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			}
 			list.add(stacks.get(i2));
 			stacks.remove(i2);
+		}
+	}
+	
+	public final void setToHide(ItemStack stack, EntityPlayer player)
+	{
+		if(!this.isKnown(stack, player))
+		{
+			stack.getTagCompound().setInteger("HideFlags", Stuff.ItemStacks.getHideFlagsInt(true, true, false, false, false, false));
+		}
+		else
+		{
+			stack.getTagCompound().removeTag("HideFlags");
 		}
 	}
 	
@@ -340,6 +385,10 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
+		if(M.proxy.side() == Side.CLIENT)
+		{
+			this.setToHide(stack, Minecraft.getMinecraft().thePlayer);
+		}
 		String s = "";
 		s += Stuff.Strings.capitalize(this.getMaterial(stack).getName()) + " ";
 		s += super.getItemStackDisplayName(stack);
@@ -362,5 +411,15 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	public boolean hasEffect(ItemStack stack)
 	{
 		return false;
+	}
+	
+	public final void setKnown(ItemStack stack, EntityPlayer player)
+	{
+		ItemEquipment.KNOWN_BY_PLAYERS.set(stack, player, true);
+	}
+	
+	public final boolean isKnown(ItemStack stack, EntityPlayer player)
+	{
+		return ItemEquipment.KNOWN_BY_PLAYERS.get(stack, player);
 	}
 }
