@@ -22,7 +22,7 @@ public class TabGeneric extends CreativeTabs
 	{
 		super("sigurdsEpicAdventureStuff." + tabLabel);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getTabIconItem()
@@ -40,27 +40,43 @@ public class TabGeneric extends CreativeTabs
 		}
 	}
 
+	private ArrayList<ItemStack> iconItemstacks = null;
+	private int timer = 0;
+	private final int frequency = 50;
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack()
 	{
-		World world = M.proxy.world(0);
-		long time = world.getTotalWorldTime();
-		ArrayList<Item> items = this.getItems();
-		ArrayList<ItemStack> itemstacks = Lists.newArrayList();
-		for(int i = 0; i < items.size(); ++i)
+		++this.timer;
+		int timer2 = (int)((float)this.timer / this.frequency);
+		if(this.iconItemstacks == null)
 		{
-			ArrayList<ItemStack> variants = Lists.newArrayList();
-			items.get(i).getSubItems(items.get(i), this, variants);
-			//itemstacks.addAll(variants);
-			if(variants.size() > 0)
+			World world = M.proxy.world(0);
+			long time = world.getTotalWorldTime();
+			ArrayList<Item> items = this.getItems();
+			this.iconItemstacks = Lists.newArrayList();
+			for(int i = 0; i < items.size(); ++i)
 			{
-				itemstacks.add(variants.get(Stuff.Randomization.randSeed(world.getSeed(), world.getTotalWorldTime() / 10).nextInt(variants.size())));
+				ArrayList<ItemStack> variants = Lists.newArrayList();
+				items.get(i).getSubItems(items.get(i), this, variants);
+				//itemstacks.addAll(variants);
+				if(variants.size() > 0)
+				{
+					this.iconItemstacks.add(variants.get(Stuff.Randomization.randSeed(world.getSeed(), world.getTotalWorldTime() / 10).nextInt(variants.size())));
+				}
 			}
+		}
+		ArrayList<ItemStack> itemstacks = this.iconItemstacks;
+		while(itemstacks.size() > 0 && timer2 >= itemstacks.size())
+		{
+			this.iconItemstacks = null;
+			this.timer -= itemstacks.size() * this.frequency;
+			timer2 -= itemstacks.size();
 		}
 		if(itemstacks.size() > 0)
 		{
-			return itemstacks.get((int)(time / 10 % itemstacks.size()));
+			return itemstacks.get(timer2);
 		}
 		else
 		{
