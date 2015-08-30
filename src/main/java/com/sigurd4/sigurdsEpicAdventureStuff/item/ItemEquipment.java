@@ -352,7 +352,7 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 		int maxRarity = this.getMaxEnchantmentsRarity();
 		int rarity = this.getRarityInt(stack);
 		float f = (float)rarity / (float)maxRarity;
-		int i = Math.max(0, Math.min(EnumRarity.values().length - 1, (int)Math.floor(f * (EnumRarity.values().length - 1))));
+		int i = Math.max(0, Math.min(EnumRarity.values().length - 1, (int)Math.floor(Math.sqrt(f) * (EnumRarity.values().length - 1))));
 		return EnumRarity.values()[i];
 	}
 	
