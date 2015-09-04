@@ -14,6 +14,8 @@ import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -25,12 +27,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.google.common.base.Predicates;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.References;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
@@ -38,6 +43,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagBoolean;
 import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagEnum;
 import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagInteger;
 import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagMap;
+import com.sigurd4.sigurdsEpicAdventureStuff.itemtags.ItemTagUUID;
 
 public abstract class ItemEquipment extends Item implements IItemTextureVariants, IItemDynamicModel
 {
@@ -76,6 +82,7 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	private final int cursedTime = 400;
 
 	//nbt
+	public static final ItemTagUUID UUID = new ItemTagUUID("UUID", false);
 	private static final ItemTagMap<Boolean, ItemTagBoolean, EntityPlayer> KNOWN_BY_PLAYERS = new ItemTagMap<Boolean, ItemTagBoolean, EntityPlayer>("KnownByPlayers", new ItemTagBoolean("", false, true), true)
 	{
 		@Override
@@ -190,6 +197,8 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 		else
 		{
 			tooltip.add(EnumChatFormatting.GRAY + "???");
+			tooltip.add(EnumChatFormatting.GRAY + "Enchants: " + (stack.getEnchantmentTagList() != null ? stack.getEnchantmentTagList().tagCount() : 0));
+			tooltip.add(EnumChatFormatting.GRAY + "Attribute Mods: " + (stack.getAttributeModifiers() != null && stack.getAttributeModifiers().entries().size() > 0 ? stack.getAttributeModifiers().entries().size() : 0));
 		}
 	}
 	
@@ -215,9 +224,14 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 		}
 		for(ItemStack stack : stacks)
 		{
-			while(!stack.isItemEnchanted())
+			ItemEquipment.UUID.set(stack, MathHelper.getRandomUuid(Item.itemRand));
+		}
+		for(ItemStack stack : stacks)
+		{
+			while(!stack.isItemEnchanted() && stack.getAttributeModifiers().size() <= 0)
 			{
 				EnchantmentHelper.addRandomEnchantment(Item.itemRand, stack, 1);
+				this.addRandomAttributeModifiers(stack, this.getItemEnchantability(stack) / 10);
 			}
 		}
 		ArrayList<ItemStack> stacks2 = new ArrayList<ItemStack>();
@@ -244,6 +258,79 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			}
 		}
 		list.addAll(stacks2);
+	}
+	
+	private void addRandomAttributeModifiers(ItemStack stack, int amount)
+	{
+		HashMultimap<String, AttributeModifier> map = HashMultimap.create();
+		amount = amount > 0 ? Item.itemRand.nextInt(amount) + 1 : 0;
+		for(int i = 0; i < amount; ++i)
+		{
+			if(References.EnumAttributeModifier.values().length > 1)
+			{
+				References.EnumAttributeModifier attribute = References.EnumAttributeModifier.values()[Item.itemRand.nextInt(References.EnumAttributeModifier.values().length)];
+				AttributeModifier modifier = attribute.getModifier(Item.itemRand, References.getItemEquipmentUUIDMod(this, stack, attribute), stack);
+				boolean flag = false;
+				switch(modifier.getOperation())
+				{
+				case 0:
+				{
+					if(modifier.getAmount() == 0)
+					{
+						flag = true;
+					}
+					break;
+				}
+				case 1:
+				{
+					if(modifier.getAmount() == 0)
+					{
+						flag = true;
+					}
+					break;
+				}
+				case 2:
+				{
+					if(modifier.getAmount() == 1)
+					{
+						flag = true;
+					}
+					break;
+				}
+				}
+				if(flag)
+				{
+					--i;
+					continue;
+				}
+				map.put(attribute.attribute.getAttributeUnlocalizedName(), modifier);
+			}
+		}
+		
+		if(!stack.hasTagCompound())
+		{
+			stack.setTagCompound(new NBTTagCompound());
+		}
+		NBTTagList nbtList = new NBTTagList();
+		if(stack.getTagCompound().hasKey("AttributeModifiers", new NBTTagList().getId()))
+		{
+			nbtList = stack.getTagCompound().getTagList("AttributeModifiers", new NBTTagCompound().getId());
+		}
+		for(String key : map.keys())
+		{
+			for(AttributeModifier mod : map.get(key))
+			{
+				NBTTagCompound compound = new NBTTagCompound();
+				compound.setLong("UUIDMost", mod.getID().getMostSignificantBits());
+				compound.setLong("UUIDLeast", mod.getID().getLeastSignificantBits());
+				compound.setString("Name", mod.getName());
+				compound.setString("AttributeName", key);
+				compound.setDouble("Amount", mod.getAmount());
+				compound.setInteger("Operation", mod.getOperation());
+				nbtList.appendTag(compound);
+			}
+		}
+		stack.getTagCompound().setTag("AttributeModifiers", nbtList);
 	}
 	
 	public final void setToHide(ItemStack stack, EntityPlayer player)
@@ -329,8 +416,64 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			Enchantment ench = Enchantment.getEnchantmentById(id);
 			rarity += this.getEnchRarity(ench, lvl);
 		}
+		Multimap attributes = stack.getAttributeModifiers();
+		for(Object key : attributes.keys())
+		{
+			for(Object value : attributes.get(key))
+			{
+				if(value instanceof AttributeModifier)
+				{
+					AttributeModifier attributemodifier = (AttributeModifier)value;
+					double d0 = attributemodifier.getAmount();
+					
+					if(attributemodifier.getID() == Item.itemModifierUUID)
+					{
+						d0 += EnchantmentHelper.func_152377_a(stack, EnumCreatureAttribute.UNDEFINED);
+					}
+					
+					double d1;
+					
+					if(attributemodifier.getOperation() != 1 && attributemodifier.getOperation() != 2)
+					{
+						d1 = d0;
+					}
+					else
+					{
+						d1 = d0 * 100.0D;
+					}
+					
+					switch(attributemodifier.getOperation())
+					{
+					case 0:
+					{
+						d1 *= 1.4;
+						break;
+					}
+					case 1:
+					{
+						d1 += 1;
+					}
+					case 2:
+					{
+						d1 *= 4;
+						break;
+					}
+					}
+					
+					if(d0 > 0.0D)
+					{
+						rarity += d0;
+					}
+					else if(d0 < 0.0D)
+					{
+						rarity += d0;
+					}
+				}
+			}
+		}
 		if(this.isCursed(stack))
 		{
+			rarity += 0.5F;
 			rarity *= 1.5F;
 		}
 		return rarity;
