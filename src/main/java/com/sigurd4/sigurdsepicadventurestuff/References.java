@@ -104,6 +104,25 @@ public class References
 			{
 				value2 = this.maxMod;
 			}
+			double chanceForNegative = 1F / 6;
+			if(((ItemEquipment)stack.getItem()).isCursed(stack))
+			{
+				chanceForNegative *= 2;
+			}
+			if(rand.nextDouble() <= chanceForNegative)
+			{
+				if(this.operation == 2)
+				{
+					value -= 1;
+				}
+				value2 *= -1;
+				float f = 8F / 10;
+				value2 = this.minMod * (1 - f) + value2 * f;
+				if(this.operation == 2)
+				{
+					value += 1;
+				}
+			}
 			return new AttributeModifier(uuid, this.name + "_" + ItemEquipment.UUID.get(stack), value2, this.operation);
 		}
 	}

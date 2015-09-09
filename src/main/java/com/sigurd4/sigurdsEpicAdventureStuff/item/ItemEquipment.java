@@ -79,7 +79,8 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	public final float enchantabilityMod;
 	private final ArmorMaterial[] materialsBase;
 	private final ArmorMaterial[] materialsDeco;
-	private final int cursedTime = 400;
+	private final static int cursedTime = 400;
+	private static ArrayList<ItemStack> cursedGenerated;
 
 	//nbt
 	public static final ItemTagUUID UUID = new ItemTagUUID("UUID", false);
@@ -206,6 +207,7 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list)
 	{
+		ItemEquipment.cursedGenerated = new ArrayList();
 		ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
 		for(ArmorMaterial materialBase : this.materialsBase)
 		{
@@ -213,12 +215,12 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			this.MATERIAL_BASE.set(stack, materialBase);
 			this.MATERIAL_DECO.remove(stack);
 			//this.setKnown(stack, Minecraft.getMinecraft().thePlayer);
-			this.setToHide(stack, Minecraft.getMinecraft().thePlayer);
+			((ItemEquipment)stack.getItem()).setToHide(stack, Minecraft.getMinecraft().thePlayer);
 			stacks.add(stack);
-			for(ArmorMaterial materialDeco : this.materialsDeco)
+			for(ArmorMaterial materialDeco : ((ItemEquipment)stack.getItem()).materialsDeco)
 			{
 				ItemStack stack2 = stack.copy();
-				this.MATERIAL_DECO.set(stack2, materialDeco);
+				((ItemEquipment)stack.getItem()).MATERIAL_DECO.set(stack2, materialDeco);
 				stacks.add(stack2);
 			}
 		}
@@ -228,10 +230,14 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 		}
 		for(ItemStack stack : stacks)
 		{
+			if(Item.itemRand.nextFloat() <= 1F / 8F)
+			{
+				ItemEquipment.cursedGenerated.add(stack);
+			}
 			while(!stack.isItemEnchanted() && stack.getAttributeModifiers().size() <= 0)
 			{
 				EnchantmentHelper.addRandomEnchantment(Item.itemRand, stack, 1);
-				this.addRandomAttributeModifiers(stack, this.getItemEnchantability(stack) / 10);
+				((ItemEquipment)stack.getItem()).addRandomAttributeModifiers(stack, ((ItemEquipment)stack.getItem()).getItemEnchantability(stack) / 10);
 			}
 		}
 		ArrayList<ItemStack> stacks2 = new ArrayList<ItemStack>();
@@ -240,8 +246,8 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			int i2 = 0;
 			for(int i = 0; i < stacks.size(); ++i)
 			{
-				int rarity1 = this.getRarityInt(stacks.get(i));
-				int rarity2 = this.getRarityInt(stacks.get(i2));
+				int rarity1 = ((ItemEquipment)stacks.get(i).getItem()).getRarityInt(stacks.get(i));
+				int rarity2 = ((ItemEquipment)stacks.get(i2).getItem()).getRarityInt(stacks.get(i2));
 				if(rarity1 > rarity2 || rarity1 == rarity2 && stacks.get(i).getItem().getItemEnchantability(stacks.get(i)) > stacks.get(i2).getItem().getItemEnchantability(stacks.get(i2)))
 				{
 					i2 = i;
@@ -252,12 +258,13 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 		}
 		for(ItemStack stack : stacks2)
 		{
-			if(Item.itemRand.nextFloat() <= 1F / 8F)
+			if(((ItemEquipment)stack.getItem()).isCursed(stack))
 			{
-				ItemEquipment.CURSED.set(stack, (int)(this.cursedTime * (1F + Item.itemRand.nextFloat() * 2F + (Item.itemRand.nextFloat() / 4 + 0.1F) * this.getRarityInt(stack))));
+				ItemEquipment.CURSED.set(stack, (int)(ItemEquipment.cursedTime * (1F + Item.itemRand.nextFloat() * 2F + (Item.itemRand.nextFloat() / 4 + 0.1F) * ((ItemEquipment)stack.getItem()).getRarityInt(stack))));
 			}
 		}
 		list.addAll(stacks2);
+		ItemEquipment.cursedGenerated = null;
 	}
 	
 	private void addRandomAttributeModifiers(ItemStack stack, int amount)
@@ -345,7 +352,9 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 		}
 	}
 	
-	protected abstract boolean equipEquipment(ItemStack stack, EntityLivingBase entitylivingbase);
+	protected abstract boolean isEquipped(ItemStack stack, EntityLivingBase entity);
+	
+	protected abstract boolean equipEquipment(ItemStack stack, EntityLivingBase entity);
 	
 	/**
 	 * Return the enchantability factor of the item, most of the time is based
@@ -380,8 +389,14 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
 		this.equipEquipment(stack, player);
-		
 		return stack;
+	}
+	
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack stack)
+	{
+		this.setKnown(stack, player);
+		ItemEquipment.CURSED.add(stack, -1);
 	}
 	
 	public final ArmorMaterial getMaterial(ItemStack stack)
@@ -471,11 +486,14 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 				}
 			}
 		}
+		ArrayList<ItemStack> cursedStacks = ItemEquipment.cursedGenerated;
+		ItemEquipment.cursedGenerated = null;
 		if(this.isCursed(stack))
 		{
 			rarity += 0.5F;
 			rarity *= 1.5F;
 		}
+		ItemEquipment.cursedGenerated = cursedStacks;
 		return rarity;
 	}
 	
@@ -596,6 +614,6 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 	
 	public final boolean isCursed(ItemStack stack)
 	{
-		return ItemEquipment.CURSED.get(stack) > 0;
+		return ItemEquipment.CURSED.get(stack) > 0 || ItemEquipment.cursedGenerated != null && ItemEquipment.cursedGenerated.contains(stack);
 	}
 }

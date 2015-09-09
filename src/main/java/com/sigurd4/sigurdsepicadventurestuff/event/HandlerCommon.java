@@ -66,7 +66,7 @@ public class HandlerCommon
 					M.network.sendTo(new PacketPlayerProps(props), (EntityPlayerMP)player);
 				}
 			}
-			
+
 			IInventory baublesInv = BaublesApi.getBaubles(player);
 			for(int i = 0; i < baublesInv.getSizeInventory(); ++i)
 			{
