@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.EnumHelper;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
@@ -34,5 +35,15 @@ public enum EnumArmorMaterial2
 	public static ArmorMaterial[] values2()
 	{
 		return Stuff.ArraysAndSuch.arrayListToArray2(EnumArmorMaterial2.values, new ArmorMaterial[EnumArmorMaterial2.values.size()]);
+	}
+	
+	public static String getUnlocalizedName(ArmorMaterial mat)
+	{
+		return Stuff.Strings.capitalizeEveryWord(Stuff.Strings.underscoresToWhiteSpaces(mat.getName().toLowerCase()));
+	}
+	
+	public static String getDisplayName(ArmorMaterial mat)
+	{
+		return StatCollector.translateToLocal(EnumArmorMaterial2.getUnlocalizedName(mat)).trim();
 	}
 }

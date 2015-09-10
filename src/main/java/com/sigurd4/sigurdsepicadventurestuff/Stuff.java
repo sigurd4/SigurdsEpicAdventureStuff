@@ -604,8 +604,12 @@ public class Stuff
 
 	public static class Strings
 	{
-		public static String UnderscoresToCamelSpaces(String s)
+		public static String underscoresToCamelSpaces(String s)
 		{
+			if(Strings.isBlank(s))
+			{
+				return s;
+			}
 			s = s.toLowerCase();
 			ArrayList<Character> cs = Strings.toCharArrayList(s);
 			for(int i = 0; i < cs.size(); ++i)
@@ -620,10 +624,30 @@ public class Stuff
 			}
 			return Strings.fromCharArrayList(cs);
 		}
+		
+		public static String underscoresToWhiteSpaces(String s)
+		{
+			if(Strings.isBlank(s))
+			{
+				return s;
+			}
+			s = s.toLowerCase();
+			ArrayList<Character> cs = Strings.toCharArrayList(s);
+			for(int i = 0; i < cs.size(); ++i)
+			{
+				char c = cs.get(i);
+				if(c == '_')
+				{
+					cs.set(i, ' ');
+					--i;
+				}
+			}
+			return Strings.fromCharArrayList(cs);
+		}
 
 		public static String removeFormatting(String s)
 		{
-			if(s == null)
+			if(Strings.isBlank(s))
 			{
 				return s;
 			}
@@ -634,10 +658,62 @@ public class Stuff
 			}
 			return s;
 		}
+		
+		public static String[] splitUp(String s)
+		{
+			if(Strings.isBlank(s))
+			{
+				return new String[] {s};
+			}
+			s = new String(s);
+			ArrayList<String> a = new ArrayList();
+			char[] cs = s.toCharArray();
+			String word = "";
+			for(int i = 0; i < cs.length; ++i)
+			{
+				char c = cs[i];
+				if(c == ' ')
+				{
+					if(!Strings.isBlank(word))
+					{
+						a.add(word);
+					}
+					word = "";
+				}
+				else
+				{
+					word += c;
+				}
+			}
+			if(!Strings.isBlank(word))
+			{
+				a.add(word);
+			}
+			return Stuff.ArraysAndSuch.arrayListToArray2(a, new String[a.size()]);
+		}
+
+		public static String capitalizeEveryWord(String s)
+		{
+			if(Strings.isBlank(s))
+			{
+				return s;
+			}
+			String s2 = "";
+			String[] words = Strings.splitUp(s);
+			for(String word : words)
+			{
+				if(s2.length() > 0)
+				{
+					s2 += " ";
+				}
+				s2 += Strings.capitalize(word);
+			}
+			return s2;
+		}
 
 		public static String capitalize(String s)
 		{
-			if(s == null || s.length() <= 0 || StringUtils.isBlank(s))
+			if(Strings.isBlank(s))
 			{
 				return s;
 			}
@@ -672,6 +748,11 @@ public class Stuff
 				s = s + c;
 			}
 			return s;
+		}
+
+		public static boolean isBlank(String s)
+		{
+			return s == null || s.length() <= 0 || StringUtils.isBlank(s);
 		}
 	}
 

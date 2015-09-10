@@ -572,11 +572,11 @@ public abstract class ItemEquipment extends Item implements IItemTextureVariants
 			this.setToHide(stack, Minecraft.getMinecraft().thePlayer);
 		}
 		String s = "";
-		s += Stuff.Strings.capitalize(this.getMaterial(stack).getName()) + " ";
+		s += EnumArmorMaterial2.getDisplayName(this.getMaterial(stack)) + " ";
 		s += super.getItemStackDisplayName(stack);
 		if(this.getMaterial2(stack) != null)
 		{
-			s += " (" + Stuff.Strings.capitalize(this.getMaterial2(stack).getName()) + ")";
+			s += " (" + EnumArmorMaterial2.getDisplayName(this.getMaterial2(stack)) + ")";
 		}
 		if(M.proxy.side() == Side.CLIENT)
 		{
