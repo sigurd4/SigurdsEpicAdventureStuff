@@ -23,9 +23,9 @@ public class References
 	public static final String CLIENT_PROXY_CLASS = "com.sigurd4.sigurdsEpicAdventureStuff.proxy.ProxyClient";
 	public static final String SERVER_PROXY_CLASS = "com.sigurd4.sigurdsEpicAdventureStuff.proxy.ProxyServer";
 	public static final String GUI_FACTORY_CLASS = "com.sigurd4.sigurdsEpicAdventureStuff.gui.GuiFactory";
-	
+
 	public static final long itemEquipmentUUIDMod = 49734985793845l;
-	
+
 	public static final UUID getItemEquipmentUUIDMod(ItemEquipment item, ItemStack stack, EnumAttributeModifier attribute)
 	{
 		int i = 0;
@@ -48,7 +48,7 @@ public class References
 		UUID uuid = ItemEquipment.UUID.has(stack) ? ItemEquipment.UUID.get(stack) : new UUID(0, 0);
 		return MathHelper.getRandomUuid(Stuff.Randomization.randSeed(References.itemEquipmentUUIDMod, name3, i, uuid.getMostSignificantBits(), uuid.getLeastSignificantBits()));
 	}
-	
+
 	public static enum EnumAttributeModifier
 	{
 		MAX_HEALTH_0(SharedMonsterAttributes.maxHealth, 1, 4, 0),
@@ -56,19 +56,19 @@ public class References
 		MOVEMENT_SPEED_2(SharedMonsterAttributes.movementSpeed, 0.5F, 1.5F, 2, 8),
 		ATTACK_DAMAGE_0(SharedMonsterAttributes.attackDamage, 1, 6, 0),
 		ATTACK_DAMAGE_2(SharedMonsterAttributes.attackDamage, 0.5F, 3F, 2, 4);
-		
+
 		public final IAttribute attribute;
 		public final String name;
 		public final float minMod;
 		public final float maxMod;
 		public final int operation;
 		public final int complexity;
-		
+
 		EnumAttributeModifier(IAttribute attribute, int minMod, int maxMod, int operation)
 		{
 			this(attribute, minMod, maxMod, operation, 1);
 		}
-		
+
 		EnumAttributeModifier(IAttribute attribute, float minMod, float maxMod, int operation, int complexity)
 		{
 			this.attribute = attribute;
@@ -78,7 +78,7 @@ public class References
 			this.operation = operation;
 			this.complexity = Math.max(1, complexity);
 		}
-		
+
 		public AttributeModifier getModifier(Random rand, UUID uuid, ItemStack stack)
 		{
 			double value = this.minMod;

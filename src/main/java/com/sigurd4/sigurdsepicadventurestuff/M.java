@@ -126,10 +126,11 @@ public class M
 	}.setUnlocalizedName("skySword").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
 	
 	//generated loot
-	public static final ItemEquipmentBauble equipment_ring = M.registerItem("ring", (ItemEquipmentBauble)new ItemEquipmentBauble(new ArmorMaterial[] {ArmorMaterial.IRON, ArmorMaterial.GOLD, EnumArmorMaterial2.SILVER}, new ArmorMaterial[] {ArmorMaterial.DIAMOND, EnumArmorMaterial2.EMERALD}, 0, 1F / 6F, 6, BaubleType.RING).setUnlocalizedName("generatedRing").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
+	public static final ItemEquipmentBauble equipment_ring = M.registerItem("ring", (ItemEquipmentBauble)new ItemEquipmentBauble(new ArmorMaterial[] {ArmorMaterial.IRON, ArmorMaterial.GOLD, EnumArmorMaterial2.SILVER}, new ArmorMaterial[] {ArmorMaterial.DIAMOND, EnumArmorMaterial2.EMERALD, EnumArmorMaterial2.ENDER_PEARL, EnumArmorMaterial2.PRISMARINE_CRYSTAL, EnumArmorMaterial2.QUARTZ, EnumArmorMaterial2.RUBY}, 0, 1F / 6F, 6, BaubleType.RING).setUnlocalizedName("generatedRing").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
 	public static final ItemMysteryPotion mystery_potion = M.registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
 
 	//crafting ingredients
+	public static final Item ruby = M.registerItem("ruby", new Item().setUnlocalizedName("ruby").setCreativeTab(CreativeTabs.tabMaterials), true, new String[] {"gemRuby"});
 	public static final Item silver_ingot = M.registerItem("silver_ingot", new Item().setUnlocalizedName("ingotSilver").setCreativeTab(CreativeTabs.tabMaterials), true, new String[] {"ingotSilver"});
 
 	////BLOCKS:

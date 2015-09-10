@@ -1,0 +1,6 @@
+{
+    "parent": "sigurdsepicadventurestuff:item/standard",
+    "textures": {
+        "layer0": "minecraft:items/ruby"
+    }
+}
