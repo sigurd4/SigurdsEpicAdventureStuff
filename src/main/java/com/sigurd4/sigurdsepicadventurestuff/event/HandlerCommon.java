@@ -14,13 +14,14 @@ import baubles.api.BaublesApi;
 
 import com.sigurd4.sigurdsEpicAdventureStuff.M;
 import com.sigurd4.sigurdsEpicAdventureStuff.extended.ExtendedPlayer;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketBaublesEquipment;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 
 public class HandlerCommon
 {
 	//minecraftforge events for both sides here!
 	public static HashMap<EntityPlayer, NBTTagCompound> playerDeathData = new HashMap<EntityPlayer, NBTTagCompound>();
-	
+
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event)
 	{
@@ -28,13 +29,13 @@ public class HandlerCommon
 		{
 			ExtendedPlayer.register((EntityPlayer)event.entity);
 		}
-		
+
 		if(event.entity instanceof EntityPlayer && event.entity.getExtendedProperties(ExtendedPlayer.PROP) == null)
 		{
 			event.entity.registerExtendedProperties(ExtendedPlayer.PROP, new ExtendedPlayer((EntityPlayer)event.entity));
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void livingUpdateEvent(LivingUpdateEvent event)
 	{
@@ -43,7 +44,7 @@ public class HandlerCommon
 			EntityPlayer player = (EntityPlayer)event.entity;
 			ExtendedPlayer props = ExtendedPlayer.get((EntityPlayer)event.entity);
 			props.update();
-			
+
 			if(!event.entity.worldObj.isRemote)
 			{
 				/** makes it so that players keep certain data upon death **/
@@ -58,7 +59,7 @@ public class HandlerCommon
 					props.saveNBTData(playerData, false);
 					HandlerCommon.playerDeathData.put(player, playerData);
 				}
-				
+
 				/** give data to client **/
 				if(player instanceof EntityPlayerMP)
 				{
@@ -66,27 +67,30 @@ public class HandlerCommon
 					M.network.sendTo(new PacketPlayerProps(props), (EntityPlayerMP)player);
 				}
 			}
-
+			
 			IInventory baublesInv = BaublesApi.getBaubles(player);
 			for(int i = 0; i < baublesInv.getSizeInventory(); ++i)
 			{
 				ItemStack itemstack = props.previousBaubles[i];
 				ItemStack itemstack1 = baublesInv.getStackInSlot(i);
-				
+
 				if(!ItemStack.areItemStacksEqual(itemstack1, itemstack))
 				{
-					//((WorldServer)player.worldObj).getEntityTracker().sendToAllTrackingEntity(this, new S04PacketEntityEquipment(this.getEntityId(), j, itemstack1));
-					
+					if(player instanceof EntityPlayerMP)
+					{
+						M.network.sendTo(new PacketBaublesEquipment(player.getEntityId(), i, itemstack), (EntityPlayerMP)player);
+					}
+
 					if(itemstack != null && M.hasItem(itemstack.getItem()))
 					{
 						event.entityLiving.getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers());
 					}
-					
+
 					if(itemstack1 != null && M.hasItem(itemstack1.getItem()))
 					{
 						event.entityLiving.getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers());
 					}
-					
+
 					props.previousBaubles[i] = itemstack1 == null ? null : itemstack1.copy();
 				}
 			}
