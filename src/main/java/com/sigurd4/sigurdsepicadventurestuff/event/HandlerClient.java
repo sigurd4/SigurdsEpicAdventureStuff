@@ -51,11 +51,13 @@ public class HandlerClient
 	@SubscribeEvent
 	public void MouseEvent(MouseEvent event)
 	{
-		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-		WorldClient world = Minecraft.getMinecraft().theWorld;
-
-		ItemSpecialSword.pitch = event.dy * 2.4F;
-		ItemSpecialSword.yaw = -event.dx * 2.2F;
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayerSP player = mc.thePlayer;
+		WorldClient world = mc.theWorld;
+		float fpsMod = 55 / Math.max(1, Minecraft.getDebugFPS());
+		
+		ItemSpecialSword.pitch = event.dy * 2.4F * fpsMod;
+		ItemSpecialSword.yaw = -event.dx * 2.2F * fpsMod;
 		if(player != null && world != null)
 		{
 			ExtendedPlayer props = ExtendedPlayer.get(player);
