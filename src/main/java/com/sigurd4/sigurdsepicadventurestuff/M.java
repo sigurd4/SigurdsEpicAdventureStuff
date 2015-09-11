@@ -48,18 +48,24 @@ public class M
 {
 	@Instance(References.MODID)
 	public static M instance;
-
+	
 	public static SimpleNetworkWrapper network;
-
+	
 	private static final HashMap<Object, Id> ids = new HashMap<Object, Id>();
 	public static final ArrayList<Id> idsToBeRegistered = new ArrayList<Id>();
 	public static final HashMap<Object, CreativeTabs[]> creativeTabs = new HashMap<Object, CreativeTabs[]>();
 	private static final HashMap<String, Boolean> isModLoaded = new HashMap<String, Boolean>();
-
+	
 	/** tabs **/
 	public static TabGeneric tabCore = new TabGeneric("core");
-
+	
 	////ITEMS:
+
+	//crafting ingredients
+	public static final Item ruby = M.registerItem("ruby", new Item().setUnlocalizedName("ruby").setCreativeTab(CreativeTabs.tabMaterials), true, new String[] {"gemRuby"});
+	public static final Item silver_ingot = M.registerItem("silver_ingot", new Item().setUnlocalizedName("ingotSilver").setCreativeTab(CreativeTabs.tabMaterials), true, new String[] {"ingotSilver"});
+
+	//swords
 	public static final ItemSpecialSwordCharge adventure_sword = M.registerItem("adventure_sword", (ItemSpecialSwordCharge)new ItemSpecialSwordCharge(7, 2.3F, 100, 2 * 20, 11 * 20)
 	{
 		@Override
@@ -69,13 +75,13 @@ public class M
 			Minecraft mc = Minecraft.getMinecraft();
 			mc.thePlayer.worldObj.spawnParticle(EnumParticleTypes.CRIT, true, mc.thePlayer.posX + look.xCoord, mc.thePlayer.posY + look.yCoord + mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ + look.zCoord, look.xCoord / 10, look.yCoord / 10, look.zCoord / 10, new int[] {});
 		}
-
+		
 		@Override
 		public void onReleaseEarly(ItemStack stack, World world, EntityPlayer player, int timeLeft)
 		{
-
+			
 		}
-
+		
 		@Override
 		public void onReleaseCharged(ItemStack stack, World world, EntityPlayer player, int timeLeft)
 		{
@@ -91,13 +97,13 @@ public class M
 			Minecraft mc = Minecraft.getMinecraft();
 			ParticleHandler.spawnCritColoured(mc.thePlayer.worldObj, true, mc.thePlayer.posX + look.xCoord, mc.thePlayer.posY + look.yCoord + mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ + look.zCoord, look.xCoord / 10, look.yCoord / 10, look.zCoord / 10, 0.8F, 0.95F, 1.15F);
 		}
-
+		
 		@Override
 		public void onReleaseEarly(ItemStack stack, World world, EntityPlayer player, int timeLeft)
 		{
-
+			
 		}
-
+		
 		@Override
 		public void onReleaseCharged(ItemStack stack, World world, EntityPlayer player, int timeLeft)
 		{
@@ -109,14 +115,14 @@ public class M
 			player.addVelocity(0, 1.2F, 0);
 			player.fallDistance = 0;
 		}
-
+		
 		@Override
 		public boolean onEntitySwing(EntityLivingBase entity, ItemStack stack)
 		{
 			float reach = 1.5F;
 			Vec3 look = Stuff.Coordinates3D.getVectorForRotation(entity.rotationPitch, entity.rotationYaw);
 			look = new Vec3(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach);
-
+			
 			for(int i = 0; i < 2 && entity.worldObj.isRemote; ++i)
 			{
 				entity.worldObj.spawnParticle(EnumParticleTypes.CLOUD, true, entity.posX + look.xCoord * 2 + Stuff.Randomization.r(0.9), entity.posY + look.yCoord * 2 + entity.getEyeHeight() + Stuff.Randomization.r(0.9), entity.posZ + look.zCoord * 2 + Stuff.Randomization.r(0.9), 4 * look.xCoord / (10 + 20 * Stuff.rand.nextFloat()) + Stuff.Randomization.r(0.1), 4 * look.yCoord / (10 + 20 * Stuff.rand.nextFloat()) + Stuff.Randomization.r(0.1), 4 * look.zCoord / (10 + 20 * Stuff.rand.nextFloat()) + Stuff.Randomization.r(0.1), new int[] {});
@@ -124,61 +130,57 @@ public class M
 			return super.onEntitySwing(entity, stack);
 		}
 	}.setUnlocalizedName("skySword").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
-	
+
 	//generated loot
 	public static final ItemEquipmentBauble equipment_ring = M.registerItem("ring", (ItemEquipmentBauble)new ItemEquipmentBauble(new ArmorMaterial[] {ArmorMaterial.IRON, ArmorMaterial.GOLD, EnumArmorMaterial2.SILVER}, new ArmorMaterial[] {ArmorMaterial.DIAMOND, EnumArmorMaterial2.EMERALD, EnumArmorMaterial2.ENDER_PEARL, EnumArmorMaterial2.PRISMARINE_CRYSTAL, EnumArmorMaterial2.QUARTZ, EnumArmorMaterial2.RUBY}, 0, 1F / 6F, 6, BaubleType.RING).setUnlocalizedName("generatedRing").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
 	public static final ItemMysteryPotion mystery_potion = M.registerItem("mystery_potion", (ItemMysteryPotion)new ItemMysteryPotion().setUnlocalizedName("mysteryPotion").setCreativeTab(M.tabCore), false, new String[] {}, 1, 1, 1);
-
-	//crafting ingredients
-	public static final Item ruby = M.registerItem("ruby", new Item().setUnlocalizedName("ruby").setCreativeTab(CreativeTabs.tabMaterials), true, new String[] {"gemRuby"});
-	public static final Item silver_ingot = M.registerItem("silver_ingot", new Item().setUnlocalizedName("ingotSilver").setCreativeTab(CreativeTabs.tabMaterials), true, new String[] {"ingotSilver"});
-
+	
 	////BLOCKS:
-
+	
 	public M()
 	{
 
 	}
-
+	
 	@SidedProxy(clientSide = References.CLIENT_PROXY_CLASS, serverSide = References.SERVER_PROXY_CLASS)
 	public static ProxyCommon proxy;
-
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		M.proxy.preInit(event);
 	}
-
+	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
 		M.proxy.init(event);
 	}
-
+	
 	@EventHandler
 	public void init(FMLPostInitializationEvent event)
 	{
 		M.proxy.postInit(event);
 	}
-
+	
 	/** Register entity with egg **/
 	/*public static void registerEntity(Class<? extends Entity> entityClass, String name, int entityID, int primaryColor, int secondaryColor)
 	{
 		EntityRegistry.registerGlobalEntityID(entityClass, name, entityID);
 		ItemMonsterPlacer2.EntityList2.registerEntity(entityClass, entityID, name, primaryColor, secondaryColor);
 	}*/
-
+	
 	/** Register entity without egg **/
 	public static void registerEntityNoEgg(Class<? extends Entity> entityClass, String name, int entityID)
 	{
 		EntityRegistry.registerModEntity(entityClass, name, entityID, M.instance, 64, 1, true);
 	}
-
+	
 	public static Iterator<Id> getIds()
 	{
 		return ((HashMap<Object, Id>)M.ids.clone()).values().iterator();
 	}
-
+	
 	public static Id getId(Item item)
 	{
 		if(M.ids.containsKey(item))
@@ -187,7 +189,7 @@ public class M
 		}
 		return null;
 	}
-
+	
 	public static Id getId(Block block)
 	{
 		if(M.ids.containsKey(block))
@@ -196,7 +198,7 @@ public class M
 		}
 		return null;
 	}
-
+	
 	public static Object getItem(Id id)
 	{
 		if(M.ids.containsValue(id))
@@ -209,22 +211,22 @@ public class M
 		}
 		return null;
 	}
-
+	
 	public static boolean hasId(Id id)
 	{
 		return M.ids.containsValue(id);
 	}
-
+	
 	public static boolean hasItem(Item item)
 	{
 		return M.ids.containsKey(item);
 	}
-
+	
 	public static boolean hasItem(Block block)
 	{
 		return M.ids.containsKey(block);
 	}
-
+	
 	public static HashMap<Integer, ArrayList<String>> getTypes(Item item)
 	{
 		HashMap<Integer, ArrayList<String>> types = new HashMap();
@@ -254,87 +256,87 @@ public class M
 		}
 		return types;
 	}
-
+	
 	public static class Id
 	{
 		public final String id;
 		public final String mod;
 		public final String[] oreDictNames;
 		public final boolean replacedIfAlreadyAnOreDict;
-
+		
 		public boolean shouldBeReplaced()
 		{
 			return this.oreDictNames.length <= 0 || !this.replacedIfAlreadyAnOreDict;
 		};
-
+		
 		public boolean visible;
 		public final boolean dungeonLoot;
 		public final int dungeonLootMin;
 		public final int dungeonLootMax;
 		public final int dungeonLootChance;
-
+		
 		public Id(String id, String mod, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 		{
 			this.id = id;
 			this.mod = mod;
 			this.replacedIfAlreadyAnOreDict = replacedIfAlreadyAnOreDict;
 			this.oreDictNames = oreDictNames;
-
+			
 			this.dungeonLoot = false;
 			this.dungeonLootMin = 0;
 			this.dungeonLootMax = 0;
 			this.dungeonLootChance = 0;
 		}
-
+		
 		private Id(String id, String mod, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames, int dungeonLootMin, int dungeonLootMax, int dungeonLootChance)
 		{
 			this.id = id;
 			this.mod = mod;
 			this.replacedIfAlreadyAnOreDict = replacedIfAlreadyAnOreDict;
 			this.oreDictNames = oreDictNames;
-
+			
 			dungeonLootMin = dungeonLootMin >= 1 ? dungeonLootMin : 1;
 			dungeonLootMax = dungeonLootMax <= 64 ? dungeonLootMax : 64;
 			dungeonLootMin = dungeonLootMin <= dungeonLootMax ? dungeonLootMin : dungeonLootMax;
 			dungeonLootMax = dungeonLootMax >= dungeonLootMin ? dungeonLootMax : dungeonLootMin;
-
+			
 			this.dungeonLoot = true;
 			this.dungeonLootMin = dungeonLootMin;
 			this.dungeonLootMax = dungeonLootMax;
 			this.dungeonLootChance = dungeonLootChance;
 		}
-
+		
 		public Id(String id, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 		{
 			this(id, References.MODID, replacedIfAlreadyAnOreDict, oreDictNames);
 		}
 	}
-
+	
 	public static <T extends Item & IItemIdFrom> T registerItem(T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
 		return M.registerItem(item.getId(), References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames);
 	}
-
+	
 	public static <T extends Item> T registerItem(String id, T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
 		return M.registerItem(id, References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames);
 	}
-
+	
 	public static <T extends Item> T registerItem(String id, String modid, T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
 		return M.registerItem(id, modid, item, replacedIfAlreadyAnOreDict, oreDictNames, 0, 0, 0);
 	}
-
+	
 	public static <T extends Item & IItemIdFrom> T registerItem(T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames, int min, int max, int chance)
 	{
 		return M.registerItem(item.getId(), References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
 	}
-
+	
 	public static <T extends Item> T registerItem(String id, T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames, int min, int max, int chance)
 	{
 		return M.registerItem(id, References.MODID, item, replacedIfAlreadyAnOreDict, oreDictNames, min, max, chance);
 	}
-
+	
 	public static <T extends Item> T registerItem(String id, String modid, T item, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames, int min, int max, int chance)
 	{
 		if(!M.ids.containsKey(item) && !M.ids.containsValue(id))
@@ -349,12 +351,12 @@ public class M
 		}
 		return item;
 	}
-
+	
 	public static <T extends Block> T registerBlock(String id, T block, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
 		return M.registerBlock(id, References.MODID, block, replacedIfAlreadyAnOreDict, oreDictNames);
 	}
-
+	
 	public static <T extends Block> T registerBlock(String id, String modid, T block, boolean replacedIfAlreadyAnOreDict, String[] oreDictNames)
 	{
 		if(!M.ids.containsKey(block))
@@ -365,19 +367,19 @@ public class M
 		}
 		return block;
 	}
-
+	
 	public static boolean visible(Item item)
 	{
 		Id id = M.getId(item);
 		return M.visible(id);
 	}
-
+	
 	public static boolean visible(Block block)
 	{
 		Id id = M.getId(block);
 		return M.visible(id);
 	}
-
+	
 	public static boolean visible(Id id)
 	{
 		if(id != null)
@@ -386,7 +388,7 @@ public class M
 		}
 		return true;
 	}
-
+	
 	public static boolean isModForItemLoaded(Object item)
 	{
 		if(item instanceof Block)
@@ -433,7 +435,7 @@ public class M
 		catch(Exception e)
 		{
 		}
-		
+
 		AItemForMod annotation = null;
 		if(field != null)
 		{
@@ -463,7 +465,7 @@ public class M
 			return true;
 		}
 	}
-
+	
 	public static boolean isModForItemLoaded2(AItemForMod item)
 	{
 		for(String modid : item.modids())
@@ -475,7 +477,7 @@ public class M
 		}
 		return true;
 	}
-
+	
 	public static boolean isModLoaded(String modid)
 	{
 		if(M.isModLoaded.containsKey(modid))
