@@ -75,7 +75,15 @@ public class ProxyClient extends ProxyCommon
 				Object item = M.getItem(id);
 				if(item != null && item instanceof Block)
 				{
-					ri.getItemModelMesher().register(Item.getItemFromBlock((Block)item), 0, new ModelResourceLocation(id.mod.toLowerCase() + ":" + id.id.toLowerCase(), "inventory"));
+					if(!(item instanceof IItemDynamicModel))
+					{
+						item = Item.getItemFromBlock((Block)item);
+						ri.getItemModelMesher().register((Item)item, 0, new ModelResourceLocation(id.mod.toLowerCase() + ":" + id.id.toLowerCase(), "inventory"));
+					}
+					else
+					{
+						item = Item.getItemFromBlock((Block)item);
+					}
 				}
 				else if(item != null && item instanceof Item)
 				{
