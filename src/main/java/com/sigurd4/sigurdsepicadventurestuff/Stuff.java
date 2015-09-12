@@ -11,6 +11,7 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -35,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Lists;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
+import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemSubItemRandom;
 import com.sigurd4.sigurdsEpicAdventureStuff.item.IItemSubItems;
 
 public class Stuff
@@ -766,19 +768,44 @@ public class Stuff
 				Id id = M.getId(item);
 				if(id != null && id.visible && id.dungeonLoot && id.dungeonLootChance > 0)
 				{
-					ItemStack stack = new ItemStack(item);
-					ArrayList<ItemStack> variants = Lists.newArrayList();
-					if(item instanceof IItemSubItems)
+					if(item instanceof IItemSubItemRandom)
 					{
-						((IItemSubItems)item).getSubItems2(item, null, variants);
-					}
-					for(int i = 0; i < variants.size(); ++i)
-					{
-						stack = variants.get(i);
-						if(stack != null)
+						loot.add(new WeightedRandomChestContent(new ItemStack(item), id.dungeonLootMin, id.dungeonLootMax, id.dungeonLootChance)
 						{
-							loot.add(new WeightedRandomChestContent(stack, id.dungeonLootMin, id.dungeonLootMax, id.dungeonLootChance));
-						}
+							@Override
+							protected ItemStack[] generateChestContent(Random random, IInventory newInventory)
+							{
+								Item item = this.theItemId.getItem();
+								if(item instanceof IItemSubItemRandom)
+								{
+									ItemStack stack = ((IItemSubItemRandom)item).getRandomSubItem(item);
+									return new ItemStack[] {stack};
+								}
+								return super.generateChestContent(random, newInventory);
+							}
+						});
+					}
+					else if(item instanceof IItemSubItems)
+					{
+						loot.add(new WeightedRandomChestContent(new ItemStack(item), id.dungeonLootMin, id.dungeonLootMax, id.dungeonLootChance)
+						{
+							@Override
+							protected ItemStack[] generateChestContent(Random random, IInventory newInventory)
+							{
+								Item item = this.theItemId.getItem();
+								if(item instanceof IItemSubItemRandom)
+								{
+									ArrayList<ItemStack> variants = Lists.newArrayList();
+									((IItemSubItems)item).getSubItems2(item, null, variants);
+									return Stuff.ArraysAndSuch.arrayListToArray2(variants, new ItemStack[variants.size()]);
+								}
+								return super.generateChestContent(random, newInventory);
+							}
+						});
+					}
+					else
+					{
+						loot.add(new WeightedRandomChestContent(new ItemStack(item), id.dungeonLootMin, id.dungeonLootMax, id.dungeonLootChance));
 					}
 					return loot;
 				}
