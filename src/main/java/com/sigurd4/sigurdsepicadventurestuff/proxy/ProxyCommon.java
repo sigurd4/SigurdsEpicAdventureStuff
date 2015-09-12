@@ -31,6 +31,7 @@ import com.sigurd4.sigurdsEpicAdventureStuff.M.Id;
 import com.sigurd4.sigurdsEpicAdventureStuff.Stuff;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommon;
 import com.sigurd4.sigurdsEpicAdventureStuff.event.HandlerCommonFML;
+import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketBaublesEquipment;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketConfig;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketKey;
 import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
@@ -38,12 +39,12 @@ import com.sigurd4.sigurdsEpicAdventureStuff.packet.PacketPlayerProps;
 public abstract class ProxyCommon
 {
 	public abstract Side side();
-	
+
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		MinecraftForge.EVENT_BUS.register(new HandlerCommon());
 		FMLCommonHandler.instance().bus().register(new HandlerCommonFML());
-		
+
 		this.registerItems();
 		this.oreDictionary();
 		this.packets();
@@ -51,30 +52,31 @@ public abstract class ProxyCommon
 		M.idsToBeRegistered.clear();
 		this.registerConfig(event.getSuggestedConfigurationFile());
 	}
-	
+
 	public void init(FMLInitializationEvent event)
 	{
 		this.recipes();
 		this.dungeonLoot();
 	}
-	
+
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		
+
 	}
-	
+
 	private void packets()
 	{
 		M.network = NetworkRegistry.INSTANCE.newSimpleChannel("SEASPackets");
 		M.network.registerMessage(PacketKey.Handler.class, PacketKey.class, 0, Side.SERVER);
 		M.network.registerMessage(PacketPlayerProps.Handler.class, PacketPlayerProps.class, 1, Side.CLIENT);
 		M.network.registerMessage(PacketConfig.Handler.class, PacketConfig.class, 2, Side.CLIENT);
+		M.network.registerMessage(PacketBaublesEquipment.Handler.class, PacketBaublesEquipment.class, 3, Side.CLIENT);
 	}
-	
+
 	private void recipes()
 	{
 	}
-	
+
 	private void registerNugget(Item nugget, Item bar)
 	{
 		if(M.visible(nugget))
@@ -83,7 +85,7 @@ public abstract class ProxyCommon
 			GameRegistry.addShapedRecipe(new ItemStack(nugget, 9), new Object[] {"B", 'B', bar});
 		}
 	}
-	
+
 	private void registerGear(Item gear, Item bar)
 	{
 		if(M.visible(gear))
@@ -91,7 +93,7 @@ public abstract class ProxyCommon
 			GameRegistry.addShapedRecipe(new ItemStack(gear, 6), new Object[] {" B ", "BbB", " B ", 'B', bar, 'b', Item.getItemFromBlock(Blocks.stone_button)});
 		}
 	}
-	
+
 	private void oreDictionary()
 	{
 		Iterator<Id> ids = M.idsToBeRegistered.iterator();
@@ -115,14 +117,14 @@ public abstract class ProxyCommon
 			}
 		}
 	}
-	
+
 	private void entities()
 	{
 		/*M.registerEntityNoEgg(EntityFood.class, "foodProjectile", 0);
 		M.registerEntityNoEgg(EntityShuriken.class, "shuriken", 1);
 		M.registerEntityNoEgg(EntityLaser.class, "laser", 2);*/
 	}
-	
+
 	private void registerItems()
 	{
 		Iterator<Id> ids = M.idsToBeRegistered.iterator();
@@ -142,7 +144,7 @@ public abstract class ProxyCommon
 					{
 						GameRegistry.registerItem((Item)item, id.id);
 					}
-					
+
 					if(id.replacedIfAlreadyAnOreDict)
 					{
 						id.visible = false;
@@ -182,7 +184,7 @@ public abstract class ProxyCommon
 			}
 		}
 	}
-	
+
 	private void registerConfig(File file)
 	{
 		if(Config.config == null)
@@ -198,7 +200,7 @@ public abstract class ProxyCommon
 			Config.config.save();
 		}
 	}
-	
+
 	private void dungeonLoot()
 	{
 		Iterator<Id> ids = M.getIds();
@@ -210,7 +212,7 @@ public abstract class ProxyCommon
 				if(M.getItem(id) instanceof Item)
 				{
 					Item item = (Item)M.getItem(id);
-					
+
 					HashMap<String, ChestGenHooks> categories = null;
 					try
 					{
@@ -225,7 +227,7 @@ public abstract class ProxyCommon
 					{
 						e.printStackTrace();
 					}
-					
+
 					if(categories != null)
 					{
 						String[] categoriesS = categories.keySet().toArray(new String[categories.keySet().size()]);
@@ -242,6 +244,6 @@ public abstract class ProxyCommon
 			}
 		}
 	}
-	
+
 	public abstract World world(int dimension);
 }
